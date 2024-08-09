@@ -21,6 +21,7 @@
       <!-- Container wrapper -->
     </nav>
     <!-- Navbar -->
+
     <!-- Sidebar -->
     <nav
       id="sidebarMenu"
@@ -31,41 +32,84 @@
         <div class="list-group list-group-flush mx-3 mt-5">
           <router-link
             to="/mainsidebar/order"
-            class="list-group-item list-group-item-action py-2 ripple"
+            class="list-group-item list-group-item-action py-2 ripple d-flex align-items-center"
             aria-current="true"
             @click="closeSidebar"
           >
-            <i class="fas fa-tachometer-alt fa-fw me-3"></i
-            ><span>Dashboard</span>
-          </router-link>
-          <router-link
-            to="/mainsidebar/detailorder"
-            class="list-group-item list-group-item-action py-2 ripple"
-            aria-current="true"
-            @click="closeSidebar"
-          >
-            <i class="fas fa-chart-line fa-fw me-3"></i
-            ><span>Peminjaman</span>
-          </router-link>
-          <router-link
-            to="/mainsidebar/category"
-            class="list-group-item list-group-item-action py-2 ripple"
-            aria-current="true"
-            @click="closeSidebar"
-          >
-            <i class="fas fa-chart-bar fa-fw me-3"></i><span>Data Pinjaman</span>
+            <i class="fas fa-tachometer-alt fa-fw me-3"></i>
+            <span>Dashboard</span>
           </router-link>
 
           <router-link
-            to="/mainsidebar/produk"
-            class="list-group-item list-group-item-action py-2 ripple"
+            to="/mainsidebar/detailorder"
+            class="list-group-item list-group-item-action py-2 ripple d-flex align-items-center"
             aria-current="true"
             @click="closeSidebar"
           >
-            <i class="fas fa-chart-bar fa-fw me-3"></i><span>Data Master</span>
+            <i class="fas fa-chart-line fa-fw me-3"></i>
+            <span>Peminjaman</span>
           </router-link>
+
+          <router-link
+            to="/mainsidebar/category"
+            class="list-group-item list-group-item-action py-2 ripple d-flex align-items-center"
+            aria-current="true"
+            @click="closeSidebar"
+          >
+            <i class="fas fa-chart-bar fa-fw me-3"></i>
+            <span>Data Pinjaman</span>
+          </router-link>
+
+          <!-- Data Master with dropdown arrow -->
+          <div
+            class="list-group-item py-2 ripple d-flex align-items-center justify-content-between"
+            aria-current="true"
+            @click="toggleMasterData"
+            style="cursor: pointer"
+          >
+            <div class="d-flex align-items-center">
+              <i class="fas fa-folder fa-fw me-3"></i>
+              <span>Data Master</span>
+            </div>
+            <i
+              :class="
+                masterDataOpen ? 'fas fa-chevron-down' : 'fas fa-chevron-right'
+              "
+            ></i>
+          </div>
+
+          <!-- Submenu items for Data Master -->
+          <div v-if="masterDataOpen" class="submenu ms-4">
+            <router-link
+              to="/mainsidebar/datasiswa"
+              class="list-group-item list-group-item-action py-2 ripple d-flex align-items-center"
+              @click="closeSidebar"
+            >
+              <i class="fas fa-user-graduate fa-fw me-3"></i>
+              <span>Siswa</span>
+            </router-link>
+
+            <router-link
+              to="/mainsidebar/dataalat"
+              class="list-group-item list-group-item-action py-2 ripple d-flex align-items-center"
+              @click="closeSidebar"
+            >
+              <i class="fas fa-tools fa-fw me-3"></i>
+              <span>Alat</span>
+            </router-link>
+            <router-link
+              to="/mainsidebar/databengkel"
+              class="list-group-item list-group-item-action py-2 ripple d-flex align-items-center"
+              @click="closeSidebar"
+            >
+              <i class="fas fa-tools fa-fw me-3"></i>
+              <span>Bengkel</span>
+            </router-link>
+          </div>
         </div>
       </div>
+
+      <!-- Logout Section -->
       <div class="logout-section">
         <a class="logout" href="#">
           <div class="name_logout" style="color: red">Logout</div>
@@ -78,7 +122,6 @@
 
   <!--Main layout-->
   <main :style="{ marginLeft: sidebarOpen ? '250px' : '0' }">
-    <!-- Adjust marginLeft instead of marginTop -->
     <div class="container pt-4">
       <router-view></router-view>
     </div>
@@ -87,12 +130,11 @@
 </template>
 
 <script>
-import { RouterView } from "vue-router";
-
 export default {
   data() {
     return {
       sidebarOpen: true,
+      masterDataOpen: false,
     };
   },
   methods: {
@@ -101,6 +143,9 @@ export default {
     },
     closeSidebar() {
       this.sidebarOpen = false;
+    },
+    toggleMasterData() {
+      this.masterDataOpen = !this.masterDataOpen;
     },
   },
 };
@@ -114,6 +159,7 @@ export default {
   color: black;
   font-style: italic;
 }
+
 .name_desc {
   font-family: "Poppins", sans-serif;
   font-size: 0.6rem;
@@ -134,17 +180,17 @@ body {
   box-shadow: 0 2px 5px 0 rgb(0 0 0 / 5%), 0 2px 10px 0 rgb(0 0 0 / 5%);
   width: 270px;
   z-index: 600;
-  transition: left 0.3s ease; /* Animasi saat toggler diklik */
-  left: -300px; /* Sidebar secara default tersembunyi */
+  transition: left 0.3s ease;
+  left: -300px;
 }
 
 .sidebar.show {
-  left: 0; /* Tampilkan sidebar saat kelas 'show' ditambahkan */
+  left: 0;
 }
 
 @media (max-width: 991.98px) {
   .sidebar {
-    width: 270px; /* Set the width for mobile devices */
+    width: 270px;
   }
 }
 
@@ -159,12 +205,14 @@ body {
   height: calc(100vh - 48px);
   padding-top: 0.5rem;
   overflow-x: hidden;
-  overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+  overflow-y: auto;
 }
 
 .list-group-item {
   background-color: gainsboro;
-  margin-bottom: 40px;
+  margin-bottom: 15px;
+  border-radius: 5px;
+  padding-left: 15px;
 }
 
 .navbar {
@@ -188,10 +236,15 @@ body {
 }
 
 main {
-  transition: margin-left 0.3s ease; /* Add transition for smooth animation */
+  transition: margin-left 0.3s ease;
 }
 
 .router-view {
-  min-height: calc(100vh - 70px); /* Adjust the min-height */
+  min-height: calc(100vh - 70px);
+}
+
+.submenu {
+  padding-left: 20px;
+  margin-top: 10px;
 }
 </style>
