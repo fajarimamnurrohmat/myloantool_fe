@@ -1,250 +1,182 @@
 <template>
-  <!--Main Navigation-->
-  <header>
-    <!-- Navbar -->
-    <nav
-      id="main-navbar"
-      class="navbar navbar-expand-lg navbar-light fixed-top"
-    >
-      <!-- Container wrapper -->
-      <div class="container">
-        <!-- Brand -->
-        <a class="navbar-brand" href="#">
-          <div class="name_brand">MyLoanTool</div>
-          <div class="name_desc">Peminjaman Alat Bengkel</div>
-        </a>
-        <!-- Toggle button -->
-        <button @click="toggleSidebar">
-          <i class="fas fa-bars"></i>
-        </button>
-      </div>
-      <!-- Container wrapper -->
-    </nav>
-    <!-- Navbar -->
-
-    <!-- Sidebar -->
-    <nav
-      id="sidebarMenu"
-      :class="{ show: sidebarOpen }"
-      class="collapse d-lg-block sidebar collapse"
-    >
-      <div class="position-sticky">
-        <div class="list-group list-group-flush mx-3 mt-5">
-          <router-link
-            to="/mainsidebar/order"
-            class="list-group-item list-group-item-action py-2 ripple d-flex align-items-center"
-            aria-current="true"
-            @click="closeSidebar"
-          >
-            <i class="fas fa-tachometer-alt fa-fw me-3"></i>
-            <span>Dashboard</span>
-          </router-link>
-
-          <router-link
-            to="/mainsidebar/detailorder"
-            class="list-group-item list-group-item-action py-2 ripple d-flex align-items-center"
-            aria-current="true"
-            @click="closeSidebar"
-          >
-            <i class="fas fa-chart-line fa-fw me-3"></i>
-            <span>Peminjaman</span>
-          </router-link>
-
-          <router-link
-            to="/mainsidebar/category"
-            class="list-group-item list-group-item-action py-2 ripple d-flex align-items-center"
-            aria-current="true"
-            @click="closeSidebar"
-          >
-            <i class="fas fa-chart-bar fa-fw me-3"></i>
-            <span>Data Pinjaman</span>
-          </router-link>
-
-          <!-- Data Master with dropdown arrow -->
-          <div
-            class="list-group-item py-2 ripple d-flex align-items-center justify-content-between"
-            aria-current="true"
-            @click="toggleMasterData"
-            style="cursor: pointer"
-          >
-            <div class="d-flex align-items-center">
-              <i class="fas fa-folder fa-fw me-3"></i>
-              <span>Data Master</span>
-            </div>
-            <i
-              :class="
-                masterDataOpen ? 'fas fa-chevron-down' : 'fas fa-chevron-right'
-              "
-            ></i>
-          </div>
-
-          <!-- Submenu items for Data Master -->
-          <div v-if="masterDataOpen" class="submenu ms-4">
-            <router-link
-              to="/mainsidebar/datasiswa"
-              class="list-group-item list-group-item-action py-2 ripple d-flex align-items-center"
-              @click="closeSidebar"
-            >
-              <i class="fas fa-user-graduate fa-fw me-3"></i>
-              <span>Siswa</span>
-            </router-link>
-
-            <router-link
-              to="/mainsidebar/dataalat"
-              class="list-group-item list-group-item-action py-2 ripple d-flex align-items-center"
-              @click="closeSidebar"
-            >
-              <i class="fas fa-tools fa-fw me-3"></i>
-              <span>Alat</span>
-            </router-link>
-            <router-link
-              to="/mainsidebar/databengkel"
-              class="list-group-item list-group-item-action py-2 ripple d-flex align-items-center"
-              @click="closeSidebar"
-            >
-              <i class="fas fa-tools fa-fw me-3"></i>
-              <span>Bengkel</span>
-            </router-link>
+    <!--Main Navigation-->
+    <header>
+      <!-- Navbar -->
+      <nav id="main-navbar" class="navbar navbar-expand-lg fixed-top">
+        <!-- Container wrapper -->
+        <div class="container">
+          <!-- Brand -->
+          <a class="navbar-brand" href="#">
+            <div class="name_brand">MyLoanTool</div>
+            <div class="name_desc">Peminjaman Alat Bengkel</div>
+          </a>
+          <!-- Toggle button -->
+          <button @click="toggleNavbar" class="navbar-toggler" type="button">
+            <i class="fas fa-bars"></i>
+          </button>
+          <!-- Navbar links -->
+          <div class="collapse navbar-collapse" :class="{ show: navbarOpen }">
+            <ul class="navbar-nav ms-auto">
+              <li class="nav-item">
+                <router-link to="/mainsidebar/order" class="nav-link" @click="closeNavbar">
+                  Dashboard
+                </router-link>
+              </li>
+              <li class="nav-item">
+                <router-link to="/mainsidebar/detailorder" class="nav-link" @click="closeNavbar">
+                  Peminjaman
+                </router-link>
+              </li>
+              <li class="nav-item">
+                <router-link to="/mainsidebar/category" class="nav-link" @click="closeNavbar">
+                  Data Pinjaman
+                </router-link>
+              </li>
+              <li class="nav-item dropdown">
+                <a
+                  class="nav-link dropdown-toggle"
+                  href="#"
+                  id="dataMasterDropdown"
+                  role="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  Data Master
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="dataMasterDropdown">
+                  <li>
+                    <router-link to="/mainsidebar/datasiswa" class="dropdown-item" @click="closeNavbar">
+                      Siswa
+                    </router-link>
+                  </li>
+                  <li>
+                    <router-link to="/mainsidebar/dataalat" class="dropdown-item" @click="closeNavbar">
+                      Alat
+                    </router-link>
+                  </li>
+                  <li>
+                    <router-link to="/mainsidebar/databengkel" class="dropdown-item" @click="closeNavbar">
+                      Bengkel
+                    </router-link>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+            <!-- Logout -->
+            <ul class="navbar-nav ms-3">
+              <li class="nav-logout">
+                <router-link to="" class="nav-link nav-logout" @click="closeNavbar">
+                  Logout
+                </router-link>
+              </li>
+            </ul>
           </div>
         </div>
+      </nav>
+      <!-- Navbar -->
+    </header>
+    <!--Main Navigation-->
+  
+    <!--Main layout-->
+    <main>
+      <div class="container pt-4">
+        <router-view></router-view>
       </div>
-
-      <!-- Logout Section -->
-      <div class="logout-section">
-        <a class="logout" href="#">
-          <div class="name_logout" style="color: red">Logout</div>
-        </a>
-      </div>
-    </nav>
-    <!-- Sidebar -->
-  </header>
-  <!--Main Navigation-->
-
-  <!--Main layout-->
-  <main :style="{ marginLeft: sidebarOpen ? '250px' : '0' }">
-    <div class="container pt-4">
-      <router-view></router-view>
-    </div>
-  </main>
-  <!--Main layout-->
-</template>
-
-<script>
-export default {
-  data() {
-    return {
-      sidebarOpen: true,
-      masterDataOpen: false,
-    };
-  },
-  methods: {
-    toggleSidebar() {
-      this.sidebarOpen = !this.sidebarOpen;
+    </main>
+    <!--Main layout-->
+  </template>
+  
+  <script>
+  export default {
+    data() {
+      return {
+        navbarOpen: false,
+      };
     },
-    closeSidebar() {
-      this.sidebarOpen = false;
+    methods: {
+      toggleNavbar() {
+        this.navbarOpen = !this.navbarOpen;
+      },
+      closeNavbar() {
+        this.navbarOpen = false;
+      },
     },
-    toggleMasterData() {
-      this.masterDataOpen = !this.masterDataOpen;
-    },
-  },
-};
-</script>
-
-<style>
-.name_brand {
-  font-family: "Poppins", sans-serif;
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: black;
-  font-style: italic;
-}
-
-.name_desc {
-  font-family: "Poppins", sans-serif;
-  font-size: 0.6rem;
-  color: black;
-}
-
-body {
-  background-color: #fbfbfb;
-}
-
-.sidebar {
-  background-color: gainsboro;
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  padding: 58px 0 0; /* Height of navbar */
-  box-shadow: 0 2px 5px 0 rgb(0 0 0 / 5%), 0 2px 10px 0 rgb(0 0 0 / 5%);
-  width: 270px;
-  z-index: 600;
-  transition: left 0.3s ease;
-  left: -300px;
-}
-
-.sidebar.show {
-  left: 0;
-}
-
-@media (max-width: 991.98px) {
-  .sidebar {
-    width: 270px;
+  };
+  </script>
+  
+  <style>
+  /* Menggunakan gradasi warna untuk navbar */
+  .navbar {
+    background: linear-gradient(90deg, #4b6cb7, #182848);
+    border-radius: 5px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    height: 80px;
   }
-}
-
-.sidebar .active {
-  border-radius: 5px;
-  box-shadow: 0 2px 5px 0 rgb(0 0 0 / 16%), 0 2px 10px 0 rgb(0 0 0 / 12%);
-}
-
-.sidebar-sticky {
-  position: relative;
-  top: 0;
-  height: calc(100vh - 48px);
-  padding-top: 0.5rem;
-  overflow-x: hidden;
-  overflow-y: auto;
-}
-
-.list-group-item {
-  background-color: gainsboro;
-  margin-bottom: 15px;
-  border-radius: 5px;
-  padding-left: 15px;
-}
-
-.navbar {
-  background-color: gainsboro;
-  border-radius: 5px;
-  box-shadow: 0 2px 5px 0 rgb(0 0 0 / 16%), 0 2px 10px 0 rgb(0 0 0 / 12%);
-  height: 70px;
-}
-
-.logout-section {
-  position: absolute;
-  bottom: 20px;
-  width: 100%;
-  text-align: center;
-}
-
-.logout {
-  display: block;
-  padding: 10px 0;
-  text-decoration: none;
-}
-
-main {
-  transition: margin-left 0.3s ease;
-}
-
-.router-view {
-  min-height: calc(100vh - 70px);
-}
-
-.submenu {
-  padding-left: 20px;
-  margin-top: 10px;
-}
-</style>
+  
+  /* Menyelaraskan gaya merek */
+  .name_brand {
+    font-family: "Poppins", sans-serif;
+    font-size: 1.35rem;
+    font-weight: bold;
+    color: white;
+    font-style: italic;
+  }
+  
+  .name_desc {
+    font-family: "Poppins", sans-serif;
+    font-size: 0.8rem;
+    color: #d1d1d1;
+  }
+  
+  /* Styling untuk tautan di navbar */
+  .navbar-nav .nav-item .nav-link {
+    color: white;
+    font-weight: bold;
+    font-family: "Poppins", sans-serif;
+    margin-right: 20px;
+    transition: color 0.3s ease;
+  }
+  
+  .navbar-nav .nav-item .nav-link:hover {
+    color: #f8c291;
+  }
+  
+  /* Logout link styling dengan warna berbeda */
+  .nav-logout .nav-link {
+    color: #e74c3c;
+    font-weight: bold;
+    margin-left: 20px;
+    transition: color 0.3s ease;
+  }
+  
+  .nav-logout .nav-link:hover {
+    color: #c0392b;
+  }
+  
+  /* Styling untuk dropdown menu */
+  .navbar-nav .dropdown-menu {
+    background-color: #2c3e50;
+    border: none;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .navbar-nav .dropdown-item {
+    color: white;
+    font-family: "Poppins", sans-serif;
+  }
+  
+  .navbar-nav .dropdown-item:hover {
+    background-color: #34495e;
+    color: #f8c291;
+  }
+  
+  /* Background dan padding untuk konten utama */
+  body {
+    background-color: #ecf0f1;
+  }
+  
+  .main {
+    padding-top: 70px;
+  }
+  </style>
+  

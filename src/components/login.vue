@@ -28,7 +28,7 @@
         <button
           type="submit"
           class="btn btn-primary mb-4"
-          style="border-radius: 20px"
+          style="border-radius: 30px; width: 100px; background-color: white; color: #182848; font-weight: bold;"
         >
           Masuk
         </button>
@@ -44,21 +44,25 @@
   height: 450px;
   width: 380px;
   border-radius: 30px;
-  background-color: gainsboro;
+  background: linear-gradient(90deg, #4b6cb7, #182848);
 }
 
 .name_login {
   font-family: "Poppins", sans-serif;
   font-size: 1rem;
   font-weight: bold;
-  color: black;
+  color: white;
+}
+
+.form-label{
+  color: white;
 }
 
 .name_brand {
   font-family: "Poppins", sans-serif;
   font-size: 1.5rem;
   font-weight: bold;
-  color: black;
+  color: white;
   margin-top: 8px;
 }
 </style>
