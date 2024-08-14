@@ -1,68 +1,142 @@
 <template>
   <div class="col d-flex align-items-center justify-content-center">
     <div class="form-container">
-      <div class="mb-5 mt-2">
-        <div class="name_login">Log In</div>
+      <div class="text-center mb-4 mt-2">
         <div class="name_brand">MyLoanTool</div>
+        <div class="name_desc">Peminjaman Alat Bengkel</div>
       </div>
-      <form style="text-align: left; margin-bottom: 70px">
-        <div class="mb-4">
-          <label for="exampleInputEmail1" class="form-label">Username</label>
+      <form>
+        <div class="mb-4 input-group">
+          <span class="input-group-text">
+            <i class="fas fa-user"></i>
+          </span>
           <input
-            type="email"
+            type="text"
             class="form-control"
-            id="exampleInputEmail1"
-            aria-describedby="emailHelp"
+            placeholder="Username"
+            autocomplete="off"
           />
         </div>
-        <div class="mb-4">
-          <label for="exampleInputPassword1" class="form-label">Password</label>
+        <div class="mb-4 input-group">
+          <span class="input-group-text">
+            <i class="fas fa-lock"></i>
+          </span>
           <input
-            type="password"
+            :type="passwordFieldType"
             class="form-control"
-            id="exampleInputPassword1"
+            placeholder="Password"
+            autocomplete="off"
           />
+          <span class="input-group-text toggle-password" @click="togglePasswordVisibility">
+            <i :class="passwordFieldIcon"></i>
+          </span>
         </div>
+        <router-link to="/mainsidebar/dashboard">
+          <button type="submit" class="btn btn-custom mt-4">
+            Log In
+          </button>
+        </router-link>
       </form>
-      <router-link to="/mainsidebar">
-        <button
-          type="submit"
-          class="btn btn-primary mb-4"
-          style="border-radius: 30px; width: 100px; background-color: white; color: #182848; font-weight: bold;"
-        >
-          Masuk
-        </button>
-      </router-link>
     </div>
   </div>
 </template>
 
+<script>
+export default {
+  data() {
+    return {
+      passwordFieldType: 'password',
+      passwordFieldIcon: 'fas fa-eye',
+    };
+  },
+  methods: {
+    togglePasswordVisibility() {
+      if (this.passwordFieldType === 'password') {
+        this.passwordFieldType = 'text';
+        this.passwordFieldIcon = 'fas fa-eye-slash';
+      } else {
+        this.passwordFieldType = 'password';
+        this.passwordFieldIcon = 'fas fa-eye';
+      }
+    },
+  },
+};
+</script>
+
 <style>
+body {
+  background: linear-gradient(to right, #ececec, #d3d3d3);
+  font-family: "Poppins", sans-serif;
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .form-container {
-  border: 1px solid gainsboro; /* Border solid dengan warna abu-abu */
-  padding: 30px;
-  height: 450px;
-  width: 380px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  border: none;
+  padding: 40px;
+  width: 400px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #4b6cb7, #182848);
+  color: white;
+}
+
+.input-group {
+  position: relative;
   border-radius: 30px;
-  background: linear-gradient(90deg, #4b6cb7, #182848);
+  overflow: hidden;
 }
 
-.name_login {
-  font-family: "Poppins", sans-serif;
-  font-size: 1rem;
+.input-group-text {
+  background-color: #e6e6e9;
+  border: none;
+  color: rgb(5, 5, 5);
+  padding: 15px 20px;
+}
+
+.form-control {
+  border: none;
+  padding: 15px 20px;
+  border-radius: 0 30px 30px 0;
+  background-color: #f0f0f0;
+}
+
+.toggle-password {
+  cursor: pointer;
+}
+
+.btn-custom {
+  width: 100%;
+  padding: 15px;
+  border-radius: 30px;
+  background-color: #f8c291;
+  color: #182848;
   font-weight: bold;
-  color: white;
+  transition: all 0.3s ease;
+  border: none;
+  text-align: center;
+  margin-top: 40px;
 }
 
-.form-label{
+.btn-custom:hover {
+  background-color: #f39c12;
   color: white;
+  box-shadow: 0 8px 15px rgba(243, 156, 18, 0.3);
+  transform: translateY(-3px);
 }
 
-.name_brand {
-  font-family: "Poppins", sans-serif;
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: white;
-  margin-top: 8px;
+.btn-custom:active {
+  transform: scale(0.95);
+}
+
+/* Media query for responsiveness */
+@media (max-width: 768px) {
+  .form-container {
+    width: 90%;
+    padding: 20px;
+  }
 }
 </style>
