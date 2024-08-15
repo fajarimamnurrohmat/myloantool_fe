@@ -31,6 +31,7 @@
             <i :class="passwordFieldIcon"></i>
           </span>
         </div>
+        <a href="" style="color: red;">lupa password ! &rarr;</a>
         <router-link to="/mainsidebar/dashboard">
           <button type="submit" class="btn btn-custom mt-4">
             Log In
@@ -64,16 +65,6 @@ export default {
 </script>
 
 <style>
-body {
-  background: linear-gradient(to right, #ececec, #d3d3d3);
-  font-family: "Poppins", sans-serif;
-  margin: 0;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 .form-container {
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
   border: none;
