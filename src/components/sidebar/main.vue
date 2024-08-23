@@ -35,14 +35,37 @@
                 Peminjaman
               </router-link>
             </li>
-            <li class="nav-item">
-              <router-link
-                to="/mainsidebar/datapinjaman"
-                class="nav-link"
-                @click="closeNavbar"
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="dataPinjamanDropdown"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
               >
                 Data Pinjaman
-              </router-link>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="dataPinjamanDropdown">
+                <li>
+                  <router-link
+                    to="/mainsidebar/datapinjaman"
+                    class="dropdown-item"
+                    @click="closeNavbar"
+                  >
+                    Pinjaman Dikembalikan
+                  </router-link>
+                </li>
+                <li>
+                  <router-link
+                    to="/mainsidebar/pinjaman_bermasalah"
+                    class="dropdown-item"
+                    @click="closeNavbar"
+                  >
+                    Pinjaman Bermasalah
+                  </router-link>
+                </li>
+              </ul>
             </li>
             <li class="nav-item dropdown">
               <a

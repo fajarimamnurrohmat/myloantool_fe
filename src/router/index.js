@@ -7,7 +7,8 @@ import Siswa from "../components/sidebar/datasiswa.vue";
 import Alat from "../components/sidebar/dataalat.vue";
 import Bengkel from "../components/sidebar/databengkel.vue";
 import Datapinjaman from "../components/sidebar/datapinjaman.vue";
-import Databengkel from "../components/sidebar/databengkel.vue";
+import Databermasalah from "../components/sidebar/dataBermasalah.vue";
+import Pengembalian from "../components/sidebar/pengembalian.vue";
 
 const routes = [
     {
@@ -23,10 +24,6 @@ const routes = [
                 component: Dashboard,
             },
             {
-                path: "peminjaman",
-                component: Peminjaman,
-            },
-            {
                 path: "datapinjaman",
                 component: Datapinjaman,
             },
@@ -36,11 +33,23 @@ const routes = [
             },
             {
                 path: "bengkel",
-                component: Databengkel,
+                component: Bengkel,
             },
             {
                 path: "alat",
                 component: Alat,
+            },
+            {
+                path: "pinjaman_bermasalah",
+                component: Databermasalah,
+            },
+            {
+                path: "peminjaman",
+                component: Peminjaman, 
+            },
+            {
+                path: "pengembalian",
+                component: Pengembalian,
             },
         ],
     },
