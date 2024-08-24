@@ -159,9 +159,9 @@ export default {
 /* Menggunakan gradasi warna untuk navbar */
 .navbar {
   background: linear-gradient(90deg, #4b6cb7, #182848);
-  border-radius: 5px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   height: 80px;
+  width: 100%;
 }
 
 /* Menyelaraskan gaya merek */
