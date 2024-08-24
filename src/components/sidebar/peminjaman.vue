@@ -244,6 +244,7 @@ export default {
 .header-peminjaman {
   font-weight: bold;
   font-size: 1.7rem;
+  color: #274278;
   margin-bottom: 10px;
   margin-top: 50px;
   animation: fadeInDown 1s ease-in-out;
