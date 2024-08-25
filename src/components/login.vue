@@ -5,6 +5,7 @@
         <div class="name_brand">MyLoanTool</div>
         <div class="name_desc">Peminjaman Alat Bengkel</div>
       </div>
+      <!-- form -->
       <form>
         <div class="mb-4 input-group">
           <span class="input-group-text">
@@ -31,13 +32,14 @@
             <i :class="passwordFieldIcon"></i>
           </span>
         </div>
-        <a href="" style="color: red;">lupa password ! &rarr;</a>
         <router-link to="/mainsidebar/dashboard">
           <button type="submit" class="btn btn-custom mt-4">
             Log In
           </button>
         </router-link>
+        <a href="#" class="forgot-password">lupa password?</a>
       </form>
+      <!-- form end -->
     </div>
   </div>
 </template>
@@ -81,18 +83,22 @@ export default {
   overflow: hidden;
 }
 
-.input-group-text {
-  background-color: #e6e6e9;
+.input-group-text, .form-control {
+  background-color: #f0f0f0;
   border: none;
   color: rgb(5, 5, 5);
   padding: 15px 20px;
 }
 
+.forgot-password {
+  display: block;
+  text-align: center; 
+  color: rgb(255, 255, 255); 
+  margin-top: 20px;
+}
+
 .form-control {
-  border: none;
-  padding: 15px 20px;
   border-radius: 0 30px 30px 0;
-  background-color: #f0f0f0;
 }
 
 .toggle-password {

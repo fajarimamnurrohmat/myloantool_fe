@@ -29,11 +29,12 @@
         <input type="text" v-model="searchQuery" @input="filterData" class="text-input" />
   
         <button class="export-button" @click="exportData('csv')">
-          Cetak CSV
+          <i class="fas fa-file-excel"></i>
         </button>
         <button class="export-button" @click="exportData('pdf')">
-          Cetak PDF
+          <i class="fas fa-file-pdf"></i>
         </button>
+
       </div>
   
       <!-- Tabel Data -->
@@ -183,11 +184,10 @@
   <style scoped>
   .header-DataPinjaman {
     font-weight: bold;
-    font-style: italic;
     color: #274278;
     font-size: 1.7rem;
     margin-bottom: 10px;
-    margin-top: 30px;
+    margin-top: -35px;
     animation: fadeInDown 1s ease-in-out;
   }
   
