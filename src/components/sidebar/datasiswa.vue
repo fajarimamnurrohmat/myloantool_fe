@@ -1,61 +1,75 @@
 <template>
   <div style="text-align: left">
     <h3 class="header-siswa">Halaman Data Siswa</h3>
+    <button @click="showModal = true" class="btn_add_siswa">
+      <i class="fas fa-plus"></i> Inputkan Data Siswa
+    </button>
   </div>
-  <div class="bordered-form">
-    <div class="form-row">
-      <div class="form-group">
-        <label for="nomorInduk">Nomor Induk</label>
-        <input
-          type="text"
-          id="nomorInduk"
-          class="form-control"
-          placeholder="Masukkan nomor induk"
-          v-model="newSiswa.nomorInduk"
-        />
+
+  <!-- Modal -->
+  <div v-if="showModal" class="modal-overlay" @click.self="closeModal">
+    <div class="modal-content">
+      
+      <div class="modal-header" style="margin-bottom: 10px;">
+        <h4 style="font-weight: bold; font-style: italic;">Input Data Siswa</h4>
+        <span class="close-modal" @click="closeModal" style="color: red; text-align: right;">&times;</span>
       </div>
-      <div class="form-group">
-        <label for="namaSiswa">Nama Siswa</label>
-        <input
-          type="text"
-          id="namaSiswa"
-          class="form-control"
-          placeholder="Masukkan nama siswa"
-          v-model="newSiswa.nama"
-        />
+      <div class="form-row">
+        <div class="form-group">
+          <label for="nomorInduk" style="color: aliceblue;">Nomor Induk</label>
+          <input
+            type="text"
+            id="nomorInduk"
+            class="form-control"
+            placeholder="Masukkan nomor induk"
+            v-model="newSiswa.nomorInduk"
+          />
+        </div>
+        <div class="form-group">
+          <label for="namaSiswa" style="color: aliceblue;">Nama Siswa</label>
+          <input
+            type="text"
+            id="namaSiswa"
+            class="form-control"
+            placeholder="Masukkan nama siswa"
+            v-model="newSiswa.nama"
+          />
+        </div>
       </div>
-    </div>
-    <div class="form-row">
-      <div class="form-group">
-        <label for="jenisKelamin">Jenis Kelamin</label>
-        <select
-          id="jenisKelamin"
-          class="form-control"
-          v-model="newSiswa.jenisKelamin"
-        >
-          <option value="">Pilih jenis kelamin</option>
-          <option value="Laki-laki">Laki-laki</option>
-          <option value="Perempuan">Perempuan</option>
-        </select>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="jenisKelamin" style="color: aliceblue;">Jenis Kelamin</label>
+          <select
+            id="jenisKelamin"
+            class="form-control"
+            v-model="newSiswa.jenisKelamin"
+          >
+            <option value="">Pilih jenis kelamin</option>
+            <option value="Laki-laki">Laki-laki</option>
+            <option value="Perempuan">Perempuan</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="jurusan" style="color: aliceblue;">Jurusan</label>
+          <input
+            type="text"
+            id="jurusan"
+            class="form-control"
+            placeholder="Masukkan jurusan"
+            v-model="newSiswa.jurusan"
+          />
+        </div>
       </div>
-      <div class="form-group">
-        <label for="jurusan">Jurusan</label>
-        <input
-          type="text"
-          id="jurusan"
-          class="form-control"
-          placeholder="Masukkan jurusan"
-          v-model="newSiswa.jurusan"
-        />
+
+      <div style="margin-top: 20px; text-align: left">
+        <button @click="addSiswa" class="btn_add_siswa">
+          <i class="fas fa-save"></i> Simpan Data
+        </button>
       </div>
-    </div>
-    <div style="margin-top: 20px; text-align: right">
-      <button class="btn_add_siswa" id="btn_add_siswa" @click="addSiswa">
-        <i class="fas fa-plus"></i> Input Data
-      </button>
     </div>
   </div>
 
+  <!-- Tabel Siswa -->
   <div style="margin-top: 30px">
     <div class="search-bar">
       <div>
@@ -109,15 +123,24 @@
         </tr>
       </tbody>
     </table>
-    <div v-if="totalPages > 1" style="margin-top: 10px; text-align: center">
-      <button @click="currentPage--" :disabled="currentPage === 1">
-        Previous
-      </button>
-      <span>Page {{ currentPage }} of {{ totalPages }}</span>
-      <button @click="currentPage++" :disabled="currentPage === totalPages">
-        Next
-      </button>
-    </div>
+    <div v-if="totalPages > 1" class="pagination-container">
+  <button 
+    @click="currentPage--" 
+    :disabled="currentPage === 1" 
+    class="pagination-button">
+    Previous
+  </button>
+  <span class="pagination-info">
+    Page {{ currentPage }} of {{ totalPages }}
+  </span>
+  <button 
+    @click="currentPage++" 
+    :disabled="currentPage === totalPages" 
+    class="pagination-button">
+    Next
+  </button>
+</div>
+
   </div>
 </template>
 
@@ -125,6 +148,7 @@
 export default {
   data() {
     return {
+      showModal: false,
       newSiswa: {
         nomorInduk: "",
         nama: "",
@@ -175,10 +199,8 @@ export default {
         } else {
           this.siswaList.push({ ...this.newSiswa });
         }
-        this.newSiswa.nomorInduk = "";
-        this.newSiswa.nama = "";
-        this.newSiswa.jenisKelamin = "";
-        this.newSiswa.jurusan = "";
+        this.closeModal();
+        this.resetForm();
       } else {
         alert("Mohon isi semua data");
       }
@@ -186,9 +208,23 @@ export default {
     editSiswa(index) {
       this.newSiswa = { ...this.siswaList[index] };
       this.editIndex = index;
+      this.showModal = true;
     },
     deleteSiswa(index) {
       this.siswaList.splice(index, 1);
+    },
+    closeModal() {
+      this.showModal = false;
+      this.resetForm();
+    },
+    resetForm() {
+      this.newSiswa = {
+        nomorInduk: "",
+        nama: "",
+        jenisKelamin: "",
+        jurusan: "",
+      };
+      this.editIndex = null;
     },
   },
   watch: {
@@ -200,6 +236,48 @@ export default {
 </script>
 
 <style>
+/* Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: linear-gradient(90deg, #4b6cb7, #182848);
+  padding: 20px;
+  border-radius: 10px;
+  width: 500px;
+  max-width: 90%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+}
+
+.close-modal {
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.modal-content h4 {
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+/* Other styles remain the same */
 .header-siswa {
   font-weight: bold;
   font-style: italic;
@@ -210,41 +288,6 @@ export default {
   animation: fadeInDown 1s ease-in-out;
 }
 
-.bordered-form {
-  border: 2px solid #ccc;
-  padding: 20px;
-  border-radius: 10px;
-  margin-top: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  transition: box-shadow 0.3s ease-in-out;
-}
-
-.bordered-form:hover {
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-}
-
-.form-row {
-  display: flex;
-  gap: 20px;
-}
-
-.form-group {
-  flex: 1;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 5px;
-  font-weight: bold;
-}
-
-.form-control {
-  width: 100%;
-  padding: 8px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-}
-
 .btn_add_siswa {
   background-color: #007bff;
   color: white;
@@ -252,71 +295,131 @@ export default {
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
+  transition: background-color 0.3s ease;
+  font-size: 16px;
 }
 
 .btn_add_siswa:hover {
   background-color: #0056b3;
-  transform: scale(1.05);
+}
+
+.form-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.form-group {
+  width: 48%;
+}
+
+.form-control {
+  width: 100%;
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
 .search-bar {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 }
 
-.search-input,
 .select-rows {
-  width: 250px;
   padding: 5px;
-  border-radius: 5px;
+  border-radius: 4px;
   border: 1px solid #ccc;
-  background-color: #fff;
-  color: #333;
 }
 
-.search-input::placeholder {
-  color: #999;
+.search-input {
+  padding: 5px;
+  width: 200px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
 }
 
 .data-table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 20px;
-  overflow-x: auto;
+  margin-top: 15px;
 }
 
-.data-table th,
 .data-table td {
-  border: 1px solid #ccc;
-  padding: 10px;
-  text-align: left;
-}
-
-.data-table th {
-  background-color: #f2f2f2;
-}
-
-.data-table tbody tr:nth-child(odd) {
-  background-color: #f9f9f9;
-}
-
-.data-table tbody tr:hover {
-  background-color: #f1f1f1;
-}
-
-.data-table .fas {
-  cursor: pointer;
-}
-
-.pagination-controls {
-  margin-top: 10px;
+  border: 1px solid #ddd;
+  padding: 8px;
   text-align: center;
 }
 
-.pagination-controls button {
-  margin: 0 5px;
+.data-table th {
+  background-color: #4b6cb7;
+  color: rgb(69, 67, 67);
+}
+
+.data-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.data-table tr:hover {
+  background-color: #ddd;
+}
+
+.pagination-container {
+  margin-top: 20px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px; /* Add space between the buttons and text */
+}
+
+.pagination-button {
+  background-color: #007bff; /* Button background color */
+  color: white; /* Button text color */
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+
+.pagination-button:hover {
+  background-color: #0056b3; /* Button color on hover */
+}
+
+.pagination-button:disabled {
+  background-color: #ccc; /* Disabled button color */
+  cursor: not-allowed;
+}
+
+.pagination-info {
+  font-weight: bold;
+  color: #333;
+  font-size: 14px;
+}
+
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 </style>
