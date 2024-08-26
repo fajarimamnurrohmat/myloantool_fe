@@ -1,4 +1,5 @@
 <template>
+<<<<<<< HEAD
   <div>
     <div style="text-align: left; margin-bottom: 30px">
       <h3 class="header-DataPinjaman">Data Pinjaman Telah Dikembalikan</h3>
@@ -7,6 +8,69 @@
         manajemen keseluruhan data pinjaman. Dapat melakukan filter serta ekspor
         data berupa file pdf.
       </p>
+=======
+    <div>
+      <div style="text-align: left; margin-bottom: 30px;">
+        <h3 class="header-DataPinjaman">Data Pinjaman Telah Dikembalikan</h3>
+        <p>
+          Pada halaman data pinjaman ini, dapat melakukan peninjauan serta
+          manajemen keseluruhan data pinjaman. Dapat melakukan filter serta ekspor
+          data berupa file pdf.
+        </p>
+      </div>
+      <hr>
+  
+      <!-- Filter dan Penyortir -->
+      <div class="filters" style="margin-top: 30px;">
+        <label for="rows">Tampilkan baris:</label>
+        <select v-model="rowsPerPage" @change="updateDisplayedData">
+          <option :value="5">5</option>
+          <option :value="10">10</option>
+          <option :value="20">20</option>
+        </select>
+  
+        <label for="startDate">Tanggal Pinjam:</label>
+        <input type="date" v-model="startDate" @change="filterData" class="date-input" />
+  
+        <label for="endDate">Tanggal Kembali:</label>
+        <input type="date" v-model="endDate" @change="filterData" class="date-input" />
+  
+        <label for="search">Pencarian:</label>
+        <input type="text" v-model="searchQuery" @input="filterData" class="text-input" />
+  
+        <button class="export-button" @click="exportData('csv')">
+          <i class="fas fa-file-excel"></i>
+        </button>
+        <button class="export-button" @click="exportData('pdf')">
+          <i class="fas fa-file-pdf"></i>
+        </button>
+
+      </div>
+  
+      <!-- Tabel Data -->
+      <table>
+        <thead>
+          <tr>
+            <th>Nama Peminjam</th>
+            <th>Alat</th>
+            <th>Bengkel</th>
+            <th>Jumlah</th>
+            <th>Tanggal Pinjam</th>
+            <th>Tanggal Kembali</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(record, index) in displayedData" :key="index">
+            <td>{{ record.namaPeminjam }}</td>
+            <td>{{ record.alat }}</td>
+            <td>{{ record.bengkel }}</td>
+            <td>{{ record.jumlah }}</td>
+            <td>{{ record.tanggalPinjam }}</td>
+            <td>{{ record.tanggalKembali }}</td>
+          </tr>
+        </tbody>
+      </table>
+>>>>>>> cb1de893a307196b4d394b495d998897b67d99eb
     </div>
     <hr />
 
@@ -191,6 +255,7 @@ export default {
         doc.save("data_pengembalian.pdf");
       }
     },
+<<<<<<< HEAD
   },
 };
 </script>
@@ -265,3 +330,78 @@ th {
   background-color: #f4f4f4;
 }
 </style>
+=======
+  };
+  </script>
+  
+  <style scoped>
+  .header-DataPinjaman {
+    font-weight: bold;
+    color: #274278;
+    font-size: 1.7rem;
+    margin-bottom: 10px;
+    margin-top: -35px;
+    animation: fadeInDown 1s ease-in-out;
+  }
+  
+  .filters {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .filters label {
+    font-weight: bold;
+  }
+  
+  .filters select,
+  .filters input[type="date"],
+  .filters input[type="text"] {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    color: #333; /* Warna teks agar kontras dengan latar belakang */
+  }
+  
+  .filters input[type="date"] {
+    background-color: #f9f9f9; /* Warna latar belakang untuk input tanggal */
+    color: #333; /* Warna teks untuk input tanggal */
+  }
+  
+  .filters input[type="text"] {
+    background-color: #fff; /* Warna latar belakang untuk input teks */
+  }
+  
+  .export-button {
+    background-color: #274278;
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .export-button:hover {
+    background-color: #1f3664;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  th,
+  td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+  }
+  
+  th {
+    background-color: #f4f4f4;
+  }
+  </style>
+  
+>>>>>>> cb1de893a307196b4d394b495d998897b67d99eb
