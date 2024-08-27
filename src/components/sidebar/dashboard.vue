@@ -27,7 +27,6 @@
 /* Styling untuk header Selamat Datang */
 .welcome-header {
     font-weight: bold;
-    font-style: italic;
     color: #274278;
     font-size: 2.5rem;
     margin-bottom: 10px;

@@ -1,64 +1,81 @@
 <template>
   <div style="text-align: left">
     <h3 class="header-peminjaman">Halaman Peminjaman</h3>
+    <button @click="showModal = true" class="btn_add_siswa">
+      <i class="fas fa-plus"></i> Inputkan Data Siswa
+    </button>
   </div>
-  <div class="bordered-form">
-    <div class="form-row">
-      <div class="form-group">
-        <label for="namaPeminjam">Nama Peminjam</label>
-        <p>Nama lengkap peminjam</p>
-        <input
-          type="text"
-          id="namaPeminjam"
-          class="form-control"
-          placeholder="Masukkan nama peminjam"
-          v-model="newPeminjaman.namaPeminjam"
-        />
+
+  <div v-if="showModal" class="modal-overlay" @click.self="closeModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4>Input Data Peminjaman</h4>
+        <span class="close-modal" @click="closeModal">&times;</span>
       </div>
-      <div class="form-group">
-        <label for="alat">Alat</label>
-        <p>Nama dan bengkel alat</p>
-        <input
-          type="text"
-          id="alat"
-          class="form-control"
-          placeholder="Masukkan nama alat"
-          v-model="newPeminjaman.alat"
-        />
+      <div class="modal-body">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="namaPeminjam">Nama Peminjam</label>
+            <p>Masukkan nama peminjam</p>
+            <input
+              type="text"
+              style="width: 250px;"
+              id="namaPeminjam"
+              class="form-control"
+              v-model="newPeminjaman.namaPeminjam"
+            />
+          </div>
+          <div class="form-group">
+            <label for="alat">Alat</label>
+            <p>Masukkan nama alat</p>
+            <input
+              type="text"
+              id="alat"
+              class="form-control"
+              v-model="newPeminjaman.alat"
+            />
+          </div>
+          <div class="form-group">
+            <label for="jumlahAlat">Jumlah Alat</label>
+            <input
+              type="number"
+              style="width: 100px; margin-top: 21px;"
+              id="jumlahAlat"
+              class="form-control"
+              v-model="newPeminjaman.jumlahAlat"
+            />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="bengkel">Bengkel</label>
+            <p>Masukkan nama bengkel alat</p>
+            <input
+              type="text"
+              style="width: 15.625rem;"
+              id="bengkel"
+              class="form-control"
+              v-model="newPeminjaman.bengkel"
+            />
+          </div>
+          <div class="form-group" style="margin-left: -2.3rem;">
+            <label for="tanggalPinjam">Tanggal Pinjam</label>
+            <p>Masukkan tanggal pinjam alat</p>
+            <input
+              type="date"
+              style="width: 16rem;"
+              id="tanggalPinjam"
+              class="form-control"
+              v-model="newPeminjaman.tanggalPinjam"
+            />
+          </div>
+        </div>
       </div>
-      <div class="form-group">
-        <label for="tanggalPinjam">Tanggal Pinjam</label>
-        <p>Tanggal pinjam alat</p>
-        <input
-          type="date"
-          id="tanggalPinjam"
-          class="form-control"
-          v-model="newPeminjaman.tanggalPinjam"
-        />
+      <div class="modal-footer">
+        <button @click="addPeminjaman" class="btn_add_peminjaman">
+          <i class="fas fa-save"></i> Simpan Data
+        </button>
       </div>
-    </div>
-    <div class="form-row" style="margin-top: 20px;">
-      <div class="form-group">
-        <label for="jumlahAlat">Jumlah Alat</label>
-        <input
-          style="width: 250px;"
-          type="number"
-          id="jumlahAlat"
-          class="form-control"
-          placeholder="Masukkan jumlah alat"
-          v-model="newPeminjaman.jumlahAlat"
-        />
-      </div>
-    </div>
-    <div style="margin-top: 20px; text-align: left;">
-      <button
-        style="border-radius: 10px;"
-        class="btn_add_peminjaman"
-        id="btn_add_peminjaman"
-        @click="addPeminjaman"
-      >
-        Input Data
-      </button>
     </div>
   </div>
 
@@ -68,10 +85,11 @@
     <div class="search-bar">
       <div>
         Tampilkan:
-        <select v-model="rowsPerPage" class="select-rows">
+        <select v-model="rowsPerPage" class="select-rows" style="width: 3rem;">
           <option value="5">5</option>
           <option value="10">10</option>
           <option value="20">20</option>
+          <option value="20">100</option>
         </select>
         baris
       </div>
@@ -108,27 +126,15 @@
           <td>{{ peminjaman.jumlahAlat }}</td>
           <td>{{ peminjaman.tanggalPinjam }}</td>
           <td>
-            <div class="action-buttons">
-              <button class="btn-action" @click="editPeminjaman(index)">
-                <i class="fas fa-edit"></i> Edit
+            <div class="dropdown d-inline-block">
+              <button class="btn btn-sm dropdown-toggle" type="button" @click="toggleDropdown(index)" :aria-expanded="dropdownIndex === index">
+                <i class="fas fa-ellipsis-h"></i>
               </button>
-              <button
-                class="btn-action btn-delete"
-                @click="deletePeminjaman(index)"
-              >
-                <i class="fas fa-trash-alt"></i> Hapus
-              </button>
-              <div class="dropdown">
-                <button
-                  class="btn-action dropdown-toggle"
-                  @click="toggleDropdown(index)"
-                >
-                  <i class="fas fa-ellipsis-v"></i> Action
-                </button>
-                <div v-if="dropdownIndex === index" class="dropdown-content">
-                  <router-link to="/mainsidebar/pengembalian">Dikembalikan</router-link>
-                  <router-link to="/perpanjangan">Perpanjangan</router-link>
-                </div>
+              <div class="dropdown-menu" :class="{ show: dropdownIndex === index }">
+                <a class="dropdown-item" @click="editPeminjaman(index)"><i class="fas fa-edit"></i> Edit</a>
+                <a class="dropdown-item" @click="deletePeminjaman(index)" style="color: red;"><i class="fas fa-trash-alt"></i> Hapus</a>
+                <router-link to="/mainsidebar/pengembalian" class="dropdown-item"><i class="fas fa-thumbs-up"></i> Dikembalikan</router-link>
+                <router-link to="/mainsidebar/pinjaman_bermasalah" class="dropdown-item" style="color: red;"><i class="fas fa-exclamation-triangle"></i> Barang bermasalah</router-link>
               </div>
             </div>
           </td>
@@ -159,9 +165,11 @@
 export default {
   data() {
     return {
+      showModal: false,
       newPeminjaman: {
         namaPeminjam: "",
         alat: "",
+        bengkel: "",
         tanggalPinjam: "",
         jumlahAlat: "",
       },
@@ -202,6 +210,7 @@ export default {
       if (
         this.newPeminjaman.namaPeminjam &&
         this.newPeminjaman.alat &&
+        this.newPeminjaman.bengkel &&
         this.newPeminjaman.tanggalPinjam &&
         this.newPeminjaman.jumlahAlat
       ) {
@@ -213,10 +222,8 @@ export default {
         } else {
           this.peminjamanList.push({ ...this.newPeminjaman });
         }
-        this.newPeminjaman.namaPeminjam = "";
-        this.newPeminjaman.alat = "";
-        this.newPeminjaman.tanggalPinjam = "";
-        this.newPeminjaman.jumlahAlat = "";
+        this.closeModal();
+        this.resetForm();
       } else {
         alert("Mohon isi semua data");
       }
@@ -227,6 +234,21 @@ export default {
     },
     deletePeminjaman(index) {
       this.peminjamanList.splice(index, 1);
+      this.dropdownIndex = null; // Close dropdown after deletion
+    },
+    closeModal() {
+      this.showModal = false;
+      this.resetForm();
+    },
+    resetForm() {
+      this.newPeminjaman = {
+        namaPeminjam: "",
+        alat: "",
+        bengkel: "",
+        tanggalPinjam: "",
+        jumlahAlat: "",
+      };
+      this.editIndex = null;
     },
     toggleDropdown(index) {
       this.dropdownIndex = this.dropdownIndex === index ? null : index;
@@ -241,6 +263,70 @@ export default {
 </script>
 
 <style>
+/* Modal Styles */
+.modal-overlay {
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  padding: 20px;
+  width: 100%; 
+  max-width: 100%;
+  justify-content: left;
+  align-items: left;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: #223661 !important;
+  padding: 20px;
+  border-radius: 10px;
+  width: 600px !important;
+  max-width: 100% !important;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  color: white;
+}
+
+.modal-body .form-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.modal-body {
+  color: white;
+  text-align: left; 
+}
+
+.modal-header h4, 
+.modal-body label, 
+.modal-body p,
+.modal-footer {
+  color: white;
+}
+
+.modal-body p {
+  margin-top: -9px;
+  margin-bottom: 10px;
+  font-size: 10px;
+  font-weight: 300;
+}
+
+.modal-body .form-group:last-child {
+  margin-right: 0;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-start; 
+  padding: 10px 0;
+}
+
 .header-peminjaman {
   font-weight: bold;
   font-size: 1.7rem;
@@ -250,57 +336,11 @@ export default {
   animation: fadeInDown 1s ease-in-out;
 }
 
-.bordered-form {
-  border: 2px solid #ccc;
-  padding: 20px;
-  border-radius: 10px;
-  margin-top: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  transition: box-shadow 0.3s ease-in-out;
-}
-
-.bordered-form:hover {
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-}
-
-.form-row {
-  display: flex;
-  gap: 20px;
-}
-
-.form-group {
-  flex: 1;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 5px;
-  font-weight: bold;
-  text-align: left;
-  color: #4E4E4E;
-}
-
-.form-group p {
-  text-align: left;
-  color: #979393;
-  line-height: 1;
-  font-size: 13px;
-}
-
-.form-group input {
-  border-radius: 10px;
-}
-.form-control {
-  width: 100%;
-  padding: 8px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-}
-
 .btn_add_peminjaman {
   background-color: #007bff;
   color: white;
   padding: 10px 20px;
+  margin-left: 0px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -358,70 +398,47 @@ export default {
   background-color: #f1f1f1;
 }
 
-.action-buttons {
-  display: flex;
-  gap: 10px;
-}
-
-.btn-action {
-  background: none;
-  border: none;
-  color: #007bff;
-  cursor: pointer;
-  font-size: 14px;
-  padding: 5px;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.btn-action:hover {
-  text-decoration: underline;
-}
-
-.btn-delete {
-  color: red;
-}
-
+/* Dropdown Styling */
 .dropdown {
   position: relative;
 }
 
-.dropdown-content {
-  display: block;
+.dropdown-menu {
+  display: none; 
   position: absolute;
+  top: 100%; 
+  right: 0;
+  left: auto; 
   background-color: #fff;
-  min-width: 160px;
+  width: 15rem;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   z-index: 1;
   border-radius: 5px;
   padding: 10px;
+  max-height: 300px; 
+  overflow-y: auto; 
+  margin-top: 5px; 
+  transform: translateX(-50%);
+  left: 50%;
 }
 
-.dropdown-content router-link {
+.dropdown-menu.show {
+  display: block;
+}
+
+.dropdown-menu button {
+  background: none;
+  border: none;
   color: black;
   padding: 10px;
-  text-decoration: none;
-  display: block;
+  text-align: left;
+  width: 100%;
+  box-sizing: border-box;
+  cursor: pointer;
 }
 
-.dropdown-content router-link:hover {
+.dropdown-menu button:hover {
   background-color: #f1f1f1;
-}
-
-.dropdown-content a {
-  color: black;
-  padding: 12px 16px;
-  text-decoration: none;
-  display: block;
-}
-
-.dropdown-content a:hover {
-  background-color: #f1f1f1;
-}
-
-.dropdown-toggle:focus + .dropdown-content {
-  display: block;
 }
 
 .pagination-controls {

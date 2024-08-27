@@ -11,7 +11,7 @@
     <div class="modal-content">
       
       <div class="modal-header" style="margin-bottom: 10px;">
-        <h4 style="font-weight: bold; font-style: italic;">Input Data Siswa</h4>
+        <h4 style="font-weight: bold;">Input Data Siswa</h4>
         <span class="close-modal" @click="closeModal" style="color: red; text-align: right;">&times;</span>
       </div>
       <div class="form-row">
@@ -280,11 +280,10 @@ export default {
 /* Other styles remain the same */
 .header-siswa {
   font-weight: bold;
-  font-style: italic;
   color: #274278;
   font-size: 1.7rem;
   margin-bottom: 10px;
-  margin-top: 30px;
+  margin-top: 20px;
   animation: fadeInDown 1s ease-in-out;
 }
 
