@@ -11,7 +11,7 @@
           <span class="input-group-text">
             <i class="fas fa-user"></i>
           </span>
-          <input-class
+          <input
             type="text"
             class="form-control"
             placeholder="Username"
@@ -22,7 +22,7 @@
           <span class="input-group-text">
             <i class="fas fa-lock"></i>
           </span>
-          <input-class
+          <input
             :type="passwordFieldType"
             class="form-control"
             placeholder="Password"
@@ -67,10 +67,11 @@ export default {
 </script>
 
 <style>
-input-class {
+input {
   outline: none !important;
   border: none !important;
 }
+
 .form-container {
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
   border: none;
@@ -85,7 +86,7 @@ input-class {
   position: relative;
   border-radius: 30px;
   overflow: hidden;
-  background-color: white;
+  background-color: #f0f0f0;
 }
 
 .input-group-text {
