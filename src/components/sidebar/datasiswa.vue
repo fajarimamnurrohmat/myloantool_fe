@@ -9,14 +9,18 @@
   <!-- Modal -->
   <div v-if="showModal" class="modal-overlay" @click.self="closeModal">
     <div class="modal-content">
-      
-      <div class="modal-header" style="margin-bottom: 10px;">
-        <h4 style="font-weight: bold;">Input Data Siswa</h4>
-        <span class="close-modal" @click="closeModal" style="color: red; text-align: right;">&times;</span>
+      <div class="modal-header">
+        <h4>Input Data Siswa</h4>
+        <span
+          class="close-modal"
+          @click="closeModal"
+          style="color: red; text-align: right"
+          >&times;</span
+        >
       </div>
       <div class="form-row">
         <div class="form-group">
-          <label for="nomorInduk" style="color: aliceblue;">Nomor Induk</label>
+          <label for="nomorInduk">Nomor Induk</label>
           <input
             type="text"
             id="nomorInduk"
@@ -26,7 +30,7 @@
           />
         </div>
         <div class="form-group">
-          <label for="namaSiswa" style="color: aliceblue;">Nama Siswa</label>
+          <label for="namaSiswa">Nama Siswa</label>
           <input
             type="text"
             id="namaSiswa"
@@ -38,7 +42,7 @@
       </div>
       <div class="form-row">
         <div class="form-group">
-          <label for="jenisKelamin" style="color: aliceblue;">Jenis Kelamin</label>
+          <label for="jenisKelamin">Jenis Kelamin</label>
           <select
             id="jenisKelamin"
             class="form-control"
@@ -50,7 +54,7 @@
           </select>
         </div>
         <div class="form-group">
-          <label for="jurusan" style="color: aliceblue;">Jurusan</label>
+          <label for="jurusan">Jurusan</label>
           <input
             type="text"
             id="jurusan"
@@ -124,23 +128,24 @@
       </tbody>
     </table>
     <div v-if="totalPages > 1" class="pagination-container">
-  <button 
-    @click="currentPage--" 
-    :disabled="currentPage === 1" 
-    class="pagination-button">
-    Previous
-  </button>
-  <span class="pagination-info">
-    Page {{ currentPage }} of {{ totalPages }}
-  </span>
-  <button 
-    @click="currentPage++" 
-    :disabled="currentPage === totalPages" 
-    class="pagination-button">
-    Next
-  </button>
-</div>
-
+      <button
+        @click="currentPage--"
+        :disabled="currentPage === 1"
+        class="pagination-button"
+      >
+        Previous
+      </button>
+      <span class="pagination-info">
+        Page {{ currentPage }} of {{ totalPages }}
+      </span>
+      <button
+        @click="currentPage++"
+        :disabled="currentPage === totalPages"
+        class="pagination-button"
+      >
+        Next
+      </button>
+    </div>
   </div>
 </template>
 
@@ -272,9 +277,12 @@ export default {
   cursor: pointer;
 }
 
+.modal-content {
+  text-align: left;
+  color: #274278;
+}
 .modal-content h4 {
   margin-top: 0;
-  margin-bottom: 20px;
 }
 
 /* Other styles remain the same */
@@ -398,7 +406,6 @@ export default {
   color: #333;
   font-size: 14px;
 }
-
 
 @keyframes fadeIn {
   from {

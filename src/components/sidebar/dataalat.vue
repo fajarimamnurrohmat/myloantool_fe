@@ -1,57 +1,63 @@
 <template>
   <div style="text-align: left">
     <h3 class="header-alat">Halaman Data Alat</h3>
+    <!-- Trigger Button for Modal -->
+    <button class="btn_add_alat" @click="showModal = true">
+      <i class="fas fa-plus"></i> Inputkan Data Alat
+    </button>
   </div>
-  <div class="bordered-form">
-    <div class="form-row">
-      <div class="form-group">
-        <label for="namaAlat">Nama Alat</label>
-        <input
-          type="text"
-          id="namaAlat"
-          class="form-control"
-          placeholder="Masukkan nama alat"
-          v-model="newAlat.namaAlat"
-        />
+
+  <!-- Modal -->
+  <div v-if="showModal" class="modal-overlay" @click.self="closeModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4>Input Data Alat</h4>
+        <button class="close-modal" @click="closeModal">&times;</button>
       </div>
-      <div class="form-group">
-        <label for="kondisi">Kondisi</label>
-        <select id="kondisi" class="form-control" v-model="newAlat.kondisi">
-          <option value="">Pilih kondisi</option>
-          <option value="Baik">Baik</option>
-          <option value="Rusak">Rusak</option>
-        </select>
+      <div class="modal-body">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="namaAlat">Nama Alat</label>
+            <input
+              type="text"
+              id="namaAlat"
+              class="form-control"
+              placeholder="Masukkan nama alat"
+              v-model="newAlat.namaAlat"
+            />
+          </div>
+          <div class="form-group">
+            <label for="jumlah">Jumlah</label>
+            <input
+              type="number"
+              id="jumlah"
+              class="form-control"
+              placeholder="Masukkan jumlah"
+              v-model="newAlat.jumlah"
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="ruangBengkel">Ruang Bengkel</label>
+          <input
+            type="text"
+            id="ruangBengkel"
+            class="form-control"
+            placeholder="Masukkan ruang bengkel"
+            v-model="newAlat.ruangBengkel"
+          />
+        </div>
       </div>
-    </div>
-    <div class="form-row">
-      <div class="form-group">
-        <label for="jumlah">Jumlah</label>
-        <input
-          type="number"
-          id="jumlah"
-          class="form-control"
-          placeholder="Masukkan jumlah"
-          v-model="newAlat.jumlah"
-        />
+      <div class="modal-footer">
+        <button class="btn_add_alat" @click="addAlat">
+          <i class="fas fa-save"></i> Simpan Data
+        </button>
       </div>
-      <div class="form-group">
-        <label for="ruangBengkel">Ruang Bengkel</label>
-        <input
-          type="text"
-          id="ruangBengkel"
-          class="form-control"
-          placeholder="Masukkan ruang bengkel"
-          v-model="newAlat.ruangBengkel"
-        />
-      </div>
-    </div>
-    <div style="margin-top: 20px; text-align: right">
-      <button class="btn_add_alat" id="btn_add_alat" @click="addAlat">
-        <i class="fas fa-plus"></i> Input Data
-      </button>
     </div>
   </div>
 
+  <!-- Table Section -->
   <div style="margin-top: 30px">
     <div class="search-bar">
       <div>
@@ -78,7 +84,6 @@
         <tr>
           <th>No</th>
           <th>Nama Alat</th>
-          <th>Kondisi</th>
           <th>Jumlah</th>
           <th>Ruang Bengkel</th>
           <th>Action</th>
@@ -88,7 +93,6 @@
         <tr v-for="(alat, index) in paginatedAlatList" :key="index">
           <td>{{ index + 1 + (currentPage - 1) * rowsPerPage }}</td>
           <td>{{ alat.namaAlat }}</td>
-          <td>{{ alat.kondisi }}</td>
           <td>{{ alat.jumlah }}</td>
           <td>{{ alat.ruangBengkel }}</td>
           <td>
@@ -101,7 +105,7 @@
           </td>
         </tr>
         <tr v-if="paginatedAlatList.length === 0">
-          <td colspan="6" style="text-align: center">Tidak ada data</td>
+          <td colspan="5" style="text-align: center">Tidak ada data</td>
         </tr>
       </tbody>
     </table>
@@ -123,7 +127,6 @@ export default {
     return {
       newAlat: {
         namaAlat: "",
-        kondisi: "",
         jumlah: "",
         ruangBengkel: "",
       },
@@ -132,6 +135,7 @@ export default {
       currentPage: 1,
       searchQuery: "",
       editIndex: null,
+      showModal: false,
     };
   },
   computed: {
@@ -141,7 +145,6 @@ export default {
           alat.namaAlat
             .toLowerCase()
             .includes(this.searchQuery.toLowerCase()) ||
-          alat.kondisi.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
           alat.jumlah.toString().includes(this.searchQuery) ||
           alat.ruangBengkel
             .toLowerCase()
@@ -161,7 +164,6 @@ export default {
     addAlat() {
       if (
         this.newAlat.namaAlat &&
-        this.newAlat.kondisi &&
         this.newAlat.jumlah &&
         this.newAlat.ruangBengkel
       ) {
@@ -172,9 +174,9 @@ export default {
           this.alatList.push({ ...this.newAlat });
         }
         this.newAlat.namaAlat = "";
-        this.newAlat.kondisi = "";
         this.newAlat.jumlah = "";
         this.newAlat.ruangBengkel = "";
+        this.showModal = false;
       } else {
         alert("Mohon isi semua data");
       }
@@ -182,9 +184,19 @@ export default {
     editAlat(index) {
       this.newAlat = { ...this.alatList[index] };
       this.editIndex = index;
+      this.showModal = true;
     },
     deleteAlat(index) {
       this.alatList.splice(index, 1);
+    },
+    closeModal() {
+      this.showModal = false;
+      this.newAlat = {
+        namaAlat: "",
+        jumlah: "",
+        ruangBengkel: "",
+      };
+      this.editIndex = null;
     },
   },
   watch: {
@@ -195,7 +207,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .header-alat {
   font-weight: bold;
   font-style: italic;
@@ -206,26 +218,58 @@ export default {
   animation: fadeInDown 1s ease-in-out;
 }
 
-.bordered-form {
-  border: 2px solid #ccc;
+.btn_add_alat {
+  margin-top: 20px;
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.btn_add_alat:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  background: #fff;
   padding: 20px;
   border-radius: 10px;
-  margin-top: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  transition: box-shadow 0.3s ease-in-out;
+  width: 400px;
+  position: relative;
 }
 
-.bordered-form:hover {
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-}
-
-.form-row {
+.modal-header {
   display: flex;
-  gap: 20px;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0px;
+}
+
+.close-modal {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
 }
 
 .form-group {
-  flex: 1;
+  margin-bottom: 1px;
 }
 
 .form-group label {
@@ -241,19 +285,8 @@ export default {
   border: 1px solid #ccc;
 }
 
-.btn_add_alat {
-  background-color: #007bff;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
-}
-
-.btn_add_alat:hover {
-  background-color: #0056b3;
-  transform: scale(1.05);
+.modal-footer {
+  text-align: right;
 }
 
 .search-bar {
@@ -280,6 +313,7 @@ export default {
 .data-table {
   width: 100%;
   border-collapse: collapse;
+
   margin-top: 20px;
   overflow-x: auto;
 }

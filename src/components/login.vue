@@ -28,14 +28,15 @@
             placeholder="Password"
             autocomplete="off"
           />
-          <span class="input-group-text toggle-password" @click="togglePasswordVisibility">
+          <span
+            class="input-group-text toggle-password"
+            @click="togglePasswordVisibility"
+          >
             <i :class="passwordFieldIcon"></i>
           </span>
         </div>
         <router-link to="/mainsidebar/dashboard">
-          <button type="submit" class="btn btn-custom mt-4">
-            Log In
-          </button>
+          <button type="submit" class="btn btn-custom mt-4">Log In</button>
         </router-link>
         <a href="#" class="forgot-password">lupa password?</a>
       </form>
@@ -48,18 +49,18 @@
 export default {
   data() {
     return {
-      passwordFieldType: 'password',
-      passwordFieldIcon: 'fas fa-eye',
+      passwordFieldType: "password",
+      passwordFieldIcon: "fas fa-eye",
     };
   },
   methods: {
     togglePasswordVisibility() {
-      if (this.passwordFieldType === 'password') {
-        this.passwordFieldType = 'text';
-        this.passwordFieldIcon = 'fas fa-eye-slash';
+      if (this.passwordFieldType === "password") {
+        this.passwordFieldType = "text";
+        this.passwordFieldIcon = "fas fa-eye-slash";
       } else {
-        this.passwordFieldType = 'password';
-        this.passwordFieldIcon = 'fas fa-eye';
+        this.passwordFieldType = "password";
+        this.passwordFieldIcon = "fas fa-eye";
       }
     },
   },
@@ -102,7 +103,8 @@ input {
   box-shadow: none;
 }
 
-.input-group-text, .form-control {
+.input-group-text,
+.form-control {
   background-color: transparent;
   border: none;
   color: rgb(5, 5, 5);
@@ -111,8 +113,8 @@ input {
 
 .forgot-password {
   display: block;
-  text-align: center; 
-  color: rgb(255, 255, 255); 
+  text-align: center;
+  color: rgb(255, 255, 255);
   margin-top: 20px;
 }
 

@@ -2,7 +2,7 @@
   <div style="text-align: left">
     <h3 class="header-peminjaman">Halaman Peminjaman</h3>
     <button @click="showModal = true" class="btn_add_siswa">
-      <i class="fas fa-plus"></i>  Inputkan Data Siswa
+      <i class="fas fa-plus"></i> Input Peminjaman
     </button>
   </div>
 
@@ -19,7 +19,7 @@
             <p>Masukkan nama peminjam</p>
             <input
               type="text"
-              style="width: 250px;"
+              style="width: 250px"
               id="namaPeminjam"
               class="form-control"
               v-model="newPeminjaman.namaPeminjam"
@@ -39,7 +39,7 @@
             <label for="jumlahAlat">Jumlah Alat</label>
             <input
               type="number"
-              style="width: 100px; margin-top: 1.55rem;"
+              style="width: 100px; margin-top: 1.55rem"
               id="jumlahAlat"
               class="form-control"
               v-model="newPeminjaman.jumlahAlat"
@@ -52,18 +52,18 @@
             <p>Masukkan nama bengkel alat</p>
             <input
               type="text"
-              style="width: 15.625rem;"
+              style="width: 15.625rem"
               id="bengkel"
               class="form-control"
               v-model="newPeminjaman.bengkel"
             />
           </div>
-          <div class="form-group" style="margin-left: -2.3rem;">
+          <div class="form-group" style="margin-left: -2.3rem">
             <label for="tanggalPinjam">Tanggal Pinjam</label>
             <p>Masukkan tanggal pinjam alat</p>
             <input
               type="date"
-              style="width: 16rem;"
+              style="width: 16rem"
               id="tanggalPinjam"
               class="form-control"
               v-model="newPeminjaman.tanggalPinjam"
@@ -78,12 +78,12 @@
       </div>
     </div>
   </div>
-  <hr>
+  <hr />
   <div style="margin-top: 20px">
     <div class="search-bar">
       <div>
         Tampilkan:
-        <select v-model="rowsPerPage" class="select-rows" style="width: 3rem;">
+        <select v-model="rowsPerPage" class="select-rows" style="width: 3rem">
           <option value="5">5</option>
           <option value="10">10</option>
           <option value="20">20</option>
@@ -101,7 +101,7 @@
         />
       </div>
     </div>
-    
+
     <!-- table section -->
     <table class="data-table">
       <thead>
@@ -125,13 +125,36 @@
           <td>{{ peminjaman.tanggalPinjam }}</td>
           <td>
             <div class="dropdown d-inline-block">
-              <button class="btn btn-sm" type="button" @click="toggleDropdown(index)" :aria-expanded="dropdownIndex === index">
+              <button
+                class="btn btn-sm"
+                type="button"
+                @click="toggleDropdown(index)"
+                :aria-expanded="dropdownIndex === index"
+              >
                 <i class="fas fa-ellipsis-h"></i>
               </button>
-              <div class="dropdown-menu-act" :class="{ show: dropdownIndex === index }">
-                <a class="dropdown-item" @click="editPeminjaman(index)" style="color: #274278;"><i class="fas fa-edit"></i> Edit</a>
-                <router-link to="/mainsidebar/pengembalian" class="dropdown-item" style="color: #274278;"><i class="fas fa-thumbs-up"></i> Dikembalikan</router-link>
-                <a class="dropdown-item" @click="deletePeminjaman(index)" style="color: red;"><i class="fas fa-trash-alt"></i> Hapus</a>
+              <div
+                class="dropdown-menu-act"
+                :class="{ show: dropdownIndex === index }"
+              >
+                <a
+                  class="dropdown-item"
+                  @click="editPeminjaman(index)"
+                  style="color: #274278"
+                  ><i class="fas fa-edit"></i> Edit</a
+                >
+                <router-link
+                  to="/mainsidebar/pengembalian"
+                  class="dropdown-item"
+                  style="color: #274278"
+                  ><i class="fas fa-thumbs-up"></i> Dikembalikan</router-link
+                >
+                <a
+                  class="dropdown-item"
+                  @click="deletePeminjaman(index)"
+                  style="color: red"
+                  ><i class="fas fa-trash-alt"></i> Hapus</a
+                >
               </div>
             </div>
           </td>
@@ -233,17 +256,17 @@ export default {
     },
     deletePeminjaman(index) {
       this.peminjamanList.splice(index, 1);
-      this.dropdownIndex = null; 
+      this.dropdownIndex = null;
     },
     closeModal() {
       this.isClosing = true;
-      const modalContent = document.querySelector('.modal-content');
-      modalContent.classList.add('closing');
+      const modalContent = document.querySelector(".modal-content");
+      modalContent.classList.add("closing");
       setTimeout(() => {
         this.showModal = false;
         this.isClosing = false;
-        modalContent.classList.remove('closing');
-      }, 300); 
+        modalContent.classList.remove("closing");
+      }, 300);
     },
     resetForm() {
       this.newPeminjaman = {
@@ -275,7 +298,7 @@ export default {
   background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   padding: 20px;
-  width: 100%; 
+  width: 100%;
   max-width: 100%;
   justify-content: left;
   align-items: left;
@@ -302,7 +325,7 @@ export default {
 
 .modal-header .close-modal {
   font-size: 2rem;
-  color: #274278;
+  color: #f30202;
   cursor: pointer;
   margin-bottom: 3rem;
 }
@@ -314,12 +337,12 @@ export default {
 
 .modal-body {
   color: #274278;
-  text-align: left; 
+  text-align: left;
   margin-top: -1rem;
 }
 
-.modal-header h4, 
-.modal-body label, 
+.modal-header h4,
+.modal-body label,
 .modal-body p {
   color: #274278;
 }
@@ -332,9 +355,7 @@ export default {
 }
 
 .modal-content .form-control {
-  border-color: #274278; 
-  color: #274278; 
-  background-color: transparent; 
+  background-color: white;
 }
 
 .modal-body .form-group:last-child {
@@ -343,7 +364,7 @@ export default {
 
 .modal-footer {
   display: flex;
-  justify-content: flex-start; 
+  justify-content: flex-start;
   padding: 10px 0;
 }
 
@@ -435,20 +456,20 @@ export default {
 
 /* Dropdown Styling */
 .dropdown-menu-act {
-  display: none; 
+  display: none;
   position: absolute;
-  top: 100%; 
+  top: 100%;
   right: 0;
-  left: auto; 
+  left: auto;
   background-color: #fff;
   width: 150px;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   z-index: 1;
   border-radius: 5px;
   padding: 10px;
-  max-height: 300px; 
-  overflow-y: auto; 
-  margin-top: 5px; 
+  max-height: 300px;
+  overflow-y: auto;
+  margin-top: 5px;
   transform: translateX(-50%);
   left: 170%;
 }
