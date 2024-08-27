@@ -229,6 +229,7 @@ export default {
     editPeminjaman(index) {
       this.newPeminjaman = { ...this.peminjamanList[index] };
       this.editIndex = index;
+      this.showModal = true;
     },
     deletePeminjaman(index) {
       this.peminjamanList.splice(index, 1);
