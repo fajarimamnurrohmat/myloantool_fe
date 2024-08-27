@@ -1,10 +1,10 @@
 <template>
-    <div style="text-align: center; margin-top: 40px;">
-        <h1 class="welcome-header">Selamat Datang, Admin !</h1>
+    <div style="text-align: center;">
+        <h1 class="welcome-header" style="margin-bottom: 1rem;">Selamat Datang, Admin !</h1>
         <h5 class="welcome-subtext">Semoga hari Anda produktif dan penuh kesuksesan dalam mengelola peminjaman alat.</h5>
     </div>
 
-    <div style="display: flex; justify-content: space-between; gap: 20px; margin-top: 60px;">
+    <div style="display: flex; justify-content: space-between; gap: 20px; margin-top: 30px;">
         <!-- Card 1: Data Alat -->
         <div class="card-dashboard" style="background-color: #4b6cb7;">
             <h2>Data Alat</h2>

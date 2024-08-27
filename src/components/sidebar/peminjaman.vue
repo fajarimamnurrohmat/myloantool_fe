@@ -2,7 +2,7 @@
   <div style="text-align: left">
     <h3 class="header-peminjaman">Halaman Peminjaman</h3>
     <button @click="showModal = true" class="btn_add_siswa">
-      <i class="fas fa-plus"></i> Inputkan Data Siswa
+      <i class="fas fa-plus"></i>  Inputkan Data Siswa
     </button>
   </div>
 
@@ -39,7 +39,7 @@
             <label for="jumlahAlat">Jumlah Alat</label>
             <input
               type="number"
-              style="width: 100px; margin-top: 21px;"
+              style="width: 100px; margin-top: 1.55rem;"
               id="jumlahAlat"
               class="form-control"
               v-model="newPeminjaman.jumlahAlat"
@@ -78,9 +78,7 @@
       </div>
     </div>
   </div>
-
   <hr>
-
   <div style="margin-top: 20px">
     <div class="search-bar">
       <div>
@@ -127,14 +125,13 @@
           <td>{{ peminjaman.tanggalPinjam }}</td>
           <td>
             <div class="dropdown d-inline-block">
-              <button class="btn btn-sm dropdown-toggle" type="button" @click="toggleDropdown(index)" :aria-expanded="dropdownIndex === index">
+              <button class="btn btn-sm" type="button" @click="toggleDropdown(index)" :aria-expanded="dropdownIndex === index">
                 <i class="fas fa-ellipsis-h"></i>
               </button>
-              <div class="dropdown-menu" :class="{ show: dropdownIndex === index }">
-                <a class="dropdown-item" @click="editPeminjaman(index)"><i class="fas fa-edit"></i> Edit</a>
+              <div class="dropdown-menu-act" :class="{ show: dropdownIndex === index }">
+                <a class="dropdown-item" @click="editPeminjaman(index)" style="color: #274278;"><i class="fas fa-edit"></i> Edit</a>
+                <router-link to="/mainsidebar/pengembalian" class="dropdown-item" style="color: #274278;"><i class="fas fa-thumbs-up"></i> Dikembalikan</router-link>
                 <a class="dropdown-item" @click="deletePeminjaman(index)" style="color: red;"><i class="fas fa-trash-alt"></i> Hapus</a>
-                <router-link to="/mainsidebar/pengembalian" class="dropdown-item"><i class="fas fa-thumbs-up"></i> Dikembalikan</router-link>
-                <router-link to="/mainsidebar/pinjaman_bermasalah" class="dropdown-item" style="color: red;"><i class="fas fa-exclamation-triangle"></i> Barang bermasalah</router-link>
               </div>
             </div>
           </td>
@@ -166,6 +163,7 @@ export default {
   data() {
     return {
       showModal: false,
+      isClosing: false,
       newPeminjaman: {
         namaPeminjam: "",
         alat: "",
@@ -234,11 +232,17 @@ export default {
     },
     deletePeminjaman(index) {
       this.peminjamanList.splice(index, 1);
-      this.dropdownIndex = null; // Close dropdown after deletion
+      this.dropdownIndex = null; 
     },
     closeModal() {
-      this.showModal = false;
-      this.resetForm();
+      this.isClosing = true;
+      const modalContent = document.querySelector('.modal-content');
+      modalContent.classList.add('closing');
+      setTimeout(() => {
+        this.showModal = false;
+        this.isClosing = false;
+        modalContent.classList.remove('closing');
+      }, 300); 
     },
     resetForm() {
       this.newPeminjaman = {
@@ -278,19 +282,28 @@ export default {
 }
 
 .modal-content {
-  background: #223661 !important;
+  background: #ebebeb !important;
   padding: 20px;
   border-radius: 10px;
   width: 600px !important;
   max-width: 100% !important;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   animation: fadeIn 0.3s ease-in-out;
+  transition: fadeOut 0.3s ease-out;
 }
 
 .modal-header {
   display: flex;
   justify-content: space-between;
-  color: white;
+  align-items: center; /* Align items vertically */
+  color: #274278;
+}
+
+.modal-header .close-modal {
+  font-size: 2rem;
+  color: #274278;
+  cursor: pointer;
+  margin-bottom: 3rem;
 }
 
 .modal-body .form-row {
@@ -299,22 +312,28 @@ export default {
 }
 
 .modal-body {
-  color: white;
+  color: #274278;
   text-align: left; 
+  margin-top: -1rem;
 }
 
 .modal-header h4, 
 .modal-body label, 
-.modal-body p,
-.modal-footer {
-  color: white;
+.modal-body p {
+  color: #274278;
 }
 
 .modal-body p {
   margin-top: -9px;
   margin-bottom: 10px;
-  font-size: 10px;
-  font-weight: 300;
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.modal-content .form-control {
+  border-color: #274278; 
+  color: #274278; 
+  background-color: transparent; 
 }
 
 .modal-body .form-group:last-child {
@@ -326,6 +345,21 @@ export default {
   justify-content: flex-start; 
   padding: 10px 0;
 }
+
+/* Animation for closing the modal */
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.modal-content.closing {
+  animation: fadeOut 0.3s ease-out forwards;
+}
+/* end of the modal */
 
 .header-peminjaman {
   font-weight: bold;
@@ -399,18 +433,14 @@ export default {
 }
 
 /* Dropdown Styling */
-.dropdown {
-  position: relative;
-}
-
-.dropdown-menu {
+.dropdown-menu-act {
   display: none; 
   position: absolute;
   top: 100%; 
   right: 0;
   left: auto; 
   background-color: #fff;
-  width: 15rem;
+  width: 150px;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   z-index: 1;
   border-radius: 5px;
@@ -419,25 +449,14 @@ export default {
   overflow-y: auto; 
   margin-top: 5px; 
   transform: translateX(-50%);
-  left: 50%;
+  left: 170%;
 }
 
-.dropdown-menu.show {
+.dropdown-menu-act.show {
   display: block;
 }
 
-.dropdown-menu button {
-  background: none;
-  border: none;
-  color: black;
-  padding: 10px;
-  text-align: left;
-  width: 100%;
-  box-sizing: border-box;
-  cursor: pointer;
-}
-
-.dropdown-menu button:hover {
+.dropdown-menu-act button:hover {
   background-color: #f1f1f1;
 }
 
