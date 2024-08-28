@@ -14,16 +14,6 @@
           v-model="newBengkel.nama"
         />
       </div>
-      <div class="form-group">
-        <label for="jurusan">Jurusan</label>
-        <input
-          type="text"
-          id="jurusan"
-          class="form-control"
-          placeholder="Masukkan jurusan"
-          v-model="newBengkel.jurusan"
-        />
-      </div>
     </div>
     <div style="margin-top: 20px; text-align: right">
       <button class="btn_add_bengkel" id="btn_add_bengkel" @click="addBengkel">
@@ -58,7 +48,6 @@
         <tr>
           <th>No</th>
           <th>Ruang Bengkel</th>
-          <th>Jurusan</th>
           <th>Action</th>
         </tr>
       </thead>
@@ -66,7 +55,6 @@
         <tr v-for="(bengkel, index) in paginatedBengkelList" :key="index">
           <td>{{ index + 1 + (currentPage - 1) * rowsPerPage }}</td>
           <td>{{ bengkel.nama }}</td>
-          <td>{{ bengkel.jurusan }}</td>
           <td>
             <i class="fas fa-edit" @click="editBengkel(index)"></i>
             <i
@@ -99,7 +87,6 @@ export default {
     return {
       newBengkel: {
         nama: "",
-        jurusan: "",
       },
       bengkelList: [],
       rowsPerPage: 5,
@@ -110,10 +97,8 @@ export default {
   },
   computed: {
     filteredBengkelList() {
-      return this.bengkelList.filter(
-        (bengkel) =>
-          bengkel.nama.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-          bengkel.jurusan.toLowerCase().includes(this.searchQuery.toLowerCase())
+      return this.bengkelList.filter((bengkel) =>
+        bengkel.nama.toLowerCase().includes(this.searchQuery.toLowerCase())
       );
     },
     paginatedBengkelList() {
@@ -127,7 +112,7 @@ export default {
   },
   methods: {
     addBengkel() {
-      if (this.newBengkel.nama && this.newBengkel.jurusan) {
+      if (this.newBengkel.nama) {
         if (this.editIndex !== null) {
           this.bengkelList.splice(this.editIndex, 1, { ...this.newBengkel });
           this.editIndex = null;
@@ -135,7 +120,6 @@ export default {
           this.bengkelList.push({ ...this.newBengkel });
         }
         this.newBengkel.nama = "";
-        this.newBengkel.jurusan = "";
       } else {
         alert("Mohon isi semua data");
       }

@@ -292,18 +292,6 @@ export default {
 
 <style>
 /* Modal Styles */
-.modal-overlay {
-  top: 0;
-  left: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  padding: 20px;
-  width: 100%;
-  max-width: 100%;
-  justify-content: left;
-  align-items: left;
-  z-index: 1000;
-}
 
 .modal-content {
   background: #274278 !important;

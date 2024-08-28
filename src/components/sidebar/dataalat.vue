@@ -12,27 +12,32 @@
     <div class="modal-content">
       <div class="modal-header">
         <h4>Input Data Alat</h4>
-        <button class="close-modal" @click="closeModal">&times;</button>
+        <span
+          class="close-modal"
+          @click="closeModal"
+          style="color: red; text-align: right"
+          >&times;</span
+        >
       </div>
       <div class="modal-body">
         <div class="form-row">
           <div class="form-group">
             <label for="namaAlat">Nama Alat</label>
+            <p>Masukkan  nama alat</p>
             <input
               type="text"
               id="namaAlat"
               class="form-control"
-              placeholder="Masukkan nama alat"
               v-model="newAlat.namaAlat"
             />
           </div>
           <div class="form-group">
             <label for="jumlah">Jumlah</label>
+            <p>Masukkan jumlah alat</p>
             <input
               type="number"
               id="jumlah"
               class="form-control"
-              placeholder="Masukkan jumlah"
               v-model="newAlat.jumlah"
             />
           </div>
@@ -40,11 +45,11 @@
 
         <div class="form-group">
           <label for="ruangBengkel">Ruang Bengkel</label>
+          <p>Masukkan nama ruang bengkel</p>
           <input
             type="text"
             id="ruangBengkel"
             class="form-control"
-            placeholder="Masukkan ruang bengkel"
             v-model="newAlat.ruangBengkel"
           />
         </div>
@@ -262,9 +267,7 @@ export default {
 }
 
 .close-modal {
-  background: transparent;
-  border: none;
-  font-size: 1.5rem;
+  font-size: 30px;
   cursor: pointer;
 }
 
