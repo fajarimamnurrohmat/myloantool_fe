@@ -21,21 +21,21 @@
       <div class="form-row">
         <div class="form-group">
           <label for="nomorInduk">Nomor Induk</label>
+          <p>Masukkan nomor induk</p>
           <input
             type="text"
             id="nomorInduk"
             class="form-control"
-            placeholder="Masukkan nomor induk"
             v-model="newSiswa.nomorInduk"
           />
         </div>
         <div class="form-group">
           <label for="namaSiswa">Nama Siswa</label>
+          <p>Masukkan nama siswa</p>
           <input
             type="text"
             id="namaSiswa"
             class="form-control"
-            placeholder="Masukkan nama siswa"
             v-model="newSiswa.nama"
           />
         </div>
@@ -43,6 +43,7 @@
       <div class="form-row">
         <div class="form-group">
           <label for="jenisKelamin">Jenis Kelamin</label>
+          <p>Pilih jenis kelamin</p>
           <select
             id="jenisKelamin"
             class="form-control"
@@ -55,11 +56,11 @@
         </div>
         <div class="form-group">
           <label for="jurusan">Jurusan</label>
+          <p>Masukkan Jurusan</p>
           <input
             type="text"
             id="jurusan"
             class="form-control"
-            placeholder="Masukkan jurusan"
             v-model="newSiswa.jurusan"
           />
         </div>
@@ -314,6 +315,18 @@ export default {
   display: flex;
   justify-content: space-between;
   margin-bottom: 15px;
+}
+
+.form-group label,
+.form-group p {
+  color: white;
+}
+
+.form-group p {
+  margin-top: -9px;
+  margin-bottom: 10px;
+  font-size: 12px;
+  font-weight: 400;
 }
 
 .form-group {

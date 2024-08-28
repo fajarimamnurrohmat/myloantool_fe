@@ -306,7 +306,7 @@ export default {
 }
 
 .modal-content {
-  background: #ebebeb !important;
+  background: #274278 !important;
   padding: 20px;
   border-radius: 10px;
   width: 600px !important;
@@ -320,7 +320,7 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center; /* Align items vertically */
-  color: #274278;
+  color: white;
 }
 
 .modal-header .close-modal {
@@ -336,7 +336,7 @@ export default {
 }
 
 .modal-body {
-  color: #274278;
+  color: white;
   text-align: left;
   margin-top: -1rem;
 }
@@ -344,7 +344,7 @@ export default {
 .modal-header h4,
 .modal-body label,
 .modal-body p {
-  color: #274278;
+  color: white;
 }
 
 .modal-body p {
