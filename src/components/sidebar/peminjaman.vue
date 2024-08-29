@@ -79,6 +79,24 @@
     </div>
   </div>
   <hr />
+  <!-- Date Filter Section -->
+  <div class="filter-section">
+    <div class="date-inputs">
+      <div>
+        <label for="startDate">Tanggal Mulai:</label>
+        <input type="date" id="startDate" v-model="startDate" class="date-filter"  style="background-color: white; color: black;"/>
+      </div>
+      <div>
+        <label for="endDate">Tanggal Akhir:</label>
+        <input type="date" id="endDate" v-model="endDate" class="date-filter" style="background-color: white; color: black;"/>
+      </div>
+    </div>
+    <div class="filter-buttons">
+      <button @click="resetFilter" class="btn-reset">Reset</button>
+      <button @click="exportData('pdf')" class="btn-export">Cetak PDF</button>
+      <button @click="exportData('csv')" class="btn-export">Cetak CSV</button>
+    </div>
+  </div>
   <div style="margin-top: 20px">
     <div class="search-bar">
       <div>
@@ -182,6 +200,10 @@
 </template>
 
 <script>
+import jsPDF from "jspdf";
+import "jspdf-autotable";
+import Papa from "papaparse";
+
 export default {
   data() {
     return {
@@ -195,6 +217,8 @@ export default {
         jumlahAlat: "",
       },
       peminjamanList: [],
+      startDate: "",
+      endDate: "",
       rowsPerPage: 5,
       currentPage: 1,
       searchQuery: "",
@@ -204,18 +228,36 @@ export default {
   },
   computed: {
     filteredPeminjamanList() {
-      return this.peminjamanList.filter(
-        (peminjaman) =>
-          peminjaman.namaPeminjam
-            .toLowerCase()
-            .includes(this.searchQuery.toLowerCase()) ||
-          peminjaman.alat
-            .toLowerCase()
-            .includes(this.searchQuery.toLowerCase()) ||
-          peminjaman.bengkel
-            .toLowerCase()
-            .includes(this.searchQuery.toLowerCase())
-      );
+      let filteredList = this.peminjamanList;
+
+      // Filter by search query
+      if (this.searchQuery) {
+        filteredList = filteredList.filter(
+          (peminjaman) =>
+            peminjaman.namaPeminjam
+              .toLowerCase()
+              .includes(this.searchQuery.toLowerCase()) ||
+            peminjaman.alat
+              .toLowerCase()
+              .includes(this.searchQuery.toLowerCase()) ||
+            peminjaman.bengkel
+              .toLowerCase()
+              .includes(this.searchQuery.toLowerCase())
+        );
+      }
+
+      // Filter by date range
+      if (this.startDate && this.endDate) {
+        filteredList = filteredList.filter((peminjaman) => {
+          const tanggalPinjam = new Date(peminjaman.tanggalPinjam);
+          return (
+            tanggalPinjam >= new Date(this.startDate) &&
+            tanggalPinjam <= new Date(this.endDate)
+          );
+        });
+      }
+
+      return filteredList;
     },
     paginatedPeminjamanList() {
       const start = (this.currentPage - 1) * this.rowsPerPage;
@@ -280,6 +322,70 @@ export default {
     },
     toggleDropdown(index) {
       this.dropdownIndex = this.dropdownIndex === index ? null : index;
+    },
+    filterByDate() {
+      this.currentPage = 1; // Reset to first page after filtering
+    },
+    resetFilter() {
+      this.startDate = "";
+      this.endDate = "";
+      this.filterByDate();
+    },
+    exportData(format) {
+      if (format === "pdf") {
+        this.exportPDF();
+      } else if (format === "csv") {
+        this.exportCSV();
+      }
+    },
+    exportPDF() {
+      const doc = new jsPDF();
+
+      doc.text("Daftar Peminjaman belum dikembalikan", 14, 16);
+      doc.autoTable({
+        startY: 20,
+        head: [
+          ["Nama Peminjam", "Alat", "Bengkel", "Tanggal Pinjam", "Jumlah Alat"],
+        ],
+        body: this.filteredPeminjamanList.map((peminjaman) => [
+          peminjaman.namaPeminjam,
+          peminjaman.alat,
+          peminjaman.bengkel,
+          peminjaman.tanggalPinjam,
+          peminjaman.jumlahAlat,
+        ]),
+      });
+
+      doc.save("peminjaman.pdf");
+    },
+    exportCSV() {
+      const csv = Papa.unparse({
+        fields: [
+          "Nama Peminjam",
+          "Alat",
+          "Bengkel",
+          "Tanggal Pinjam",
+          "Jumlah Alat",
+        ],
+        data: this.filteredPeminjamanList.map((peminjaman) => [
+          peminjaman.namaPeminjam,
+          peminjaman.alat,
+          peminjaman.bengkel,
+          peminjaman.tanggalPinjam,
+          peminjaman.jumlahAlat,
+        ]),
+      });
+
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+      const link = document.createElement("a");
+      const url = URL.createObjectURL(blob);
+
+      link.setAttribute("href", url);
+      link.setAttribute("download", "peminjaman.csv");
+      link.style.visibility = "hidden";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
     },
   },
   watch: {
@@ -474,6 +580,7 @@ export default {
   margin-top: 5px;
   transform: translateX(-50%);
   left: 170%;
+  text-align: left;
 }
 
 .dropdown-menu-act.show {
@@ -491,5 +598,65 @@ export default {
 
 .pagination-controls button {
   margin: 0 5px;
+}
+
+.filter-section {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.date-inputs {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.date-inputs label {
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.date-filter {
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.filter-buttons {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.btn-reset {
+  background-color: #f8d891;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.btn-filter,
+.btn-export {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.btn-reset:hover {
+  background-color: #e67e22;
+}
+
+.btn-filter:hover,
+.btn-export:hover {
+  background-color: #0056b3;
 }
 </style>

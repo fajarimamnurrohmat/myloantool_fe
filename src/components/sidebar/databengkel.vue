@@ -314,7 +314,7 @@ export default {
 }
 
 .data-table th {
-  background-color: #4b6cb7;
+  background-color: #ebecee;
   color: rgb(69, 67, 67);
 }
 

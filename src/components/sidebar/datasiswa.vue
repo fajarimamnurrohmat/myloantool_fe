@@ -372,11 +372,6 @@ export default {
   text-align: center;
 }
 
-.data-table th {
-  background-color: #4b6cb7;
-  color: rgb(69, 67, 67);
-}
-
 .data-table tr:nth-child(even) {
   background-color: #f2f2f2;
 }
