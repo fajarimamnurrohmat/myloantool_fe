@@ -292,6 +292,20 @@ export default {
 
 <style>
 /* Modal Styles */
+.form-row {
+  display: flex;
+  gap: 20px;
+}
+
+.form-group {
+  flex: 1;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
 
 .modal-content {
   background: #274278 !important;

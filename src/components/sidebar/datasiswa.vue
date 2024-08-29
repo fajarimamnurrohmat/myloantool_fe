@@ -66,7 +66,7 @@
         </div>
       </div>
 
-      <div style="margin-top: 20px; text-align: left">
+      <div style="margin-top: 10px; text-align: left">
         <button @click="addSiswa" class="btn_add_siswa">
           <i class="fas fa-save"></i> Simpan Data
         </button>

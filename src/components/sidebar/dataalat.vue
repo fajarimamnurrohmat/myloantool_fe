@@ -224,7 +224,7 @@ export default {
 }
 
 .btn_add_alat {
-  margin-top: 20px;
+  margin-top: 10px;
   background-color: #007bff;
   color: white;
   padding: 10px 20px;
@@ -326,10 +326,6 @@ export default {
   border: 1px solid #ccc;
   padding: 10px;
   text-align: left;
-}
-
-.data-table th {
-  background-color: #f2f2f2;
 }
 
 .data-table tbody tr:nth-child(odd) {
