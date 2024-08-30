@@ -84,11 +84,23 @@
     <div class="date-inputs">
       <div>
         <label for="startDate">Tanggal Mulai:</label>
-        <input type="date" id="startDate" v-model="startDate" class="date-filter"  style="background-color: white; color: black;"/>
+        <input
+          type="date"
+          id="startDate"
+          v-model="startDate"
+          class="date-filter"
+          style="background-color: black; color: white"
+        />
       </div>
       <div>
         <label for="endDate">Tanggal Akhir:</label>
-        <input type="date" id="endDate" v-model="endDate" class="date-filter" style="background-color: white; color: black;"/>
+        <input
+          type="date"
+          id="endDate"
+          v-model="endDate"
+          class="date-filter"
+          style="background-color: black; color: white"
+        />
       </div>
     </div>
     <div class="filter-buttons">
@@ -184,18 +196,25 @@
     </table>
     <!--- end of the table -->
 
-    <div v-if="totalPages > 1" style="margin-top: 10px; text-align: center">
-      <button @click="currentPage--" :disabled="currentPage === 1">
+    <div v-if="totalPages > 1" class="pagination-container">
+      <button
+        @click="currentPage--"
+        :disabled="currentPage === 1"
+        class="pagination-button"
+      >
         Previous
       </button>
-      <span>Page {{ currentPage }} of {{ totalPages }}</span>
-      <button @click="currentPage++" :disabled="currentPage === totalPages">
+      <span class="pagination-info">
+        Page {{ currentPage }} of {{ totalPages }}
+      </span>
+      <button
+        @click="currentPage++"
+        :disabled="currentPage === totalPages"
+        class="pagination-button"
+      >
         Next
       </button>
     </div>
-  </div>
-  <div>
-    <router-view></router-view>
   </div>
 </template>
 
@@ -591,15 +610,6 @@ export default {
   background-color: #f1f1f1;
 }
 
-.pagination-controls {
-  margin-top: 10px;
-  text-align: center;
-}
-
-.pagination-controls button {
-  margin: 0 5px;
-}
-
 .filter-section {
   display: flex;
   flex-wrap: wrap;
@@ -631,7 +641,7 @@ export default {
 }
 
 .btn-reset {
-  background-color: #f8d891;
+  background-color: #f1c056;
   color: white;
   padding: 10px 20px;
   border: none;
@@ -658,5 +668,14 @@ export default {
 .btn-filter:hover,
 .btn-export:hover {
   background-color: #0056b3;
+}
+
+.pagination-container {
+  margin-top: 20px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px; /* Add space between the buttons and text */
 }
 </style>

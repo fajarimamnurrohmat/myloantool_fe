@@ -333,8 +333,7 @@ export default {
 
 .pagination-container {
   display: flex;
-  justify-content: flex-end;
-  margin-top: 15px;
+  margin-top: 20px;
 }
 
 .pagination-button {

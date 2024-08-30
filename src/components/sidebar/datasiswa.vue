@@ -380,41 +380,6 @@ export default {
   background-color: #ddd;
 }
 
-.pagination-container {
-  margin-top: 20px;
-  text-align: center;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 15px; /* Add space between the buttons and text */
-}
-
-.pagination-button {
-  background-color: #007bff; /* Button background color */
-  color: white; /* Button text color */
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 14px;
-  transition: background-color 0.3s ease;
-}
-
-.pagination-button:hover {
-  background-color: #0056b3; /* Button color on hover */
-}
-
-.pagination-button:disabled {
-  background-color: #ccc; /* Disabled button color */
-  cursor: not-allowed;
-}
-
-.pagination-info {
-  font-weight: bold;
-  color: #333;
-  font-size: 14px;
-}
-
 @keyframes fadeIn {
   from {
     opacity: 0;
