@@ -613,8 +613,6 @@ export default {
   background-color: #f1f1f1;
 }
 
-
-
 .date-inputs {
   display: flex;
   gap: 20px;
