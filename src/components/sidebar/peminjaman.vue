@@ -78,7 +78,9 @@
       </div>
     </div>
   </div>
+
   <hr />
+
   <!-- Date Filter Section -->
   <div class="filter-section">
     <div class="date-inputs">
@@ -102,11 +104,11 @@
           style="background-color: black; color: white"
         />
       </div>
+      <div class="filter-buttons">
+      <button @click="resetFilter" class="btn-reset"><i class="fa fa-sync" aria-hidden="true"></i></button>
+      <button @click="exportData('pdf')" class="btn-export"><i class="fa fa-file-pdf" aria-hidden="true"></i></button>
+      <button @click="exportData('csv')" class="btn-export"><i class="fa fa-file-excel" aria-hidden="true"></i></button>
     </div>
-    <div class="filter-buttons">
-      <button @click="resetFilter" class="btn-reset">Reset</button>
-      <button @click="exportData('pdf')" class="btn-export">Cetak PDF</button>
-      <button @click="exportData('csv')" class="btn-export">Cetak CSV</button>
     </div>
   </div>
   <div style="margin-top: 20px">
@@ -121,6 +123,7 @@
         </select>
         baris
       </div>
+      
       <div>
         Pencarian:
         <input
@@ -630,7 +633,7 @@ export default {
 
 .date-filter {
   padding: 5px;
-  border: 1px solid #ccc;
+  border: 1px solid #2d24aa;
   border-radius: 5px;
 }
 
@@ -638,6 +641,11 @@ export default {
   display: flex;
   gap: 10px;
   align-items: center;
+  margin-left: auto; 
+}
+
+.filter-buttons button {
+  border-radius: 10px;
 }
 
 .btn-reset {
