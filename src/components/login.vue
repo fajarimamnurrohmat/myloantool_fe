@@ -9,7 +9,8 @@
       <form>
         <div class="mb-4 input-group">
           <span class="input-group-text">
-            <i class="fas fa-user"></i>
+            <i  class="fas fa-user"
+                style="color: #182848;"></i>
           </span>
           <input
             type="text"
@@ -20,7 +21,8 @@
         </div>
         <div class="mb-4 input-group">
           <span class="input-group-text">
-            <i class="fas fa-lock"></i>
+            <i  class="fas fa-lock" 
+                style="color: #182848;"></i>
           </span>
           <input
             :type="passwordFieldType"
@@ -32,13 +34,16 @@
             class="input-group-text toggle-password"
             @click="togglePasswordVisibility"
           >
-            <i :class="passwordFieldIcon"></i>
+            <i :class="passwordFieldIcon"
+            style="color: #182848;"></i>
           </span>
         </div>
         <router-link to="/mainsidebar/dashboard">
-          <button type="submit" class="btn btn-custom mt-4">Log In</button>
+          <button type="submit" 
+                  class="btn btn-custom mt-4"
+                  style="background-color: white;">Login</button>
         </router-link>
-        <a href="#" class="forgot-password">lupa password?</a>
+        <a href="#" class="forgot-password">Lupa password?</a>
       </form>
       <!-- form end -->
     </div>
@@ -116,6 +121,7 @@ input {
   text-align: center;
   color: rgb(255, 255, 255);
   margin-top: 20px;
+  font-size: 0.9rem;
 }
 
 .form-control {
@@ -140,9 +146,9 @@ input {
 }
 
 .btn-custom:hover {
-  background-color: #f39c12;
-  color: white;
-  box-shadow: 0 8px 15px rgba(243, 156, 18, 0.3);
+  background-color: #182848;
+  color: #182848;
+  box-shadow: 0 8px 15px #4b6cb7;
   transform: translateY(-3px);
 }
 

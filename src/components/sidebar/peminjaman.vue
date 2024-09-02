@@ -84,25 +84,15 @@
   <!-- Date Filter Section -->
   <div class="filter-section">
     <div class="date-inputs">
-      <div>
+      <div class="date-input-wrapper">
         <label for="startDate">Tanggal Mulai:</label>
-        <input
-          type="date"
-          id="startDate"
-          v-model="startDate"
-          class="date-filter"
-          style="background-color: black; color: white"
-        />
+        <input type="date" id="startDate" v-model="startDate" class="date-filter">
+        <i class="fas fa-calendar-alt calendar-icon"></i>
       </div>
-      <div>
+      <div class="date-input-wrapper">
         <label for="endDate">Tanggal Akhir:</label>
-        <input
-          type="date"
-          id="endDate"
-          v-model="endDate"
-          class="date-filter"
-          style="background-color: black; color: white"
-        />
+        <input type="date" id="startDate" v-model="startDate" class="date-filter">
+        <i class="fas fa-calendar-alt calendar-icon"></i>
       </div>
       <div class="filter-buttons">
       <button @click="resetFilter" class="btn-reset"><i class="fa fa-sync" aria-hidden="true"></i></button>
@@ -435,6 +425,26 @@ export default {
   font-weight: bold;
 }
 
+.date-input-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.calendar-icon {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  color: #4b6cb7; /* Warna ikon sesuai dengan kebutuhan */
+  pointer-events: none; /* Agar klik tetap pada input */
+}
+
+/* Optional: Tambahkan interaksi klik pada ikon untuk membuka date picker */
+.date-input-wrapper:hover .calendar-icon {
+  color: #274278; /* Warna saat hover */
+}
+
+
 .modal-content {
   background: #274278 !important;
   padding: 20px;
@@ -554,6 +564,7 @@ export default {
   color: #333;
 }
 
+
 .search-input::placeholder {
   color: #999;
 }
@@ -573,11 +584,11 @@ export default {
 }
 
 .data-table th {
-  background-color: #f2f2f2;
+  background-color: #6b0909;
 }
 
 .data-table tbody tr:nth-child(odd) {
-  background-color: #f9f9f9;
+  background-color: none;
 }
 
 .data-table tbody tr:hover {
@@ -612,6 +623,7 @@ export default {
 .dropdown-menu-act button:hover {
   background-color: #f1f1f1;
 }
+/* end of dropdown style */
 
 .date-inputs {
   display: flex;
@@ -625,9 +637,12 @@ export default {
 }
 
 .date-filter {
-  padding: 5px;
-  border: 1px solid #2d24aa;
+  padding: 0.5rem 0.9rem;
+  width: 13rem;
+  border: 1px solid #ffffff;
   border-radius: 5px;
+  background-color: white;
+  color: #4b6cb7;
 }
 
 .filter-buttons {
@@ -641,8 +656,8 @@ export default {
 }
 
 .btn-reset {
-  background-color: #f1c056;
-  color: white;
+  background-color: #ffffff;
+  color: #4b6cb7;
   padding: 10px 20px;
   border: none;
   border-radius: 5px;
@@ -652,8 +667,8 @@ export default {
 
 .btn-filter,
 .btn-export {
-  background-color: #007bff;
-  color: white;
+  background-color: #ffffff;
+  color: #4b6cb7;
   padding: 10px 20px;
   border: none;
   border-radius: 5px;
@@ -662,12 +677,12 @@ export default {
 }
 
 .btn-reset:hover {
-  background-color: #e67e22;
+  background-color: #e9e9e9;
 }
 
 .btn-filter:hover,
 .btn-export:hover {
-  background-color: #0056b3;
+  background-color: #e9e9e9;
 }
 
 .pagination-container {
