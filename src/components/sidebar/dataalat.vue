@@ -3,7 +3,7 @@
     <h3 class="header-alat">Halaman Data Alat</h3>
     <!-- Trigger Button for Modal -->
     <button class="btn_add_alat" @click="showModal = true">
-      <i class="fas fa-plus"></i> Inputkan Data Alat
+      <i class="fas fa-plus"></i> Inputkan Data
     </button>
   </div>
 
@@ -23,7 +23,7 @@
         <div class="form-row">
           <div class="form-group">
             <label for="namaAlat">Nama Alat</label>
-            <p>Masukkan  nama alat</p>
+            <p>Masukkan nama alat</p>
             <input
               type="text"
               id="namaAlat"

@@ -2,7 +2,7 @@
   <div style="text-align: left">
     <h3 class="header-bengkel">Halaman Data Bengkel</h3>
     <button @click="showModal = true" class="btn-add-bengkel">
-      <i class="fas fa-plus"></i> Inputkan Nama Ruang Bengkel
+      <i class="fas fa-plus"></i> Inputkan Data
     </button>
   </div>
 
@@ -10,7 +10,7 @@
   <div v-if="showModal" class="modal-overlay" @click.self="closeModal">
     <div class="modal-content">
       <div class="modal-header">
-        <h4>Input Nama Ruang Bengkel</h4>
+        <h4>Input Data Bengkel</h4>
         <span
           class="close-modal"
           @click="closeModal"
@@ -314,7 +314,7 @@ export default {
 }
 
 .data-table th {
-  background-color: #ebecee;
+  background-color: white;
   color: rgb(69, 67, 67);
 }
 

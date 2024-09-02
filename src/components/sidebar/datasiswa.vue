@@ -2,7 +2,7 @@
   <div style="text-align: left">
     <h3 class="header-siswa">Halaman Data Siswa</h3>
     <button @click="showModal = true" class="btn_add_siswa">
-      <i class="fas fa-plus"></i> Inputkan Data Siswa
+      <i class="fas fa-plus"></i> Inputkan Data
     </button>
   </div>
 

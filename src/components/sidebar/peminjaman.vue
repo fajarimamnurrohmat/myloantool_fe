@@ -61,13 +61,16 @@
           <div class="form-group" style="margin-left: -2.3rem">
             <label for="tanggalPinjam">Tanggal Pinjam</label>
             <p>Masukkan tanggal pinjam alat</p>
-            <input
-              type="date"
-              style="width: 16rem"
-              id="tanggalPinjam"
-              class="form-control"
-              v-model="newPeminjaman.tanggalPinjam"
-            />
+            <div class="date-input-wrapper">
+              <input
+                type="date"
+                id="tanggalPinjam"
+                v-model="newPeminjaman.tanggalPinjam"
+                class="form-control"
+                style="width: 16rem"
+              />
+              <i class="fas fa-calendar-alt calendar-icon"></i>
+            </div>
           </div>
         </div>
       </div>
@@ -86,19 +89,35 @@
     <div class="date-inputs">
       <div class="date-input-wrapper">
         <label for="startDate">Tanggal Mulai:</label>
-        <input type="date" id="startDate" v-model="startDate" class="date-filter">
+        <input
+          type="date"
+          id="startDate"
+          v-model="startDate"
+          class="date-filter"
+        />
         <i class="fas fa-calendar-alt calendar-icon"></i>
       </div>
       <div class="date-input-wrapper">
         <label for="endDate">Tanggal Akhir:</label>
-        <input type="date" id="startDate" v-model="startDate" class="date-filter">
+        <input
+          type="date"
+          id="startDate"
+          v-model="startDate"
+          class="date-filter"
+        />
         <i class="fas fa-calendar-alt calendar-icon"></i>
       </div>
       <div class="filter-buttons">
-      <button @click="resetFilter" class="btn-reset"><i class="fa fa-sync" aria-hidden="true"></i></button>
-      <button @click="exportData('pdf')" class="btn-export"><i class="fa fa-file-pdf" aria-hidden="true"></i></button>
-      <button @click="exportData('csv')" class="btn-export"><i class="fa fa-file-excel" aria-hidden="true"></i></button>
-    </div>
+        <button @click="resetFilter" class="btn-reset">
+          <i class="fa fa-sync" aria-hidden="true"></i>
+        </button>
+        <button @click="exportData('pdf')" class="btn-export">
+          <i class="fa fa-file-pdf" aria-hidden="true"></i>
+        </button>
+        <button @click="exportData('csv')" class="btn-export">
+          <i class="fa fa-file-excel" aria-hidden="true"></i>
+        </button>
+      </div>
     </div>
   </div>
   <div style="margin-top: 20px">
@@ -113,7 +132,7 @@
         </select>
         baris
       </div>
-      
+
       <div>
         Pencarian:
         <input
@@ -444,7 +463,6 @@ export default {
   color: #274278; /* Warna saat hover */
 }
 
-
 .modal-content {
   background: #274278 !important;
   padding: 20px;
@@ -564,7 +582,6 @@ export default {
   color: #333;
 }
 
-
 .search-input::placeholder {
   color: #999;
 }
@@ -648,7 +665,7 @@ export default {
 .filter-buttons {
   display: flex;
   gap: 10px;
-  margin-left: auto; 
+  margin-left: auto;
 }
 
 .filter-buttons button {

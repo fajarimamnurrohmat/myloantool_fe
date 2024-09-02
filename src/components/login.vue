@@ -9,8 +9,7 @@
       <form>
         <div class="mb-4 input-group">
           <span class="input-group-text">
-            <i  class="fas fa-user"
-                style="color: #182848;"></i>
+            <i class="fas fa-user" style="color: #182848"></i>
           </span>
           <input
             type="text"
@@ -21,8 +20,7 @@
         </div>
         <div class="mb-4 input-group">
           <span class="input-group-text">
-            <i  class="fas fa-lock" 
-                style="color: #182848;"></i>
+            <i class="fas fa-lock" style="color: #182848"></i>
           </span>
           <input
             :type="passwordFieldType"
@@ -34,14 +32,17 @@
             class="input-group-text toggle-password"
             @click="togglePasswordVisibility"
           >
-            <i :class="passwordFieldIcon"
-            style="color: #182848;"></i>
+            <i :class="passwordFieldIcon" style="color: #182848"></i>
           </span>
         </div>
         <router-link to="/mainsidebar/dashboard">
-          <button type="submit" 
-                  class="btn btn-custom mt-4"
-                  style="background-color: white;">Login</button>
+          <button
+            type="submit"
+            class="btn btn-custom mt-4"
+            style="background-color: white"
+          >
+            Login
+          </button>
         </router-link>
         <a href="#" class="forgot-password">Lupa password?</a>
       </form>
