@@ -613,12 +613,7 @@ export default {
   background-color: #f1f1f1;
 }
 
-.filter-section {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  margin-bottom: 20px;
-}
+
 
 .date-inputs {
   display: flex;
@@ -640,7 +635,6 @@ export default {
 .filter-buttons {
   display: flex;
   gap: 10px;
-  align-items: center;
   margin-left: auto; 
 }
 
