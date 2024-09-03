@@ -30,7 +30,6 @@
           />
         </div>
       </div>
-
       <div style="margin-top: 10px; text-align: left">
         <button @click="addBengkel" class="btn-add-bengkel">
           <i class="fas fa-save"></i> Simpan Data
@@ -275,7 +274,7 @@ export default {
 }
 
 .form-control {
-  width: 100%;
+  width: 16rem;
   padding: 8px;
   font-size: 14px;
   border: 1px solid #ccc;

@@ -134,8 +134,8 @@ input {
 }
 
 .btn-custom {
-  width: 100%;
-  padding: 15px;
+  width: 150px;
+  height: 50px;
   border-radius: 30px;
   background-color: #f8c291;
   color: #182848;

@@ -128,7 +128,7 @@
           <option value="5">5</option>
           <option value="10">10</option>
           <option value="20">20</option>
-          <option value="20">100</option>
+          <option value="100">100</option>
         </select>
         baris
       </div>
@@ -598,10 +598,6 @@ export default {
   border: 1px solid #ccc;
   padding: 10px;
   text-align: left;
-}
-
-.data-table th {
-  background-color: #6b0909;
 }
 
 .data-table tbody tr:nth-child(odd) {

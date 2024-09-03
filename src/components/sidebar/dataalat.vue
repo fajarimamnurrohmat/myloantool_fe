@@ -282,7 +282,7 @@ export default {
 }
 
 .form-control {
-  width: 100%;
+  width: 16rem;
   padding: 8px;
   border-radius: 5px;
   border: 1px solid #ccc;
