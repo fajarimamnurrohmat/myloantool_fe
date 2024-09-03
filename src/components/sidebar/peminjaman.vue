@@ -494,8 +494,6 @@ export default {
 }
 
 .modal-body {
-  color: white;
-  text-align: left;
   margin-top: -1rem;
 }
 
