@@ -12,43 +12,59 @@
 
     <!-- Filter dan Penyortir -->
     <div class="filters" style="margin-top: 30px">
-      <label for="rows">Tampilkan baris:</label>
-      <select v-model="rowsPerPage" @change="updateDisplayedData">
-        <option :value="5">5</option>
-        <option :value="10">10</option>
-        <option :value="20">20</option>
-      </select>
+      <div class="date-input-wrapper">
+        <label for="startDate">Tanggal Kembali :</label>
+        <input
+          type="date"
+          v-model="startDate"
+          @change="filterData"
+          class="date-input"
+        />
+        <i class="fas fa-calendar-alt calendar-icon"></i>
+      </div>
+      <div class="date-input-wrapper">
+        <label for="endDate">sampai :</label>
+        <input
+          type="date"
+          v-model="endDate"
+          @change="filterData"
+          class="date-input"
+        />
+        <i class="fas fa-calendar-alt calendar-icon"></i>
+      </div>
+      <div class="filter-buttons">
+        <button @click="resetFilters" class="btn-reset">
+          <i class="fa fa-sync" aria-hidden="true"></i>
+        </button>
+        <button @click="exportData('pdf')" class="btn-export">
+          <i class="fa fa-file-pdf" aria-hidden="true"></i>
+        </button>
+        <button @click="exportData('csv')" class="btn-export">
+          <i class="fa fa-file-excel" aria-hidden="true"></i>
+        </button>
+      </div>
+    </div>
 
-      <label for="startDate">Tanggal Pinjam:</label>
-      <input
-        type="date"
-        v-model="startDate"
-        @change="filterData"
-        class="date-input"
-      />
-
-      <label for="endDate">Tanggal Kembali:</label>
-      <input
-        type="date"
-        v-model="endDate"
-        @change="filterData"
-        class="date-input"
-      />
-
-      <label for="search">Pencarian:</label>
-      <input
-        type="text"
-        v-model="searchQuery"
-        @input="filterData"
-        class="text-input"
-      />
-
-      <button class="export-button" @click="exportData('csv')">
-        Cetak CSV
-      </button>
-      <button class="export-button" @click="exportData('pdf')">
-        Cetak PDF
-      </button>
+    <div class="filters2">
+      <div>
+        <label for="rows" style="font-weight: 400">Tampilkan :</label>
+        <select v-model="rowsPerPage" @change="updateDisplayedData">
+          <option :value="5">5</option>
+          <option :value="10">10</option>
+          <option :value="20">20</option>
+        </select>
+        baris
+      </div>
+      <div>
+        <label for="search" style="font-weight: 400">Pencarian :</label>
+        <input
+          type="text"
+          v-model="searchQuery"
+          @input="filterData"
+          class="text-input"
+          placeholder="Cari..."
+        />
+      </div>
     </div>
 
     <!-- Tabel Data -->
@@ -131,10 +147,9 @@ export default {
       // Filter berdasarkan tanggal
       if (this.startDate || this.endDate) {
         filteredData = filteredData.filter((record) => {
-          const pinjamDate = new Date(record.tanggalPinjam);
           const kembaliDate = new Date(record.tanggalKembali);
           return (
-            (!this.startDate || pinjamDate >= new Date(this.startDate)) &&
+            (!this.startDate || kembaliDate >= new Date(this.startDate)) &&
             (!this.endDate || kembaliDate <= new Date(this.endDate))
           );
         });
@@ -191,6 +206,12 @@ export default {
         doc.save("data_pengembalian.pdf");
       }
     },
+    resetFilters() {
+      this.startDate = "";
+      this.endDate = "";
+      this.searchQuery = "";
+      this.updateDisplayedData();
+    },
   },
 };
 </script>
@@ -213,13 +234,20 @@ export default {
   gap: 10px;
 }
 
+.filters2 {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
 .filters label {
   font-weight: bold;
 }
 
-.filters select,
+.filters2 select,
 .filters input[type="date"],
-.filters input[type="text"] {
+.filters2 input[type="text"] {
   padding: 5px;
   border: 1px solid #ccc;
   border-radius: 5px;
@@ -229,10 +257,10 @@ export default {
 
 .filters input[type="date"] {
   background-color: #f9f9f9; /* Warna latar belakang untuk input tanggal */
-  color: #333; /* Warna teks untuk input tanggal */
+  color: #4b6cb7; /* Warna teks untuk input tanggal */
 }
 
-.filters input[type="text"] {
+.filters2 input[type="text"] {
   background-color: #fff; /* Warna latar belakang untuk input teks */
 }
 
@@ -247,6 +275,19 @@ export default {
 
 .export-button:hover {
   background-color: #1f3664;
+}
+
+.reset-button {
+  background-color: #ccc;
+  color: #333;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.reset-button:hover {
+  background-color: #999;
 }
 
 table {
