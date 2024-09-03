@@ -25,7 +25,7 @@
           <input
             type="text"
             id="namaRuang"
-            class="form-control"
+            class="form-controll"
             v-model="newBengkel.namaRuang"
           />
         </div>
@@ -273,12 +273,13 @@ export default {
   width: 100%;
 }
 
-.form-control {
+.form-controll {
   width: 16rem;
   padding: 8px;
   font-size: 14px;
   border: 1px solid #ccc;
   border-radius: 4px;
+  background-color: white;
 }
 
 .search-bar {
