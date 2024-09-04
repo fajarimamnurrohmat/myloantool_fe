@@ -248,6 +248,7 @@ export default {
 .filters2 select,
 .filters input[type="date"],
 .filters2 input[type="text"] {
+  margin-left: 10px;
   padding: 5px;
   border: 1px solid #ccc;
   border-radius: 5px;
@@ -257,7 +258,7 @@ export default {
 
 .filters input[type="date"] {
   background-color: #f9f9f9; /* Warna latar belakang untuk input tanggal */
-  color: #4b6cb7; /* Warna teks untuk input tanggal */
+  color: #333; /* Warna teks untuk input tanggal */
 }
 
 .filters2 input[type="text"] {
