@@ -1,7 +1,7 @@
 <template>
   <div style="text-align: center">
-    <h1 class="welcome-header" style="margin-bottom: 1rem">
-      Selamat Datang, Admin !
+    <h1 class="welcome-header" style="margin-bottom: 1rem;">
+      Selamat Datang, Admin!
     </h1>
     <h5 class="welcome-subtext">
       Semoga hari Anda produktif dan penuh kesuksesan dalam mengelola peminjaman

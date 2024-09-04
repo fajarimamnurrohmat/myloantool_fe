@@ -454,13 +454,13 @@ export default {
   top: 50%;
   right: 10px;
   transform: translateY(-50%);
-  color: #4b6cb7; /* Warna ikon sesuai dengan kebutuhan */
+  color: #7b8291; /* Warna ikon sesuai dengan kebutuhan */
   pointer-events: none; /* Agar klik tetap pada input */
 }
 
 /* Optional: Tambahkan interaksi klik pada ikon untuk membuka date picker */
 .date-input-wrapper:hover .calendar-icon {
-  color: #274278; /* Warna saat hover */
+  color: #636468; /* Warna saat hover */
 }
 
 .modal-content {
@@ -595,7 +595,7 @@ export default {
 .data-table td {
   border: 1px solid #ccc;
   padding: 10px;
-  text-align: left;
+  text-align: center;
 }
 
 .data-table tbody tr:nth-child(odd) {
@@ -653,7 +653,7 @@ export default {
   border: 1px solid #ffffff;
   border-radius: 5px;
   background-color: white;
-  color: #4b6cb7;
+  color: #7b8291;
 }
 
 .filter-buttons {
