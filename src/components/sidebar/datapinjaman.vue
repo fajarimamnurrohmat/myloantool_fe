@@ -47,6 +47,7 @@
         <i class="fas fa-search search-icon"></i>
         <input
           type="text"
+          @input="filterData"
           v-model="searchQuery"
           class="search-input"
           style="width: 11rem"
