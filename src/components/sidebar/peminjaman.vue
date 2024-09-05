@@ -2,10 +2,11 @@
   <div style="text-align: left">
     <h3 class="header-peminjaman">Halaman Peminjaman</h3>
     <button @click="showModal = true" class="btn_add_siswa">
-      <i class="fas fa-plus"></i> Input Peminjaman
+      <i class="fas fa-plus" style="margin-right: 1rem;"></i> Input Peminjaman
     </button>
   </div>
 
+  <!-- Start of Modal Section -->
   <div v-if="showModal" class="modal-overlay" @click.self="closeModal">
     <div class="modal-content">
       <div class="modal-header">
@@ -13,7 +14,9 @@
         <span class="close-modal" @click="closeModal">&times;</span>
       </div>
       <div class="modal-body">
+        <!-- form rowa atas -->
         <div class="form-row">
+          <!-- peminjam -->
           <div class="form-group">
             <label for="namaPeminjam">Nama Peminjam</label>
             <p>Masukkan nama peminjam</p>
@@ -25,6 +28,8 @@
               v-model="newPeminjaman.namaPeminjam"
             />
           </div>
+          <!-- peminjam -->
+          <!-- alat -->
           <div class="form-group">
             <label for="alat">Alat</label>
             <p>Masukkan nama alat</p>
@@ -35,6 +40,8 @@
               v-model="newPeminjaman.alat"
             />
           </div>
+          <!-- alat -->
+          <!-- jumlah -->
           <div class="form-group">
             <label for="jumlahAlat">Jumlah Alat</label>
             <input
@@ -45,8 +52,12 @@
               v-model="newPeminjaman.jumlahAlat"
             />
           </div>
+          <!-- jumlah -->
         </div>
+        <!-- form row atas -->
+        <!-- form row bawah -->
         <div class="form-row">
+          <!-- bengkel -->
           <div class="form-group">
             <label for="bengkel">Bengkel</label>
             <p>Masukkan nama bengkel alat</p>
@@ -58,6 +69,8 @@
               v-model="newPeminjaman.bengkel"
             />
           </div>
+          <!-- bengkel -->
+          <!-- tgl pinjam -->
           <div class="form-group" style="margin-left: -2.3rem">
             <label for="tanggalPinjam">Tanggal Pinjam</label>
             <p>Masukkan tanggal pinjam alat</p>
@@ -72,15 +85,18 @@
               <i class="fas fa-calendar-alt calendar-icon"></i>
             </div>
           </div>
+          <!-- tgl pinjam -->
         </div>
+        <!-- form row bawah -->
       </div>
       <div class="modal-footer">
         <button @click="addPeminjaman" class="btn_add_peminjaman">
-          <i class="fas fa-save"></i> Simpan Data
+         Simpan Data
         </button>
       </div>
     </div>
   </div>
+  <!-- End of Modal Section -->
 
   <hr />
 
@@ -88,7 +104,7 @@
   <div class="filter-section">
     <div class="date-inputs">
       <div class="date-input-wrapper">
-        <label for="startDate">Tanggal Mulai:</label>
+        <label for="startDate" class="date-sort">From:</label>
         <input
           type="date"
           id="startDate"
@@ -98,7 +114,7 @@
         <i class="fas fa-calendar-alt calendar-icon"></i>
       </div>
       <div class="date-input-wrapper">
-        <label for="endDate">Tanggal Akhir:</label>
+        <label for="endDate" class="date-sort">To:</label>
         <input
           type="date"
           id="startDate"
@@ -107,6 +123,7 @@
         />
         <i class="fas fa-calendar-alt calendar-icon"></i>
       </div>
+      <!-- filter button section -->
       <div class="filter-buttons">
         <button @click="resetFilter" class="btn-reset">
           <i class="fa fa-sync" aria-hidden="true"></i>
@@ -118,32 +135,23 @@
           <i class="fa fa-file-excel" aria-hidden="true"></i>
         </button>
       </div>
-    </div>
-  </div>
-  <div style="margin-top: 20px">
-    <div class="search-bar">
-      <div>
-        Tampilkan:
-        <select v-model="rowsPerPage" class="select-rows" style="width: 3rem">
-          <option value="5">5</option>
-          <option value="10">10</option>
-          <option value="20">20</option>
-          <option value="100">100</option>
-        </select>
-        baris
-      </div>
-
-      <div>
-        Pencarian:
+      <!-- filter button section -->
+      <!-- search -->
+      <div class="search-bar-container">
+        <i class="fas fa-search search-icon"></i> 
         <input
           type="text"
           v-model="searchQuery"
           class="search-input"
-          placeholder="Cari..."
+          style="width: 11rem;"
         />
       </div>
+      <!-- search -->
     </div>
+  </div>
+  <!-- End of Date Filter Section -->
 
+  <div style="margin-top: 2rem">
     <!-- table section -->
     <table class="data-table">
       <thead>
@@ -152,8 +160,8 @@
           <th>Nama Peminjam</th>
           <th>Alat</th>
           <th>Bengkel</th>
-          <th>Jumlah</th>
           <th>Tanggal Pinjam</th>
+          <th>Jumlah</th>
           <th>Action</th>
         </tr>
       </thead>
@@ -163,9 +171,10 @@
           <td>{{ peminjaman.namaPeminjam }}</td>
           <td>{{ peminjaman.alat }}</td>
           <td>{{ peminjaman.bengkel }}</td>
-          <td>{{ peminjaman.jumlahAlat }}</td>
           <td>{{ peminjaman.tanggalPinjam }}</td>
+          <td>{{ peminjaman.jumlahAlat }}</td>
           <td>
+            <!-- dropdown set -->
             <div class="dropdown d-inline-block">
               <button
                 class="btn btn-sm"
@@ -199,6 +208,7 @@
                 >
               </div>
             </div>
+            <!-- dropdown set -->
           </td>
         </tr>
         <tr v-if="paginatedPeminjamanList.length === 0">
@@ -207,7 +217,20 @@
       </tbody>
     </table>
     <!--- end of the table -->
-
+    <div class="search-bar">
+      <div>
+        Tampilkan:
+        <select 
+          v-model="rowsPerPage" 
+          class="select-rows" 
+          style="width: 3rem;">
+          <option value="5">5</option>
+          <option value="10">10</option>
+          <option value="20">20</option>
+          <option value="100">100</option>
+        </select>
+        baris
+      </div>
     <div v-if="totalPages > 1" class="pagination-container">
       <button
         @click="currentPage--"
@@ -227,6 +250,7 @@
         Next
       </button>
     </div>
+  </div>
   </div>
 </template>
 
@@ -568,14 +592,31 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 10px;
+  margin-top: 1rem;
+}
+
+.search-bar-container {
+  position: relative;
+  display: inline-block;
+}
+
+.search-input {
+  padding-right: 30px; /* Add some extra padding to accommodate the icon */
+}
+
+.search-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #7b8291; /* Change the color of the icon if needed */
+  pointer-events: none; /* Make sure the icon doesn't interfere with input interactions */
 }
 
 .search-input,
 .select-rows {
-  width: 250px;
   padding: 5px;
-  border: 1px solid #ccc;
+  border: 1px solid #fff;
   background-color: #fff;
   color: #333;
 }
@@ -634,12 +675,21 @@ export default {
 .dropdown-menu-act button:hover {
   background-color: #f1f1f1;
 }
+
+.dropdown-item {
+  margin-top: 0.3rem;
+}
 /* end of dropdown style */
 
 .date-inputs {
   display: flex;
   gap: 20px;
   align-items: center;
+}
+
+.date-sort {
+  color: #7a7979;
+  font-weight: 300;
 }
 
 .date-inputs label {
@@ -658,12 +708,19 @@ export default {
 
 .filter-buttons {
   display: flex;
-  gap: 10px;
+  gap: 8px;
   margin-left: auto;
 }
 
 .filter-buttons button {
-  border-radius: 10px;
+  border-radius: 5px;
+  height: 2rem; /* reduce the height */
+  width: 2.5rem;
+  padding: 0.2rem; /* add some padding */
+}
+
+.filter-buttons button i {
+  font-size: 1rem; /* increase the font size of the icon */
 }
 
 .btn-reset {
