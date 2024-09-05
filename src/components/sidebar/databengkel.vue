@@ -332,8 +332,7 @@ export default {
 }
 
 .pagination-container {
-  display: flex;
-  margin-top: 20px;
+  margin-top: 4px;
 }
 
 .pagination-button {

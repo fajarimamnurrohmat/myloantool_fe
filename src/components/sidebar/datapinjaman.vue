@@ -43,26 +43,14 @@
           <i class="fa fa-file-excel" aria-hidden="true"></i>
         </button>
       </div>
-    </div>
-
-    <div class="filters2">
-      <div>
-        <label for="rows" style="font-weight: 400">Tampilkan :</label>
-        <select v-model="rowsPerPage" @change="updateDisplayedData">
-          <option :value="5">5</option>
-          <option :value="10">10</option>
-          <option :value="20">20</option>
-        </select>
-        baris
-      </div>
-      <div>
-        <label for="search" style="font-weight: 400">Pencarian :</label>
+      <div class="search-bar-container">
+        <i class="fas fa-search search-icon"></i>
         <input
           type="text"
           v-model="searchQuery"
-          @input="filterData"
-          class="text-input"
-          placeholder="Cari..."
+          class="search-input"
+          style="width: 11rem"
+          placeholder="Cari.."
         />
       </div>
     </div>
@@ -90,6 +78,17 @@
         </tr>
       </tbody>
     </table>
+    <div class="filters2">
+      <div>
+        <label for="rows" style="font-weight: 400">Tampilkan :</label>
+        <select v-model="rowsPerPage" @change="updateDisplayedData">
+          <option :value="5">5</option>
+          <option :value="10">10</option>
+          <option :value="20">20</option>
+        </select>
+        baris
+      </div>
+    </div>
   </div>
 </template>
 
@@ -235,7 +234,7 @@ export default {
 }
 
 .filters2 {
-  margin-bottom: 20px;
+  margin-top: 20px;
   display: flex;
   justify-content: space-between;
   gap: 10px;
@@ -246,8 +245,7 @@ export default {
 }
 
 .filters2 select,
-.filters input[type="date"],
-.filters2 input[type="text"] {
+.filters input[type="date"] {
   margin-left: 10px;
   padding: 5px;
   border: 1px solid #ccc;
@@ -259,10 +257,6 @@ export default {
 .filters input[type="date"] {
   background-color: #f9f9f9; /* Warna latar belakang untuk input tanggal */
   color: #333; /* Warna teks untuk input tanggal */
-}
-
-.filters2 input[type="text"] {
-  background-color: #fff; /* Warna latar belakang untuk input teks */
 }
 
 .export-button {

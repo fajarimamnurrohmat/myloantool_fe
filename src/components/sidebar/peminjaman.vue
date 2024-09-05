@@ -2,7 +2,7 @@
   <div style="text-align: left">
     <h3 class="header-peminjaman">Halaman Peminjaman</h3>
     <button @click="showModal = true" class="btn_add_siswa">
-      <i class="fas fa-plus" style="margin-right: 1rem;"></i> Input Peminjaman
+      <i class="fas fa-plus" style="margin-right: 1rem"></i> Input Peminjaman
     </button>
   </div>
 
@@ -79,7 +79,7 @@
                 type="date"
                 id="tanggalPinjam"
                 v-model="newPeminjaman.tanggalPinjam"
-                class="form-control"
+                class="date-filter"
                 style="width: 16rem"
               />
               <i class="fas fa-calendar-alt calendar-icon"></i>
@@ -91,7 +91,7 @@
       </div>
       <div class="modal-footer">
         <button @click="addPeminjaman" class="btn_add_peminjaman">
-         Simpan Data
+          Simpan Data
         </button>
       </div>
     </div>
@@ -138,12 +138,13 @@
       <!-- filter button section -->
       <!-- search -->
       <div class="search-bar-container">
-        <i class="fas fa-search search-icon"></i> 
+        <i class="fas fa-search search-icon"></i>
         <input
           type="text"
           v-model="searchQuery"
           class="search-input"
-          style="width: 11rem;"
+          style="width: 11rem"
+          placeholder="Cari.."
         />
       </div>
       <!-- search -->
@@ -220,10 +221,7 @@
     <div class="search-bar">
       <div>
         Tampilkan:
-        <select 
-          v-model="rowsPerPage" 
-          class="select-rows" 
-          style="width: 3rem;">
+        <select v-model="rowsPerPage" class="select-rows" style="width: 3rem">
           <option value="5">5</option>
           <option value="10">10</option>
           <option value="20">20</option>
@@ -231,26 +229,26 @@
         </select>
         baris
       </div>
-    <div v-if="totalPages > 1" class="pagination-container">
-      <button
-        @click="currentPage--"
-        :disabled="currentPage === 1"
-        class="pagination-button"
-      >
-        Previous
-      </button>
-      <span class="pagination-info">
-        Page {{ currentPage }} of {{ totalPages }}
-      </span>
-      <button
-        @click="currentPage++"
-        :disabled="currentPage === totalPages"
-        class="pagination-button"
-      >
-        Next
-      </button>
+      <div v-if="totalPages > 1" class="pagination-container">
+        <button
+          @click="currentPage--"
+          :disabled="currentPage === 1"
+          class="pagination-button"
+        >
+          Previous
+        </button>
+        <span class="pagination-info">
+          Page {{ currentPage }} of {{ totalPages }}
+        </span>
+        <button
+          @click="currentPage++"
+          :disabled="currentPage === totalPages"
+          class="pagination-button"
+        >
+          Next
+        </button>
+      </div>
     </div>
-  </div>
   </div>
 </template>
 
@@ -754,7 +752,6 @@ export default {
 }
 
 .pagination-container {
-  margin-top: 20px;
   text-align: center;
   display: flex;
   justify-content: center;
