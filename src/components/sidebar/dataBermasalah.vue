@@ -43,26 +43,15 @@
           <i class="fa fa-file-excel" aria-hidden="true"></i>
         </button>
       </div>
-    </div>
-
-    <div class="filters2">
-      <div>
-        <label for="rows" style="font-weight: 400">Tampilkan :</label>
-        <select v-model="rowsPerPage" @change="updateDisplayedData">
-          <option :value="5">5</option>
-          <option :value="10">10</option>
-          <option :value="20">20</option>
-        </select>
-        baris
-      </div>
-      <div>
-        <label for="search" style="font-weight: 400">Pencarian :</label>
+      <div class="search-bar-container">
+        <i class="fas fa-search search-icon"></i>
         <input
           type="text"
-          v-model="searchQuery"
           @input="filterData"
-          class="text-input"
-          placeholder="Cari..."
+          v-model="searchQuery"
+          class="search-input"
+          style="width: 11rem"
+          placeholder="Cari.."
         />
       </div>
     </div>
@@ -105,6 +94,17 @@
         </tr>
       </tbody>
     </table>
+    <div class="filters2">
+      <div>
+        <label for="rows" style="font-weight: 400">Tampilkan :</label>
+        <select v-model="rowsPerPage" @change="updateDisplayedData">
+          <option :value="5">5</option>
+          <option :value="10">10</option>
+          <option :value="20">20</option>
+        </select>
+        baris
+      </div>
+    </div>
   </div>
 </template>
 
@@ -165,10 +165,10 @@ export default {
       // Filter berdasarkan tanggal
       if (this.startDate || this.endDate) {
         filteredData = filteredData.filter((record) => {
-          const kembaliDate = new Date(record.tanggalKembali);
+          const permasalahanDate = new Date(record.tanggalPermasalahan);
           return (
-            (!this.startDate || kembaliDate >= new Date(this.startDate)) &&
-            (!this.endDate || kembaliDate <= new Date(this.endDate))
+            (!this.startDate || permasalahanDate >= new Date(this.startDate)) &&
+            (!this.endDate || permasalahanDate <= new Date(this.endDate))
           );
         });
       }
@@ -255,7 +255,7 @@ export default {
 }
 
 .filters2 {
-  margin-bottom: 20px;
+  margin-top: 20px;
   display: flex;
   justify-content: space-between;
   gap: 10px;

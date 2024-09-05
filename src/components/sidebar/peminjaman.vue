@@ -117,8 +117,8 @@
         <label for="endDate" class="date-sort">To:</label>
         <input
           type="date"
-          id="startDate"
-          v-model="startDate"
+          id="endDate"
+          v-model="endDate"
           class="date-filter"
         />
         <i class="fas fa-calendar-alt calendar-icon"></i>
