@@ -11,7 +11,7 @@
           <div class="name_desc">Peminjaman Alat Bengkel</div>
         </a>
         <!-- Toggle button -->
-        <button @click="toggleNavbar" class="navbar-toggler" type="button">
+        <button @click="toggleNavbar" class="navbar-toggler" type="button]">
           <i class="fas fa-bars"></i>
         </button>
         <!-- Navbar links -->
