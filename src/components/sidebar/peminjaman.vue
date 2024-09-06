@@ -128,6 +128,34 @@
         <button @click="resetFilter" class="btn-reset">
           <i class="fa fa-sync" aria-hidden="true"></i>
         </button>
+        <div class="dropdown d-inline-block">
+              <button
+                class="btn"
+                type="button"
+                @click="toggleDropdown(index)"
+                :aria-expanded="dropdownIndex === index"
+                style="color: #274278; background-color: white;"
+              >
+              <i class="fa-solid fa-file-export"></i> 
+              </button>
+              <div
+                class="dropdown-menu-act"
+                :class="{ show: dropdownIndex === index }"
+              >
+                <a
+                  class="dropdown-item"
+                  @click="exportData('pdf')"
+                  style="color: #7b8291">
+                  Export as .pdf
+                </a>
+                <a
+                  class="dropdown-item"
+                  @click="exportData('csv')"
+                  style="color: #7b8291">
+                  Export as .csv
+                </a>
+              </div>
+            </div>
         <button @click="exportData('pdf')" class="btn-export">
           <i class="fa fa-file-pdf" aria-hidden="true"></i>
         </button>
