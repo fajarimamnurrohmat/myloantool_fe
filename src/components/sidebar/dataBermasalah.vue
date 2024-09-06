@@ -87,7 +87,7 @@
                 @click="toggleDropdown(index)"
                 :aria-expanded="dropdownIndex === index"
               >
-                <i class="fas fa-ellipsis-h"></i>
+              <i class="fas fa-check-square" aria-hidden="true"></i>
               </button>
             </div>
           </td>

@@ -4,8 +4,7 @@
       <h3 class="header-DataPinjaman">Data Pinjaman Telah Dikembalikan</h3>
       <p>
         Pada halaman data pinjaman ini, dapat melakukan peninjauan serta
-        manajemen keseluruhan data pinjaman. Dapat melakukan filter serta ekspor
-        data berupa file pdf.
+        manajemen keseluruhan data pinjaman. Data pada halaman ini merupakan data barang yang memiliki kondisi baik.
       </p>
     </div>
     <hr />
@@ -219,7 +218,6 @@ export default {
 <style scoped>
 .header-DataPinjaman {
   font-weight: bold;
-  font-style: italic;
   color: #274278;
   font-size: 1.7rem;
   margin-bottom: 10px;

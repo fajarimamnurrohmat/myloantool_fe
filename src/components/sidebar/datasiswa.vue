@@ -77,22 +77,27 @@
   <!-- Tabel Siswa -->
   <div style="margin-top: 30px">
     <div class="search-bar">
-      <div>
-        Tampilkan
-        <select v-model="rowsPerPage" class="select-rows">
-          <option value="5">5</option>
-          <option value="10">10</option>
-          <option value="20">20</option>
-        </select>
-        baris
+      <div class="filter-buttons">
+        <button @click="resetFilter" class="btn-reset">
+          <i class="fa fa-sync" aria-hidden="true"></i>
+        </button>
+        <button @click="exportData('pdf')" class="btn-export">
+          <i class="fa fa-file-pdf" aria-hidden="true"></i>
+        </button>
+        <button @click="exportData('csv')" class="btn-export">
+          <i class="fa fa-file-excel" aria-hidden="true"></i>
+        </button>
       </div>
-      <div>
-        Pencarian:
+      <!-- filter button section -->
+      <!-- search -->
+      <div class="search-bar-container">
+        <i class="fas fa-search search-icon"></i>
         <input
           type="text"
           v-model="searchQuery"
           class="search-input"
-          placeholder="Cari..."
+          style="width: 11rem"
+          placeholder="Cari.."
         />
       </div>
     </div>
@@ -128,6 +133,17 @@
         </tr>
       </tbody>
     </table>
+    <div class="filters2">
+      <div>
+        <label for="rows" style="font-weight: 400">Tampilkan :</label>
+        <select v-model="rowsPerPage" @change="updateDisplayedData">
+          <option :value="5">5</option>
+          <option :value="10">10</option>
+          <option :value="20">20</option>
+        </select>
+        baris
+      </div>
+    </div>
     <div v-if="totalPages > 1" class="pagination-container">
       <button
         @click="currentPage--"
@@ -266,6 +282,42 @@ export default {
   animation: fadeIn 0.3s ease-in-out;
 }
 
+.filters2 {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.search-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+.filter-buttons {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.filter-buttons button {
+  border-radius: 5px;
+  height: 2rem; /* reduce the height */
+  width: 2.5rem;
+  padding: 0.2rem; /* add some padding */
+}
+
+.filter-buttons button i {
+  font-size: 1rem; /* increase the font size of the icon */
+}
+
+.search-bar-container {
+  position: relative;
+  display: inline-block;
+  margin-left: 1.5rem;
+}
 .modal-header {
   display: flex;
   justify-content: space-between;
