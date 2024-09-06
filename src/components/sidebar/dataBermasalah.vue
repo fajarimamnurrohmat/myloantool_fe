@@ -13,7 +13,7 @@
     <!-- Filter dan Penyortir -->
     <div class="filters" style="margin-top: 30px">
       <div class="date-input-wrapper">
-        <label for="startDate">Tanggal Permasalahan :</label>
+        <label for="startDate" style="color: #7b8291;">From :</label>
         <input
           type="date"
           v-model="startDate"
@@ -23,7 +23,7 @@
         <i class="fas fa-calendar-alt calendar-icon"></i>
       </div>
       <div class="date-input-wrapper">
-        <label for="endDate">sampai :</label>
+        <label for="endDate" style="color: #7b8291;">To :</label>
         <input
           type="date"
           v-model="endDate"
@@ -278,7 +278,7 @@ export default {
 
 .filters input[type="date"] {
   background-color: #f9f9f9; /* Warna latar belakang untuk input tanggal */
-  color: #333; /* Warna teks untuk input tanggal */
+  color: #7b8291; /* Warna teks untuk input tanggal */
 }
 
 .filters2 input[type="text"] {
