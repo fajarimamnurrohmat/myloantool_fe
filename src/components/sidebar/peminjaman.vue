@@ -125,41 +125,52 @@
         </button>
         <div class="dropdown d-inline-block">
           <button
-            class="btn"
+            class="btn-export"
             type="button"
             @click="toggleDropdown(index)"
             :aria-expanded="dropdownIndex === index"
-            style="color: #274278; background-color: white; width: 100%"
-          >
-            export
-            <i class="fa-solid fa-file-export"></i>
+            style="
+              color: #4b6cb7; 
+              background-color: white; 
+              width: 6rem;"
+          ><i class="fa-solid fa-arrow-up-from-bracket" 
+              style="
+                      margin-left: 0.5rem;
+                      margin-right: 0.4rem;">
+          </i>
+            Export
           </button>
           <div
-            class="dropdown-menu-act"
+            class="dropdown-menu-export"
             :class="{ show: dropdownIndex === index }"
           >
             <a
-              class="dropdown-item"
+              class="dropdown-item-export"
               @click="exportData('pdf')"
-              style="color: #7b8291"
-              ><i class="fa fa-file-pdf" aria-hidden="true"></i>
-              Export as .pdf
+              style="color: #4b6cb7"
+              ><i class="fa fa-file-pdf" 
+                  aria-hidden="true"
+                  style="
+                      margin-left: 0.2rem;
+                      margin-right: 0.1rem;">
+              </i>
+              .pdf
             </a>
             <a
-              class="dropdown-item"
+              class="dropdown-item-export"
               @click="exportData('csv')"
-              style="color: #7b8291"
-              ><i class="fa fa-file-excel" aria-hidden="true"></i>
-              Export as .csv
+              style="color: #4b6cb7;"
+              ><i class="fa-solid fa-file-csv" 
+                  aria-hidden="true"
+                  style="
+                      margin-left: 0.2rem;
+                      margin-right: 0.1rem;
+                      margin-top: 0.5rem;">
+              </i>
+              .csv
             </a>
           </div>
         </div>
-        <button @click="exportData('pdf')" class="btn-export">
-          <i class="fa fa-file-pdf" aria-hidden="true"></i>
-        </button>
-        <button @click="exportData('csv')" class="btn-export">
-          <i class="fa fa-file-excel" aria-hidden="true"></i>
-        </button>
       </div>
       <!-- filter button section -->
       <!-- search -->
@@ -169,7 +180,7 @@
           type="text"
           v-model="searchQuery"
           class="search-input"
-          style="width: 11rem"
+          style="width: 11rem;"
           placeholder="Cari.."
         />
       </div>
@@ -221,11 +232,10 @@
                   style="color: #274278"
                   ><i class="fas fa-edit"></i> Edit</a
                 >
-                <router-link
-                  to="/mainsidebar/pengembalian"
+                <a @click="tampilModal = true"
                   class="dropdown-item"
                   style="color: #274278"
-                  ><i class="fas fa-thumbs-up"></i> Dikembalikan</router-link
+                  ><i class="fas fa-thumbs-up"></i> Dikembalikan</a
                 >
                 <a
                   class="dropdown-item"
@@ -244,6 +254,120 @@
       </tbody>
     </table>
     <!--- end of the table -->
+
+  <!-- Start of Modal Section -->
+  <div v-if="tampilModal" class="modal-overlay" @click.self="closeModal">
+      <div class="modal-content" style="margin-top: 5rem;">
+        <div class="modal-header">
+          <h4>Input Data Pengembalian</h4>
+          <span class="close-modal" @click="closeModal">&times;</span>
+        </div>
+        <div class="modal-body">
+          <!-- form rowa atas -->
+          <div class="form-row">
+            <!-- peminjam -->
+            <div class="form-group">
+              <label for="namaPeminjam">Nama Peminjam</label>
+              <p>Masukkan nama peminjam</p>
+              <input
+                type="text"
+                style="width: 250px"
+                id="namaPeminjam"
+                class="form-control"
+                v-model="newPeminjaman.namaPeminjam"
+              />
+            </div>
+            <!-- peminjam -->
+            <!-- alat -->
+            <div class="form-group">
+              <label for="alat">Alat</label>
+              <p>Masukkan nama alat</p>
+              <input
+                type="text"
+                id="alat"
+                class="form-control"
+                v-model="newPeminjaman.alat"
+              />
+            </div>
+            <!-- alat -->
+            <!-- jumlah -->
+            <div class="form-group">
+              <label for="jumlahAlat">Jumlah Alat</label>
+              <input
+                type="number"
+                style="width: 100px; margin-top: 1.55rem"
+                id="jumlahAlat"
+                class="form-control"
+                v-model="newPeminjaman.jumlahAlat"
+              />
+            </div>
+            <!-- jumlah -->
+          </div>
+          <!-- form row atas -->
+          <!-- form row bawah -->
+          <div class="form-row">
+            <!-- bengkel -->
+            <div class="form-group">
+              <label for="bengkel">Bengkel</label>
+              <p>Masukkan nama bengkel alat</p>
+              <input
+                type="text"
+                style="width: 15.625rem"
+                id="bengkel"
+                class="form-control"
+                v-model="newPeminjaman.bengkel"
+              />
+            </div>
+            <!-- bengkel -->
+            <!-- tgl pinjam -->
+            <div class="form-group" style="margin-left: -2.3rem">
+              <label for="tanggalPinjam">Tanggal Pinjam</label>
+              <p>Masukkan tanggal pinjam alat</p>
+              <div class="date-input-wrapper">
+                <input
+                  type="date"
+                  id="tanggalPinjam"
+                  v-model="newPeminjaman.tanggalPinjam"
+                  class="date-filter"
+                  style="width: 16rem"
+                />
+                <i class="fas fa-calendar-alt calendar-icon"></i>
+              </div>
+            </div>
+            <!-- tgl pinjam -->
+          </div> 
+          <!-- form row bawah -->
+          <hr style="color: white;">
+          <!-- form row bawah -->
+          <div class="form-row">
+            <!-- tgl pinjam -->
+            <div class="form-group">
+              <label for="tanggalPengembalian">Tanggal Pengembalian</label>
+              <p>Masukkan tanggal pengembalian alat</p>
+              <div class="date-input-wrapper">
+                <input
+                  type="date"
+                  id="tanggalPengembalian"
+                  v-model="newPeminjaman.tanggalPengembalian"
+                  class="date-filter"
+                  style="width: 15.7rem"
+                />
+                <i class="fas fa-calendar-alt calendar-icon"></i>
+              </div>
+            </div>
+            <!-- tgl pinjam -->
+          </div> 
+          <!-- form row bawah -->
+        </div>
+        <div class="modal-footer">
+          <button @click="gotoPengembalian" class="btn_add_peminjaman">
+            Simpan Data
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- End of Modal Section -->
+
     <div class="search-bar">
       <div>
         Tampilkan:
@@ -287,6 +411,7 @@ export default {
   data() {
     return {
       showModal: false,
+      tampilModal: false,
       isClosing: false,
       newPeminjaman: {
         namaPeminjam: "",
@@ -294,6 +419,7 @@ export default {
         bengkel: "",
         tanggalPinjam: "",
         jumlahAlat: "",
+        tanggalPengembalian: "",
       },
       peminjamanList: [],
       startDate: "",
@@ -369,6 +495,9 @@ export default {
       } else {
         alert("Mohon isi semua data");
       }
+    },
+    goToPengembalian() {
+      this.$router.push('/mainsidebar/datapinjaman');
     },
     editPeminjaman(index) {
       this.newPeminjaman = { ...this.peminjamanList[index] };
@@ -676,19 +805,17 @@ export default {
   display: none;
   position: absolute;
   top: 100%;
-  right: 0;
-  left: auto;
+  right: auto;
+  left: 1.2rem;
   background-color: #fff;
-  width: 150px;
+  width: 9.4rem;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   z-index: 1;
   border-radius: 5px;
   padding: 10px;
   max-height: 300px;
   overflow-y: auto;
-  margin-top: 5px;
   transform: translateX(-50%);
-  left: 170%;
   text-align: left;
 }
 
@@ -701,6 +828,40 @@ export default {
 }
 
 .dropdown-item {
+  margin-top: 0.3rem;
+}
+/* end of dropdown style */
+
+/* Dropdown Styling */
+.dropdown-menu-export {
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: auto;
+  left: 3rem;
+  background-color: #fff;
+  width: 6rem;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  border-radius: 5px;
+  padding: 10px;
+  max-height: 26rem;
+  overflow-y: auto;
+  margin-top: 5px;
+  transform: translateX(-50%);
+  text-align: left;
+}
+
+.dropdown-menu-export.show {
+  display: block;
+}
+
+.dropdown-menu-export button:hover {
+  background-color: #a72828;
+  color: #0056b3;
+}
+
+.dropdown-item-export {
   margin-top: 0.3rem;
 }
 /* end of dropdown style */
@@ -766,6 +927,8 @@ export default {
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s ease-in-out;
+  text-align: left;
+  margin-right: -2.3rem;
 }
 
 .btn-reset:hover {
