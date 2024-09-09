@@ -226,22 +226,23 @@
                 class="dropdown-menu-act"
                 :class="{ show: dropdownIndex === index }"
               >
-                <a
+                <button
                   class="dropdown-item"
                   @click="editPeminjaman(index)"
                   style="color: #274278"
-                  ><i class="fas fa-edit"></i> Edit</a
+                  >Edit</button
                 >
-                <a @click="tampilModal = true"
+                <button 
+                  @click="tampilModal = true"
                   class="dropdown-item"
                   style="color: #274278"
-                  ><i class="fas fa-thumbs-up"></i> Dikembalikan</a
+                  >Pengembalian</button
                 >
-                <a
+                <button
                   class="dropdown-item"
                   @click="deletePeminjaman(index)"
                   style="color: red"
-                  ><i class="fas fa-trash-alt"></i> Hapus</a
+                  >Hapus</button
                 >
               </div>
             </div>
@@ -514,6 +515,7 @@ export default {
       modalContent.classList.add("closing");
       setTimeout(() => {
         this.showModal = false;
+        this.tampilModal = false;
         this.isClosing = false;
         modalContent.classList.remove("closing");
       }, 300);
@@ -808,7 +810,7 @@ export default {
   right: auto;
   left: 1.2rem;
   background-color: #fff;
-  width: 9.4rem;
+  width: 8.7rem;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   z-index: 1;
   border-radius: 5px;
