@@ -264,6 +264,10 @@
           <span class="close-modal" @click="closeModal">&times;</span>
         </div>
         <div class="modal-body">
+          <div class="button-row">
+            <button type="button" class="btn-pengembalian">Baik</button>
+            <button type="button" class="btn-pengembalian">Rusak</button>
+        </div>
           <!-- form rowa atas -->
           <div class="form-row">
             <!-- peminjam -->
@@ -340,6 +344,7 @@
           <!-- form row bawah -->
           <hr style="color: white;">
           <!-- form row bawah -->
+          
           <div class="form-row">
             <!-- tgl pinjam -->
             <div class="form-group">
@@ -808,7 +813,7 @@ export default {
   position: absolute;
   top: 100%;
   right: auto;
-  left: 1.2rem;
+  left: 1rem;
   background-color: #fff;
   width: 8.7rem;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
@@ -827,6 +832,8 @@ export default {
 
 .dropdown-menu-act button:hover {
   background-color: #f1f1f1;
+  color: #274278;
+  font-weight: 600;
 }
 
 .dropdown-item {
@@ -867,6 +874,28 @@ export default {
   margin-top: 0.3rem;
 }
 /* end of dropdown style */
+
+.button-row {
+  display: flex;
+  gap: 1rem; /* Adjust the gap as needed */
+  align-items: center; /* Align items vertically in the center */
+  flex-wrap: wrap; /* If you want the buttons to wrap on smaller screens */
+  margin-bottom: 1rem;
+}
+
+.btn-pengembalian {
+  background-color: #274278;
+  color: white;
+  border-color: white;
+  border-radius: 1rem;
+  height: 100%;
+  padding: 0.7rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem; /* Decrease the gap for better button spacing */
+  cursor: pointer; /* Add pointer cursor for better UX */
+}
 
 .date-inputs {
   display: flex;
