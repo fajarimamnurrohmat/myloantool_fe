@@ -77,17 +77,17 @@
   <!-- Tabel Siswa -->
   <div style="margin-top: 30px">
     <div class="search-bar">
-      <div class="filter-buttons">
-        <button @click="resetFilter" class="btn-reset">
-          <i class="fa fa-sync" aria-hidden="true"></i>
-        </button>
-        <button @click="exportData('pdf')" class="btn-export">
-          <i class="fa fa-file-pdf" aria-hidden="true"></i>
-        </button>
-        <button @click="exportData('csv')" class="btn-export">
-          <i class="fa fa-file-excel" aria-hidden="true"></i>
-        </button>
+      <div class="filters2">
+      <div>
+        <label for="rows" style="font-weight: 400">Tampilkan :</label>
+        <select v-model="rowsPerPage" @change="updateDisplayedData" style="background-color: white; color: black;">
+          <option :value="5">5</option>
+          <option :value="10">10</option>
+          <option :value="20">20</option>
+        </select>
+        baris
       </div>
+    </div>
       <!-- filter button section -->
       <!-- search -->
       <div class="search-bar-container">
@@ -133,17 +133,6 @@
         </tr>
       </tbody>
     </table>
-    <div class="filters2">
-      <div>
-        <label for="rows" style="font-weight: 400">Tampilkan :</label>
-        <select v-model="rowsPerPage" @change="updateDisplayedData">
-          <option :value="5">5</option>
-          <option :value="10">10</option>
-          <option :value="20">20</option>
-        </select>
-        baris
-      </div>
-    </div>
     <div v-if="totalPages > 1" class="pagination-container">
       <button
         @click="currentPage--"
