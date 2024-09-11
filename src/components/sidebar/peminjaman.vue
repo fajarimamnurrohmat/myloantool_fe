@@ -22,7 +22,7 @@
             <p>Masukkan nama peminjam</p>
             <input
               type="text"
-              style="width: 250px"
+              style="width: 17.5rem"
               id="namaPeminjam"
               class="form-control"
               v-model="newPeminjaman.namaPeminjam"
@@ -36,23 +36,13 @@
             <input
               type="text"
               id="alat"
+              style="width: 17.5rem; margin-left: -0.5rem;"
               class="form-control"
               v-model="newPeminjaman.alat"
             />
           </div>
           <!-- alat -->
-          <!-- jumlah -->
-          <div class="form-group">
-            <label for="jumlahAlat">Jumlah Alat</label>
-            <input
-              type="number"
-              style="width: 100px; margin-top: 1.55rem"
-              id="jumlahAlat"
-              class="form-control"
-              v-model="newPeminjaman.jumlahAlat"
-            />
-          </div>
-          <!-- jumlah -->
+          
         </div>
         <!-- form row atas -->
         <!-- form row bawah -->
@@ -71,7 +61,7 @@
           </div>
           <!-- bengkel -->
           <!-- tgl pinjam -->
-          <div class="form-group" style="margin-left: -2.3rem">
+          <div class="form-group">
             <label for="tanggalPinjam">Tanggal Pinjam</label>
             <p>Masukkan tanggal pinjam alat</p>
             <div class="date-input-wrapper">
@@ -80,12 +70,24 @@
                 id="tanggalPinjam"
                 v-model="newPeminjaman.tanggalPinjam"
                 class="date-filter"
-                style="width: 16rem"
+                style="width: 12rem"
               />
               <i class="fas fa-calendar-alt calendar-icon"></i>
             </div>
           </div>
           <!-- tgl pinjam -->
+          <!-- jumlah -->
+          <div class="form-group">
+            <label for="jumlahAlat">Jumlah Alat</label>
+            <input
+              type="number"
+              style="width: 100px; margin-top: 1.55rem"
+              id="jumlahAlat"
+              class="form-control"
+              v-model="newPeminjaman.jumlahAlat"
+            />
+          </div>
+          <!-- jumlah -->
         </div>
         <!-- form row bawah -->
       </div>
@@ -646,7 +648,7 @@ export default {
   background: #274278 !important;
   padding: 20px;
   border-radius: 10px;
-  width: 600px !important;
+  width: 40rem !important;
   max-width: 100% !important;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   animation: fadeIn 0.3s ease-in-out;
