@@ -14,7 +14,7 @@
         <span class="close-modal" @click="closeModal">&times;</span>
       </div>
       <div class="modal-body">
-        <!-- form rowa atas -->
+        <!-- form row atas -->
         <div class="form-row">
           <!-- peminjam -->
           <div class="form-group">
@@ -258,17 +258,33 @@
 
   <!-- Start of Modal Section -->
   <div v-if="tampilModal" class="modal-overlay" @click.self="closeModal">
-      <div class="modal-content" style="margin-top: 5rem;">
-        <div class="modal-header">
-          <h4>Input Data Pengembalian</h4>
-          <span class="close-modal" @click="closeModal">&times;</span>
+    <div class="modal-content" style="margin-top: 5rem;">
+      <div class="modal-header" style="margin-top: -1rem;">
+        <h4>Input Data Pengembalian</h4>
+        <span class="close-modal" @click="closeModal">&times;</span>
+      </div>
+      <div class="modal-body">
+        <!-- Navigation Text -->
+        <div class="nav-text">
+          <span 
+            :class="{ active: selectedOption === 'baik' }" 
+            @click="selectOption('baik')"
+            style="cursor: pointer;"
+          >
+            Baik
+          </span>
+          <span 
+            :class="{ active: selectedOption === 'bermasalah' }" 
+            @click="selectOption('bermasalah')"
+            style="cursor: pointer;"
+          >
+            Bermasalah
+          </span>
         </div>
-        <div class="modal-body">
-          <div class="button-row">
-            <button type="button" class="btn-pengembalian">Baik</button>
-            <button type="button" class="btn-pengembalian">Rusak</button>
-        </div>
-          <!-- form rowa atas -->
+        <!-- Conditional Rendering for 'Baik' Content -->
+        <div v-if="selectedOption === 'baik'">
+          <!-- Content for 'Baik' -->
+          <!-- form row atas -->
           <div class="form-row">
             <!-- peminjam -->
             <div class="form-group">
@@ -276,7 +292,7 @@
               <p>Masukkan nama peminjam</p>
               <input
                 type="text"
-                style="width: 250px"
+                style="width: 17.5rem"
                 id="namaPeminjam"
                 class="form-control"
                 v-model="newPeminjaman.namaPeminjam"
@@ -290,80 +306,214 @@
               <input
                 type="text"
                 id="alat"
+                style="width: 17.5rem; margin-left: -0.5rem;"
                 class="form-control"
                 v-model="newPeminjaman.alat"
               />
             </div>
             <!-- alat -->
-            <!-- jumlah -->
-            <div class="form-group">
-              <label for="jumlahAlat">Jumlah Alat</label>
-              <input
-                type="number"
-                style="width: 100px; margin-top: 1.55rem"
-                id="jumlahAlat"
-                class="form-control"
-                v-model="newPeminjaman.jumlahAlat"
-              />
-            </div>
-            <!-- jumlah -->
           </div>
           <!-- form row atas -->
-          <!-- form row bawah -->
+            <!-- form row bawah -->
+            <div class="form-row">
+              <!-- bengkel -->
+              <div class="form-group">
+                <label for="bengkel">Bengkel</label>
+                <p>Masukkan nama bengkel alat</p>
+                <input
+                  type="text"
+                  style="width: 15.625rem"
+                  id="bengkel"
+                  class="form-control"
+                  v-model="newPeminjaman.bengkel"
+                />
+              </div>
+              <!-- bengkel -->
+              <!-- tgl pinjam -->
+              <div class="form-group">
+                <label for="tanggalPinjam">Tanggal Pinjam</label>
+                <p>Masukkan tanggal pinjam alat</p>
+                <div class="date-input-wrapper">
+                  <input
+                    type="date"
+                    id="tanggalPinjam"
+                    v-model="newPeminjaman.tanggalPinjam"
+                    class="date-filter"
+                    style="width: 12rem"
+                  />
+                  <i class="fas fa-calendar-alt calendar-icon"></i>
+                </div>
+              </div>
+              <!-- tgl pinjam -->
+              <!-- jumlah -->
+              <div class="form-group">
+                <label for="jumlahAlat">Jumlah Alat</label>
+                <input
+                  type="number"
+                  style="width: 100px; margin-top: 1.55rem"
+                  id="jumlahAlat"
+                  class="form-control"
+                  v-model="newPeminjaman.jumlahAlat"
+                />
+              </div>
+              <!-- jumlah -->
+            </div>
+            <!-- form row bawah -->
+
+            <!-- form row bawah -->
+            <hr style="color: white;">
+            <!-- form row bawah -->
+            
+            <div class="form-row">
+              <!-- tgl pinjam -->
+              <div class="form-group">
+                <label for="tanggalPengembalian">Tanggal Pengembalian</label>
+                <p>Masukkan tanggal pengembalian alat</p>
+                <div class="date-input-wrapper">
+                  <input
+                    type="date"
+                    id="tanggalPengembalian"
+                    v-model="newPeminjaman.tanggalPengembalian"
+                    class="date-filter"
+                    style="width: 15.7rem"
+                  />
+                  <i class="fas fa-calendar-alt calendar-icon"></i>
+                </div>
+              </div>
+              <!-- tgl pinjam -->
+            </div> 
+            <!-- form row bawah -->
+          <!-- form row -->
+        </div>
+
+        <!-- Conditional Rendering for 'Bermasalah' Content -->
+        <div v-if="selectedOption === 'bermasalah'">
+          <!-- Content for 'Bermasalah' -->
+          <!-- form row atas -->
           <div class="form-row">
-            <!-- bengkel -->
+            <!-- peminjam -->
             <div class="form-group">
-              <label for="bengkel">Bengkel</label>
-              <p>Masukkan nama bengkel alat</p>
+              <label for="namaPeminjam">Nama Peminjam</label>
+              <p>Masukkan nama peminjam</p>
               <input
                 type="text"
-                style="width: 15.625rem"
-                id="bengkel"
+                style="width: 17.5rem"
+                id="namaPeminjam"
                 class="form-control"
-                v-model="newPeminjaman.bengkel"
+                v-model="newPeminjaman.namaPeminjam"
               />
             </div>
-            <!-- bengkel -->
-            <!-- tgl pinjam -->
-            <div class="form-group" style="margin-left: -2.3rem">
-              <label for="tanggalPinjam">Tanggal Pinjam</label>
-              <p>Masukkan tanggal pinjam alat</p>
-              <div class="date-input-wrapper">
-                <input
-                  type="date"
-                  id="tanggalPinjam"
-                  v-model="newPeminjaman.tanggalPinjam"
-                  class="date-filter"
-                  style="width: 16rem"
-                />
-                <i class="fas fa-calendar-alt calendar-icon"></i>
-              </div>
-            </div>
-            <!-- tgl pinjam -->
-          </div> 
-          <!-- form row bawah -->
-          <hr style="color: white;">
-          <!-- form row bawah -->
-          
-          <div class="form-row">
-            <!-- tgl pinjam -->
+            <!-- peminjam -->
+            <!-- alat -->
             <div class="form-group">
-              <label for="tanggalPengembalian">Tanggal Pengembalian</label>
-              <p>Masukkan tanggal pengembalian alat</p>
-              <div class="date-input-wrapper">
-                <input
-                  type="date"
-                  id="tanggalPengembalian"
-                  v-model="newPeminjaman.tanggalPengembalian"
-                  class="date-filter"
-                  style="width: 15.7rem"
-                />
-                <i class="fas fa-calendar-alt calendar-icon"></i>
-              </div>
+              <label for="alat">Alat</label>
+              <p>Masukkan nama alat</p>
+              <input
+                type="text"
+                id="alat"
+                style="width: 17.5rem; margin-left: -0.5rem;"
+                class="form-control"
+                v-model="newPeminjaman.alat"
+              />
             </div>
-            <!-- tgl pinjam -->
-          </div> 
-          <!-- form row bawah -->
+            <!-- alat -->
+            </div>
+            <!-- form row atas -->
+            <!-- form row bawah -->
+            <div class="form-row">
+              <!-- bengkel -->
+              <div class="form-group">
+                <label for="bengkel">Bengkel</label>
+                <p>Masukkan nama bengkel alat</p>
+                <input
+                  type="text"
+                  style="width: 15.625rem"
+                  id="bengkel"
+                  class="form-control"
+                  v-model="newPeminjaman.bengkel"
+                />
+              </div>
+              <!-- bengkel -->
+              <!-- tgl pinjam -->
+              <div class="form-group">
+                <label for="tanggalPinjam">Tanggal Pinjam</label>
+                <p>Masukkan tanggal pinjam alat</p>
+                <div class="date-input-wrapper">
+                  <input
+                    type="date"
+                    id="tanggalPinjam"
+                    v-model="newPeminjaman.tanggalPinjam"
+                    class="date-filter"
+                    style="width: 12rem"
+                  />
+                  <i class="fas fa-calendar-alt calendar-icon"></i>
+                </div>
+              </div>
+              <!-- tgl pinjam -->
+              <!-- jumlah -->
+              <div class="form-group">
+                <label for="jumlahAlat">Jumlah Alat</label>
+                <input
+                  type="number"
+                  style="width: 100px; margin-top: 1.55rem"
+                  id="jumlahAlat"
+                  class="form-control"
+                  v-model="newPeminjaman.jumlahAlat"
+                />
+              </div>
+              <!-- jumlah -->
+            </div>
+            <!-- form row bawah -->
+              <!-- form row bawah -->
+              <hr style="color: white;">
+              <!-- form row bawah -->
+              
+              <div class="form-row">
+                <!-- tgl pinjam -->
+                <div class="form-group">
+                  <label for="tanggalPengembalian">Tanggal Pengembalian</label>
+                  <p>Masukkan tanggal pengembalian alat</p>
+                  <div class="date-input-wrapper">
+                    <input
+                      type="date"
+                      id="tanggalPengembalian"
+                      v-model="newPengembalian.tanggalPengembalian"
+                      class="date-filter"
+                      style="width: 15.7rem"
+                    />
+                    <i class="fas fa-calendar-alt calendar-icon"></i>
+                  </div>
+                </div>
+                <!-- tgl pinjam -->
+                <!-- jml alat rusak -->
+                <div class="form-group">
+                  <label for="jumlahAlatRusak" style="font-size: 0.9rem;">Jumlah Alat Rusak</label>
+                  <input
+                  type="number"
+                  style="margin-top: 1.6rem; height: 2.5rem; width: 8.7rem;"
+                  id="jumlahAlatRusak"
+                  class="form-control"
+                  v-model="newPengembalian.jumlahAlatRusak"
+                />
+                </div>
+                <!-- jml alat rusak -->
+                <!-- kondisi alat -->
+                <div class="form-group">
+                  <label for="kondisiAlat">Kondisi Alat</label>
+                  <select 
+                    v-model="showCondi" 
+                    class="select-condi"
+                    >
+                    <option value=""></option>
+                    <option value="Rusak">Rusak</option>
+                    <option value="Hilang">Hilang</option>
+                  </select>
+                </div>
+                <!-- kondisi alat -->
+              </div> 
+              <!-- form row bawah -->
+          </div>
+          
         </div>
         <div class="modal-footer">
           <button @click="gotoPengembalian" class="btn_add_peminjaman">
@@ -418,6 +568,7 @@ export default {
     return {
       showModal: false,
       tampilModal: false,
+      selectedOption: 'baik',
       isClosing: false,
       newPeminjaman: {
         namaPeminjam: "",
@@ -425,7 +576,10 @@ export default {
         bengkel: "",
         tanggalPinjam: "",
         jumlahAlat: "",
+      },
+      newPengembalian: {
         tanggalPengembalian: "",
+        jumlahAlatRusak: "",
       },
       peminjamanList: [],
       startDate: "",
@@ -501,6 +655,9 @@ export default {
       } else {
         alert("Mohon isi semua data");
       }
+    },
+    selectOption(option) {
+      this.selectedOption = option;
     },
     goToPengembalian() {
       this.$router.push('/mainsidebar/datapinjaman');
@@ -642,6 +799,16 @@ export default {
   pointer-events: none; /* Agar klik tetap pada input */
 }
 
+.select-condi {
+  width: 6.3rem;
+  padding: 0.4rem;
+  margin-top: 1.2rem;
+  height: 2.5rem;
+  background-color: white;
+  border-radius: 5px;
+  color: #000000;
+}
+
 /* Optional: Tambahkan interaksi klik pada ikon untuk membuka date picker */
 .date-input-wrapper:hover .calendar-icon {
   color: #636468; /* Warna saat hover */
@@ -651,7 +818,7 @@ export default {
   background: #274278 !important;
   padding: 20px;
   border-radius: 10px;
-  width: 600px !important;
+  width: 40rem !important;
   max-width: 100% !important;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   animation: fadeIn 0.3s ease-in-out;
@@ -722,6 +889,17 @@ export default {
   animation: fadeOut 0.3s ease-out forwards;
 }
 /* end of the modal */
+
+.nav-text span {
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+}
+
+.nav-text span.active {
+  text-decoration: underline;
+  color: #f30202; /* Highlight the active option */
+}
 
 .header-peminjaman {
   font-weight: bold;
@@ -978,4 +1156,39 @@ export default {
   align-items: center;
   gap: 15px; /* Add space between the buttons and text */
 }
+
+.nav-text {
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: space-between; /* Space between the two texts */
+  align-items: center; /* Vertically centers the text */
+  padding: 0 1rem; /* Optional: adds padding inside */
+  text-align: center; /* Center the text inside their flex containers */
+}
+
+.nav-text span {
+  flex: 1; /* Make the text span evenly across */
+  text-align: center; /* Center the text within the span */
+  cursor: pointer; /* Indicates the text is clickable */
+  color: rgb(199, 199, 199); /* Default color for inactive text */
+  font-weight: 400;
+}
+
+.nav-text span:first-child {
+  text-align: center; /* Align "Baik" to the left */
+  margin-left: -1rem;
+}
+
+.nav-text span:last-child {
+  text-align: center; /* Align "Buruk" to the right */
+  margin-left: -2rem;
+}
+
+/* Optional: Add active styling */
+.nav-text span.active {
+  font-weight: bold;
+  color: rgb(255, 255, 255); /* Example: Change active color */
+  border-bottom: 2px solid rgb(255, 255, 255); /* Example: Active underline */
+}
+
 </style>
