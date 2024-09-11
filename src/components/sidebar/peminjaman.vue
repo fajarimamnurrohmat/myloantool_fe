@@ -192,6 +192,16 @@
   <!-- End of Date Filter Section -->
 
   <div style="margin-top: 2rem">
+    <div class="tampil-baris" style="text-align: left;">
+        Tampilkan:
+        <select v-model="rowsPerPage" class="select-rows" style="width: 3rem">
+          <option value="5">5</option>
+          <option value="10">10</option>
+          <option value="20">20</option>
+          <option value="100">100</option>
+        </select>
+        baris
+      </div>
     <!-- table section -->
     <table class="data-table">
       <thead>
@@ -372,16 +382,6 @@
     <!-- End of Modal Section -->
 
     <div class="search-bar">
-      <div>
-        Tampilkan:
-        <select v-model="rowsPerPage" class="select-rows" style="width: 3rem">
-          <option value="5">5</option>
-          <option value="10">10</option>
-          <option value="20">20</option>
-          <option value="100">100</option>
-        </select>
-        baris
-      </div>
       <div v-if="totalPages > 1" class="pagination-container">
         <button
           @click="currentPage--"
