@@ -808,7 +808,7 @@ export default {
   position: absolute;
   top: 100%;
   right: auto;
-  left: 1.2rem;
+  left: 1rem;
   background-color: #fff;
   width: 8.7rem;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
@@ -827,6 +827,8 @@ export default {
 
 .dropdown-menu-act button:hover {
   background-color: #f1f1f1;
+  color: #274278;
+  font-weight: 600;
 }
 
 .dropdown-item {
