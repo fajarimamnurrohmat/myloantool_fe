@@ -292,7 +292,7 @@
               <p>Masukkan nama peminjam</p>
               <input
                 type="text"
-                style="width: 17.5rem"
+                style="width: 16rem"
                 id="namaPeminjam"
                 class="form-control"
                 v-model="newPeminjaman.namaPeminjam"
@@ -300,13 +300,13 @@
             </div>
             <!-- peminjam -->
             <!-- alat -->
-            <div class="form-group">
+            <div class="form-group" style="margin-left: -4.3rem;">
               <label for="alat">Alat</label>
               <p>Masukkan nama alat</p>
               <input
                 type="text"
                 id="alat"
-                style="width: 17.5rem; margin-left: -0.5rem;"
+                style="width: 19.4rem;"
                 class="form-control"
                 v-model="newPeminjaman.alat"
               />
@@ -314,15 +314,15 @@
             <!-- alat -->
           </div>
           <!-- form row atas -->
-            <!-- form row bawah -->
-            <div class="form-row">
-              <!-- bengkel -->
+          <!-- form row bawah -->
+          <div class="form-row">
+            <!-- bengkel -->
               <div class="form-group">
                 <label for="bengkel">Bengkel</label>
                 <p>Masukkan nama bengkel alat</p>
                 <input
                   type="text"
-                  style="width: 15.625rem"
+                  style="width: 16rem; height: 2.5rem;"
                   id="bengkel"
                   class="form-control"
                   v-model="newPeminjaman.bengkel"
@@ -350,7 +350,7 @@
                 <label for="jumlahAlat">Jumlah Alat</label>
                 <input
                   type="number"
-                  style="width: 100px; margin-top: 1.55rem"
+                  style="width: 100px; margin-top: 1.55rem; height: 2.5rem;"
                   id="jumlahAlat"
                   class="form-control"
                   v-model="newPeminjaman.jumlahAlat"
@@ -359,28 +359,27 @@
               <!-- jumlah -->
             </div>
             <!-- form row bawah -->
-
-            <!-- form row bawah -->
-            <hr style="color: white;">
-            <!-- form row bawah -->
-            
-            <div class="form-row">
-              <!-- tgl pinjam -->
-              <div class="form-group">
-                <label for="tanggalPengembalian">Tanggal Pengembalian</label>
-                <p>Masukkan tanggal pengembalian alat</p>
-                <div class="date-input-wrapper">
-                  <input
-                    type="date"
-                    id="tanggalPengembalian"
-                    v-model="newPeminjaman.tanggalPengembalian"
-                    class="date-filter"
-                    style="width: 15.7rem"
-                  />
-                  <i class="fas fa-calendar-alt calendar-icon"></i>
+              <!-- form row bawah -->
+              <hr style="color: white;">
+              <!-- form row bawah -->
+              
+              <div class="form-row">
+                <!-- tgl pinjam -->
+                <div class="form-group">
+                  <label for="tanggalPengembalian">Tanggal Pengembalian</label>
+                  <p>Masukkan tanggal pengembalian alat</p>
+                  <div class="date-input-wrapper">
+                    <input
+                      type="date"
+                      id="tanggalPengembalian"
+                      v-model="newPengembalian.tanggalPengembalian"
+                      class="date-filter"
+                      style="width: 15.7rem"
+                    />
+                    <i class="fas fa-calendar-alt calendar-icon"></i>
+                  </div>
                 </div>
-              </div>
-              <!-- tgl pinjam -->
+                <!-- tgl pinjam -->
             </div> 
             <!-- form row bawah -->
           <!-- form row -->
@@ -397,7 +396,7 @@
               <p>Masukkan nama peminjam</p>
               <input
                 type="text"
-                style="width: 17.5rem"
+                style="width: 16rem"
                 id="namaPeminjam"
                 class="form-control"
                 v-model="newPeminjaman.namaPeminjam"
@@ -405,29 +404,29 @@
             </div>
             <!-- peminjam -->
             <!-- alat -->
-            <div class="form-group">
+            <div class="form-group" style="margin-left: -4.3rem;">
               <label for="alat">Alat</label>
               <p>Masukkan nama alat</p>
               <input
                 type="text"
                 id="alat"
-                style="width: 17.5rem; margin-left: -0.5rem;"
+                style="width: 19.4rem;"
                 class="form-control"
                 v-model="newPeminjaman.alat"
               />
             </div>
             <!-- alat -->
-            </div>
-            <!-- form row atas -->
-            <!-- form row bawah -->
-            <div class="form-row">
-              <!-- bengkel -->
+          </div>
+          <!-- form row atas -->
+          <!-- form row bawah -->
+          <div class="form-row">
+            <!-- bengkel -->
               <div class="form-group">
                 <label for="bengkel">Bengkel</label>
                 <p>Masukkan nama bengkel alat</p>
                 <input
                   type="text"
-                  style="width: 15.625rem"
+                  style="width: 16rem; height: 2.5rem;"
                   id="bengkel"
                   class="form-control"
                   v-model="newPeminjaman.bengkel"
@@ -455,7 +454,7 @@
                 <label for="jumlahAlat">Jumlah Alat</label>
                 <input
                   type="number"
-                  style="width: 100px; margin-top: 1.55rem"
+                  style="width: 100px; margin-top: 1.55rem; height: 2.5rem;"
                   id="jumlahAlat"
                   class="form-control"
                   v-model="newPeminjaman.jumlahAlat"
@@ -486,11 +485,11 @@
                 </div>
                 <!-- tgl pinjam -->
                 <!-- jml alat rusak -->
-                <div class="form-group">
+                <div class="form-group" style="margin-left: 0.3rem;">
                   <label for="jumlahAlatRusak" style="font-size: 0.9rem;">Jumlah Alat Rusak</label>
                   <input
                   type="number"
-                  style="margin-top: 1.6rem; height: 2.5rem; width: 8.7rem;"
+                  style="margin-top: 1.6rem; height: 2.5rem; width: 12rem;"
                   id="jumlahAlatRusak"
                   class="form-control"
                   v-model="newPengembalian.jumlahAlatRusak"
@@ -807,6 +806,7 @@ export default {
   background-color: white;
   border-radius: 5px;
   color: #000000;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
 }
 
 /* Optional: Tambahkan interaksi klik pada ikon untuk membuka date picker */
