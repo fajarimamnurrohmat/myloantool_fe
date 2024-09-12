@@ -1,5 +1,5 @@
 <template>
-  <div style="text-align: left">
+  <div class="header">
     <h3 class="header-peminjaman">Halaman Peminjaman</h3>
     <button @click="showModal = true" class="btn_add_siswa">
       <i class="fas fa-plus" style="margin-right: 1rem"></i> Input Peminjaman
@@ -16,35 +16,34 @@
       <div class="modal-body">
         <!-- form row atas -->
         <div class="form-row">
-          <!-- peminjam -->
-          <div class="form-group">
-            <label for="namaPeminjam">Nama Peminjam</label>
-            <p>Masukkan nama peminjam</p>
-            <input
-              type="text"
-              style="width: 17.5rem"
-              id="namaPeminjam"
-              class="form-control"
-              v-model="newPeminjaman.namaPeminjam"
-            />
+            <!-- peminjam -->
+            <div class="form-group">
+              <label for="namaPeminjam">Nama Peminjam</label>
+              <p>Masukkan nama peminjam</p>
+              <input
+                type="text"
+                style="width: 16rem"
+                id="namaPeminjam"
+                class="form-control"
+                v-model="newPeminjaman.namaPeminjam"
+              />
+            </div>
+            <!-- peminjam -->
+            <!-- alat -->
+            <div class="form-group" style="margin-left: -4.3rem;">
+              <label for="alat">Alat</label>
+              <p>Masukkan nama alat</p>
+              <input
+                type="text"
+                id="alat"
+                style="width: 19.4rem;"
+                class="form-control"
+                v-model="newPeminjaman.alat"
+              />
+            </div>
+            <!-- alat -->
           </div>
-          <!-- peminjam -->
-          <!-- alat -->
-          <div class="form-group">
-            <label for="alat">Alat</label>
-            <p>Masukkan nama alat</p>
-            <input
-              type="text"
-              id="alat"
-              style="width: 17.5rem; margin-left: -0.5rem;"
-              class="form-control"
-              v-model="newPeminjaman.alat"
-            />
-          </div>
-          <!-- alat -->
-          
-        </div>
-        <!-- form row atas -->
+          <!-- form row atas -->
         <!-- form row bawah -->
         <div class="form-row">
           <!-- bengkel -->
@@ -106,7 +105,7 @@
   <div class="filter-section">
     <div class="date-inputs">
       <div class="date-input-wrapper">
-        <label for="startDate" class="date-sort">From:</label>
+        <label for="startDate" class="date-sort">Sort From:</label>
         <input
           type="date"
           id="startDate"
@@ -903,12 +902,16 @@ export default {
   color: #f30202; /* Highlight the active option */
 }
 
+.header {
+  text-align: left;
+}
+
 .header-peminjaman {
   font-weight: bold;
   font-size: 1.7rem;
   color: #274278;
-  margin-bottom: 10px;
-  margin-top: 50px;
+  margin-top: -5rem;
+  margin-bottom: 1.5rem;
   animation: fadeInDown 1s ease-in-out;
 }
 
@@ -1192,5 +1195,4 @@ export default {
   color: rgb(255, 255, 255); /* Example: Change active color */
   border-bottom: 2px solid rgb(255, 255, 255); /* Example: Active underline */
 }
-
 </style>
