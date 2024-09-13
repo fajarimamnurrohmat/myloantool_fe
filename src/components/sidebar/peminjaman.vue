@@ -200,7 +200,7 @@
           <option value="100">100</option>
         </select>
         baris
-      </div>
+    </div>
     <!-- table section -->
     <table class="data-table">
       <thead>
@@ -594,7 +594,6 @@ export default {
   computed: {
     filteredPeminjamanList() {
       let filteredList = this.peminjamanList;
-
       // Filter by search query
       if (this.searchQuery) {
         filteredList = filteredList.filter(
@@ -610,7 +609,6 @@ export default {
               .includes(this.searchQuery.toLowerCase())
         );
       }
-
       // Filter by date range
       if (this.startDate && this.endDate) {
         filteredList = filteredList.filter((peminjaman) => {
@@ -621,7 +619,6 @@ export default {
           );
         });
       }
-
       return filteredList;
     },
     paginatedPeminjamanList() {

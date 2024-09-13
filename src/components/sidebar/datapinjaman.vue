@@ -3,58 +3,109 @@
     <div style="text-align: left; margin-bottom: 30px">
       <h3 class="header-DataPinjaman">Data Pinjaman Telah Dikembalikan</h3>
       <p>
-        Pada halaman data pinjaman ini, dapat melakukan peninjauan serta
-        manajemen keseluruhan data pinjaman. Data pada halaman ini merupakan data barang yang memiliki kondisi baik.
+        Data pada halaman ini merupakan data barang yang memiliki kondisi baik.
       </p>
     </div>
     <hr />
 
-    <!-- Filter dan Penyortir -->
-    <div class="filters" style="margin-top: 30px">
+    <!-- Date Filter Section -->
+  <div class="filter-section">
+    <div class="date-inputs">
       <div class="date-input-wrapper">
-        <label for="startDate" style="color: #7b8291;">From :</label>
+        <label for="startDate" class="date-sort">Sort From:</label>
         <input
           type="date"
+          id="startDate"
           v-model="startDate"
-          @change="filterData"
-          class="date-input"
+          class="date-filter"
         />
         <i class="fas fa-calendar-alt calendar-icon"></i>
       </div>
       <div class="date-input-wrapper">
-        <label for="endDate" style="color: #7b8291;">To :</label>
-        <input
-          type="date"
-          v-model="endDate"
-          @change="filterData"
-          class="date-input"
-        />
+        <label for="endDate" class="date-sort">To:</label>
+        <input type="date" id="endDate" v-model="endDate" class="date-filter" />
         <i class="fas fa-calendar-alt calendar-icon"></i>
       </div>
+      <!-- filter button section -->
       <div class="filter-buttons">
-        <button @click="resetFilters" class="btn-reset">
+        <button @click="resetFilter" class="btn-reset">
           <i class="fa fa-sync" aria-hidden="true"></i>
         </button>
-        <button @click="exportData('pdf')" class="btn-export">
-          <i class="fa fa-file-pdf" aria-hidden="true"></i>
-        </button>
-        <button @click="exportData('csv')" class="btn-export">
-          <i class="fa fa-file-excel" aria-hidden="true"></i>
-        </button>
+        <div class="dropdown d-inline-block">
+          <button
+            class="btn-export"
+            type="button"
+            @click="toggleDropdown(index)"
+            :aria-expanded="dropdownIndex === index"
+            style="
+              color: #4b6cb7; 
+              background-color: white; 
+              width: 6rem;"
+          ><i class="fa-solid fa-arrow-up-from-bracket" 
+              style="
+                      margin-left: 0.5rem;
+                      margin-right: 0.4rem;">
+          </i>
+            Export
+          </button>
+          <div
+            class="dropdown-menu-export"
+            :class="{ show: dropdownIndex === index }"
+          >
+            <a
+              class="dropdown-item-export"
+              @click="exportData('pdf')"
+              style="color: #4b6cb7"
+              ><i class="fa fa-file-pdf" 
+                  aria-hidden="true"
+                  style="
+                      margin-left: 0.2rem;
+                      margin-right: 0.1rem;">
+              </i>
+              .pdf
+            </a>
+            <a
+              class="dropdown-item-export"
+              @click="exportData('csv')"
+              style="color: #4b6cb7;"
+              ><i class="fa-solid fa-file-csv" 
+                  aria-hidden="true"
+                  style="
+                      margin-left: 0.2rem;
+                      margin-right: 0.1rem;
+                      margin-top: 0.5rem;">
+              </i>
+              .csv
+            </a>
+          </div>
+        </div>
       </div>
+      <!-- filter button section -->
+      <!-- search -->
       <div class="search-bar-container">
         <i class="fas fa-search search-icon"></i>
         <input
           type="text"
-          @input="filterData"
           v-model="searchQuery"
           class="search-input"
-          style="width: 11rem"
+          style="width: 11rem;"
           placeholder="Cari.."
         />
       </div>
+      <!-- search -->
     </div>
-
+  </div>
+  <!-- End of Date Filter Section -->
+    <div class="tampil-baris" style="text-align: left; margin-top: 2rem; margin-bottom: 1rem;">
+        Tampilkan:
+        <select v-model="rowsPerPage" class="select-rows" style="width: 3rem">
+          <option value="5">5</option>
+          <option value="10">10</option>
+          <option value="20">20</option>
+          <option value="100">100</option>
+        </select>
+        baris
+    </div> 
     <!-- Tabel Data -->
     <table>
       <thead>
@@ -78,17 +129,6 @@
         </tr>
       </tbody>
     </table>
-    <div class="filters2">
-      <div>
-        <label for="rows" style="font-weight: 400">Tampilkan :</label>
-        <select v-model="rowsPerPage" @change="updateDisplayedData">
-          <option :value="5">5</option>
-          <option :value="10">10</option>
-          <option :value="20">20</option>
-        </select>
-        baris
-      </div>
-    </div>
   </div>
 </template>
 
@@ -127,13 +167,13 @@ export default {
           tanggalPinjam: "2024-08-05",
           tanggalKembali: "2024-08-15",
         },
-        // Tambahkan data lainnya di sini
       ],
       displayedData: [],
       rowsPerPage: 5,
       startDate: "",
       endDate: "",
       searchQuery: "",
+      dropdownIndex: null,
     };
   },
   mounted() {
@@ -142,7 +182,6 @@ export default {
   methods: {
     updateDisplayedData() {
       let filteredData = this.returnedLoans;
-
       // Filter berdasarkan tanggal
       if (this.startDate || this.endDate) {
         filteredData = filteredData.filter((record) => {
@@ -153,7 +192,6 @@ export default {
           );
         });
       }
-
       // Filter berdasarkan pencarian
       if (this.searchQuery) {
         const query = this.searchQuery.toLowerCase();
@@ -165,7 +203,6 @@ export default {
           );
         });
       }
-
       // Ambil data sesuai dengan rowsPerPage
       this.displayedData = filteredData.slice(0, this.rowsPerPage);
     },
@@ -204,6 +241,9 @@ export default {
         });
         doc.save("data_pengembalian.pdf");
       }
+    },
+    toggleDropdown(index) {
+      this.dropdownIndex = this.dropdownIndex === index ? null : index;
     },
     resetFilters() {
       this.startDate = "";
@@ -258,30 +298,53 @@ export default {
   color: #7b8291; /* Warna teks untuk input tanggal */
 }
 
-.export-button {
-  background-color: #274278;
-  color: white;
-  padding: 8px 12px;
+.filter-buttons {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.filter-buttons button {
+  border-radius: 5px;
+  height: 2rem; /* reduce the height */
+  width: 2.5rem;
+  padding: 0.2rem; /* add some padding */
+}
+
+.filter-buttons button i {
+  font-size: 1rem; /* increase the font size of the icon */
+}
+
+.btn-reset {
+  background-color: #ffffff;
+  color: #4b6cb7;
+  padding: 10px 20px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
 }
 
-.export-button:hover {
-  background-color: #1f3664;
-}
-
-.reset-button {
-  background-color: #ccc;
-  color: #333;
-  padding: 8px 12px;
+.btn-filter,
+.btn-export {
+  background-color: #ffffff;
+  color: #4b6cb7;
+  padding: 10px 20px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+  text-align: left;
+  margin-right: -2.3rem;
 }
 
-.reset-button:hover {
-  background-color: #999;
+.btn-reset:hover {
+  background-color: #e9e9e9;
+}
+
+.btn-filter:hover,
+.btn-export:hover {
+  background-color: #e9e9e9;
 }
 
 table {
