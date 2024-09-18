@@ -7,7 +7,7 @@
       <div class="container">
         <!-- Brand -->
         <a class="navbar-brand" href="/">
-          <div class="name_brand">MyLoanTool</div>
+          <div class="name_brand">TeknoLend</div>
           <div class="name_desc">Peminjaman Alat Bengkel</div>
         </a>
         <!-- Toggle button -->
@@ -170,7 +170,6 @@ export default {
   font-size: 1.35rem;
   font-weight: bold;
   color: #f8c291;
-  font-style: italic;
 }
 
 .name_desc {

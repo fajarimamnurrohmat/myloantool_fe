@@ -1,12 +1,8 @@
 <template>
   <div style="text-align: center">
-    <h1 class="welcome-header" style="margin-bottom: 1rem;">
+    <h1 class="welcome-header" style="margin-bottom: 3rem;">
       Selamat Datang, Admin!
     </h1>
-    <h5 class="welcome-subtext">
-      Semoga hari Anda produktif dan penuh kesuksesan dalam mengelola peminjaman
-      alat.
-    </h5>
   </div>
 
   <div
@@ -47,14 +43,6 @@
   font-size: 2.5rem;
   margin-bottom: 10px;
   animation: fadeInDown 1s ease-in-out;
-}
-
-/* Styling untuk subtext Selamat Datang */
-.welcome-subtext {
-  font-size: 1.2rem;
-  color: #7f8c8d;
-  margin-bottom: 20px;
-  animation: fadeInUp 1s ease-in-out;
 }
 
 /* Keyframes untuk animasi fadeIn */

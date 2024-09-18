@@ -1,61 +1,111 @@
 <template>
   <div>
-    <div style="text-align: left; margin-bottom: 30px">
+    <div style="text-align: left; margin-bottom: 1rem">
       <h3 class="header-DataPinjaman">Data Pinjaman Bermasalah</h3>
       <p>
-        Pada halaman data pinjaman bermasalah ini, dapat melakukan peninjauan serta
-        manajemen keseluruhan data pinjaman alat yang bermasalah. Dapat melakukan filter serta ekspor
-        data berupa file pdf & csv.
+        Data pada halaman ini merupakan data alat yang dikembalikan dalam kondisi bermasalah.
       </p>
     </div>
     <hr />
 
-    <!-- Filter dan Penyortir -->
-    <div class="filters" style="margin-top: 30px">
+    <!-- Date Filter Section -->
+  <div class="filter-section">
+    <div class="date-inputs">
       <div class="date-input-wrapper">
-        <label for="startDate" style="color: #7b8291;">From :</label>
+        <label for="startDate" class="date-sort">Sort From:</label>
         <input
           type="date"
+          id="startDate"
           v-model="startDate"
-          @change="filterData"
-          class="date-input"
+          class="date-filter"
         />
         <i class="fas fa-calendar-alt calendar-icon"></i>
       </div>
       <div class="date-input-wrapper">
-        <label for="endDate" style="color: #7b8291;">To :</label>
-        <input
-          type="date"
-          v-model="endDate"
-          @change="filterData"
-          class="date-input"
-        />
+        <label for="endDate" class="date-sort">To:</label>
+        <input type="date" id="endDate" v-model="endDate" class="date-filter" />
         <i class="fas fa-calendar-alt calendar-icon"></i>
       </div>
+      <!-- filter button section -->
       <div class="filter-buttons">
-        <button @click="resetFilters" class="btn-reset">
+        <button @click="resetFilter" class="btn-reset">
           <i class="fa fa-sync" aria-hidden="true"></i>
         </button>
-        <button @click="exportData('pdf')" class="btn-export">
-          <i class="fa fa-file-pdf" aria-hidden="true"></i>
-        </button>
-        <button @click="exportData('csv')" class="btn-export">
-          <i class="fa fa-file-excel" aria-hidden="true"></i>
-        </button>
+        <div class="dropdown d-inline-block">
+          <button
+            class="btn-export"
+            type="button"
+            @click="toggleDropdown(index)"
+            :aria-expanded="dropdownIndex === index"
+            style="
+              color: #4b6cb7; 
+              background-color: white; 
+              width: 6rem;"
+          ><i class="fa-solid fa-arrow-up-from-bracket" 
+              style="
+                      margin-left: 0.5rem;
+                      margin-right: 0.4rem;">
+          </i>
+            Export
+          </button>
+          <div
+            class="dropdown-menu-export"
+            :class="{ show: dropdownIndex === index }"
+          >
+            <a
+              class="dropdown-item-export"
+              @click="exportData('pdf')"
+              style="color: #4b6cb7"
+              ><i class="fa fa-file-pdf" 
+                  aria-hidden="true"
+                  style="
+                      margin-left: 0.2rem;
+                      margin-right: 0.1rem;">
+              </i>
+              .pdf
+            </a>
+            <a
+              class="dropdown-item-export"
+              @click="exportData('csv')"
+              style="color: #4b6cb7;"
+              ><i class="fa-solid fa-file-csv" 
+                  aria-hidden="true"
+                  style="
+                      margin-left: 0.2rem;
+                      margin-right: 0.1rem;
+                      margin-top: 0.5rem;">
+              </i>
+              .csv
+            </a>
+          </div>
+        </div>
       </div>
+      <!-- filter button section -->
+      <!-- search -->
       <div class="search-bar-container">
         <i class="fas fa-search search-icon"></i>
         <input
           type="text"
-          @input="filterData"
           v-model="searchQuery"
           class="search-input"
-          style="width: 11rem"
+          style="width: 11rem;"
           placeholder="Cari.."
         />
       </div>
+      <!-- search -->
     </div>
-
+  </div>
+  <!-- End of Date Filter Section -->
+    <div class="tampil-baris" style="text-align: left; margin-top: 2rem; margin-bottom: 1rem;">
+        Tampilkan:
+        <select v-model="rowsPerPage" class="select-rows" style="width: 3rem">
+          <option value="5">5</option>
+          <option value="10">10</option>
+          <option value="20">20</option>
+          <option value="100">100</option>
+        </select>
+        baris
+    </div> 
     <!-- Tabel Data -->
     <table>
       <thead>
@@ -87,31 +137,21 @@
                 @click="toggleDropdown(index)"
                 :aria-expanded="dropdownIndex === index"
               >
-              <i class="fas fa-check-square" aria-hidden="true"></i>
+              <span class="material-symbols-outlined">
+              priority
+              </span>
               </button>
             </div>
           </td>
         </tr>
       </tbody>
     </table>
-    <div class="filters2">
-      <div>
-        <label for="rows" style="font-weight: 400">Tampilkan :</label>
-        <select v-model="rowsPerPage" @change="updateDisplayedData">
-          <option :value="5">5</option>
-          <option :value="10">10</option>
-          <option :value="20">20</option>
-        </select>
-        baris
-      </div>
-    </div>
   </div>
 </template>
 
 <script>
 import { jsPDF } from "jspdf";
 import "jspdf-autotable";
-import { saveAs } from "file-saver";
 import * as XLSX from "xlsx";
 
 export default {
@@ -153,6 +193,7 @@ export default {
       startDate: "",
       endDate: "",
       searchQuery: "",
+      dropdownIndex: null,
     };
   },
   mounted() {
@@ -232,6 +273,9 @@ export default {
       this.searchQuery = "";
       this.updateDisplayedData();
     },
+    toggleDropdown(index) {
+      this.dropdownIndex = this.dropdownIndex === index ? null : index;
+    },
   },
 };
 </script>
@@ -239,7 +283,6 @@ export default {
 <style scoped>
 .header-DataPinjaman {
   font-weight: bold;
-  font-style: italic;
   color: #274278;
   font-size: 1.7rem;
   margin-bottom: 10px;
@@ -259,6 +302,14 @@ export default {
   display: flex;
   justify-content: space-between;
   gap: 10px;
+}
+
+.material-symbols-outlined {
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 100,
+  'GRAD' 0,
+  'opsz' 24
 }
 
 .filters label {
@@ -284,6 +335,40 @@ export default {
 .filters2 input[type="text"] {
   background-color: #fff; /* Warna latar belakang untuk input teks */
 }
+
+/* Dropdown Styling */
+.dropdown-menu-export {
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: auto;
+  left: 3rem;
+  background-color: #fff;
+  width: 6rem;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  border-radius: 5px;
+  padding: 10px;
+  max-height: 26rem;
+  overflow-y: auto;
+  margin-top: 5px;
+  transform: translateX(-50%);
+  text-align: left;
+}
+
+.dropdown-menu-export.show {
+  display: block;
+}
+
+.dropdown-menu-export button:hover {
+  background-color: #a72828;
+  color: #0056b3;
+}
+
+.dropdown-item-export {
+  margin-top: 0.3rem;
+}
+/* end of dropdown style */
 
 .export-button {
   background-color: #274278;

@@ -2,7 +2,7 @@
   <div class="col d-flex align-items-center justify-content-center">
     <div class="form-container">
       <div class="text-center mb-4 mt-2">
-        <div class="name_brand">MyLoanTool</div>
+        <div class="name_brand">TeknoLend</div>
         <div class="name_desc">Peminjaman Alat Bengkel</div>
       </div>
       <!-- form -->
@@ -80,7 +80,7 @@ input {
 }
 
 .form-container {
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  box-shadow: -10px 0 15px rgba(41, 41, 41, 0.151), 10px 0 15px rgba(0, 0, 0, 0.1); 
   border: none;
   padding: 40px;
   width: 400px;
@@ -88,6 +88,7 @@ input {
   background: linear-gradient(135deg, #4b6cb7, #182848);
   color: white;
 }
+
 
 .input-group {
   position: relative;
