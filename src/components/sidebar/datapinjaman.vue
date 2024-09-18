@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div style="text-align: left; margin-bottom: 30px">
+    <div style="text-align: left; margin-bottom: 1rem">
       <h3 class="header-DataPinjaman">Data Pinjaman Telah Dikembalikan</h3>
       <p>
         Data pada halaman ini merupakan data barang yang memiliki kondisi baik.
