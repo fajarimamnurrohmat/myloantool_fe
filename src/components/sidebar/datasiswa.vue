@@ -68,26 +68,38 @@
 
       <div style="margin-top: 10px; text-align: left">
         <button @click="addSiswa" class="btn_add_siswa">
-          <i class="fas fa-save"></i> Simpan Data
+          Simpan Data
         </button>
       </div>
     </div>
   </div>
 
-  <!-- Tabel Siswa -->
-  <div style="margin-top: 30px">
-    <div class="search-bar">
-      <div class="filters2">
-      <div>
-        <label for="rows" style="font-weight: 400">Tampilkan :</label>
-        <select v-model="rowsPerPage" @change="updateDisplayedData" style="background-color: white; color: black;">
-          <option :value="5">5</option>
-          <option :value="10">10</option>
-          <option :value="20">20</option>
-        </select>
-        baris
+  <hr />
+
+  <!-- Date Filter Section -->
+  <div class="filter-section">
+    <div class="date-inputs">
+      <div class="date-input-wrapper">
+        <label for="startDate" class="date-sort">Sort From:</label>
+        <input
+          type="date"
+          id="startDate"
+          v-model="startDate"
+          class="date-filter"
+        />
+        <i class="fas fa-calendar-alt calendar-icon"></i>
       </div>
-    </div>
+      <div class="date-input-wrapper">
+        <label for="endDate" class="date-sort">To:</label>
+        <input type="date" id="endDate" v-model="endDate" class="date-filter" />
+        <i class="fas fa-calendar-alt calendar-icon"></i>
+      </div>
+      <!-- filter button section -->
+      <div class="filter-buttons">
+        <button @click="resetFilter" class="btn-reset">
+          <i class="fa fa-sync" aria-hidden="true"></i>
+        </button>
+      </div>
       <!-- filter button section -->
       <!-- search -->
       <div class="search-bar-container">
@@ -96,11 +108,29 @@
           type="text"
           v-model="searchQuery"
           class="search-input"
-          style="width: 11rem"
+          style="width: 11rem;"
           placeholder="Cari.."
         />
       </div>
+      <!-- search -->
     </div>
+  </div>
+  <!-- End of Date Filter Section -->
+
+  <div style="margin-top: 2rem">
+    <div class="tampil-baris" style="text-align: left;">
+        Tampilkan:
+        <select v-model="rowsPerPage" class="select-rows" style="width: 3rem">
+          <option value="5">5</option>
+          <option value="10">10</option>
+          <option value="20">20</option>
+          <option value="100">100</option>
+        </select>
+        baris
+    </div>
+  </div>
+  <!-- Tabel Siswa -->
+  <div style="margin-top: 30px">
     <table class="data-table">
       <thead>
         <tr>
@@ -287,7 +317,7 @@ export default {
 
 .filter-buttons {
   display: flex;
-  gap: 8px;
+  margin-right: -2rem;
   margin-left: auto;
 }
 
