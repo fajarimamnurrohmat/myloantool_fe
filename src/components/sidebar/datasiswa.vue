@@ -79,20 +79,17 @@
   <!-- Date Filter Section -->
   <div class="filter-section">
     <div class="date-inputs">
-      <div class="date-input-wrapper">
-        <label for="startDate" class="date-sort">Sort From:</label>
-        <input
-          type="date"
-          id="startDate"
-          v-model="startDate"
-          class="date-filter"
-        />
-        <i class="fas fa-calendar-alt calendar-icon"></i>
-      </div>
-      <div class="date-input-wrapper">
-        <label for="endDate" class="date-sort">To:</label>
-        <input type="date" id="endDate" v-model="endDate" class="date-filter" />
-        <i class="fas fa-calendar-alt calendar-icon"></i>
+      <div>
+        <div class="tampil-baris" style="text-align: left;">
+            Tampilkan:
+            <select v-model="rowsPerPage" class="select-rows" style="width: 3rem">
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="20">20</option>
+              <option value="100">100</option>
+            </select>
+            baris
+        </div>
       </div>
       <!-- filter button section -->
       <div class="filter-buttons">
@@ -117,18 +114,6 @@
   </div>
   <!-- End of Date Filter Section -->
 
-  <div style="margin-top: 2rem">
-    <div class="tampil-baris" style="text-align: left;">
-        Tampilkan:
-        <select v-model="rowsPerPage" class="select-rows" style="width: 3rem">
-          <option value="5">5</option>
-          <option value="10">10</option>
-          <option value="20">20</option>
-          <option value="100">100</option>
-        </select>
-        baris
-    </div>
-  </div>
   <!-- Tabel Siswa -->
   <div style="margin-top: 30px">
     <table class="data-table">
