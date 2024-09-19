@@ -32,18 +32,6 @@
             />
           </div>
           <div class="form-group">
-            <label for="jumlah">Jumlah</label>
-            <p>Masukkan jumlah alat</p>
-            <input
-              type="number"
-              id="jumlah"
-              class="form-control"
-              v-model="newAlat.jumlah"
-            />
-          </div>
-        </div>
-
-        <div class="form-group">
           <label for="ruangBengkel">Ruang Bengkel</label>
           <p>Masukkan nama ruang bengkel</p>
           <input
@@ -53,37 +41,68 @@
             v-model="newAlat.ruangBengkel"
           />
         </div>
+        </div>
+        <div class="form-group">
+            <label for="jumlah">Jumlah</label>
+            <p>Masukkan jumlah alat</p>
+            <input
+              type="number"
+              id="jumlah"
+              class="form-control"
+              v-model="newAlat.jumlah"
+            />
+          </div>
       </div>
       <div class="modal-footer">
         <button class="btn_add_alat" @click="addAlat">
-          <i class="fas fa-save"></i> Simpan Data
+          Simpan Data
         </button>
       </div>
     </div>
   </div>
 
-  <!-- Table Section -->
-  <div style="margin-top: 30px">
-    <div class="search-bar">
+  <hr />
+
+  <!-- Date Filter Section -->
+  <div class="filter-section">
+    <div class="date-inputs">
       <div>
-        Tampilkan
-        <select v-model="rowsPerPage" class="select-rows">
-          <option value="5">5</option>
-          <option value="10">10</option>
-          <option value="20">20</option>
-        </select>
-        baris
+        <div class="tampil-baris" style="text-align: left;">
+            Tampilkan:
+            <select v-model="rowsPerPage" class="select-rows" style="width: 3rem">
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="20">20</option>
+              <option value="100">100</option>
+            </select>
+            baris
+        </div>
       </div>
-      <div>
-        Pencarian:
+      <!-- filter button section -->
+      <div class="filter-buttons">
+        <button @click="resetFilter" class="btn-reset" style="margin-right: -2rem;">
+          <i class="fa fa-sync" aria-hidden="true"></i>
+        </button>
+      </div>
+      <!-- filter button section -->
+      <!-- search -->
+      <div class="search-bar-container">
+        <i class="fas fa-search search-icon"></i>
         <input
           type="text"
           v-model="searchQuery"
           class="search-input"
-          placeholder="Cari..."
+          style="width: 11rem;"
+          placeholder="Cari.."
         />
       </div>
+      <!-- search -->
     </div>
+  </div>
+  <!-- End of Date Filter Section -->
+
+  <!-- Table Section -->
+  <div style="margin-top: 30px">
     <table class="data-table">
       <thead>
         <tr>
@@ -101,12 +120,35 @@
           <td>{{ alat.jumlah }}</td>
           <td>{{ alat.ruangBengkel }}</td>
           <td>
-            <i class="fas fa-edit" @click="editAlat(index)"></i>
-            <i
-              class="fas fa-trash-alt"
-              @click="deleteAlat(index)"
-              style="color: red; margin-left: 10px; cursor: pointer"
-            ></i>
+            <!-- dropdown set -->
+            <div class="dropdown d-inline-block">
+              <button
+                class="btn btn-sm"
+                type="button"
+                @click="toggleDropdown(index)"
+                :aria-expanded="dropdownIndex === index"
+              >
+                <i class="fas fa-ellipsis-h"></i>
+              </button>
+              <div
+                class="dropdown-menu-act"
+                :class="{ show: dropdownIndex === index }"
+              >
+                <button
+                  class="dropdown-item"
+                  @click="editPeminjaman(index)"
+                  style="color: #274278"
+                  >Edit</button
+                >
+                <button
+                  class="dropdown-item"
+                  @click="deletePeminjaman(index)"
+                  style="color: red"
+                  >Hapus</button
+                >
+              </div>
+            </div>
+            <!-- dropdown set -->
           </td>
         </tr>
         <tr v-if="paginatedAlatList.length === 0">
@@ -141,6 +183,7 @@ export default {
       searchQuery: "",
       editIndex: null,
       showModal: false,
+      dropdownIndex: null,
     };
   },
   computed: {
@@ -169,8 +212,8 @@ export default {
     addAlat() {
       if (
         this.newAlat.namaAlat &&
-        this.newAlat.jumlah &&
-        this.newAlat.ruangBengkel
+        this.newAlat.ruangBengkel &&
+        this.newAlat.jumlah 
       ) {
         if (this.editIndex !== null) {
           this.alatList.splice(this.editIndex, 1, { ...this.newAlat });
@@ -179,8 +222,8 @@ export default {
           this.alatList.push({ ...this.newAlat });
         }
         this.newAlat.namaAlat = "";
-        this.newAlat.jumlah = "";
         this.newAlat.ruangBengkel = "";
+        this.newAlat.jumlah = "";
         this.showModal = false;
       } else {
         alert("Mohon isi semua data");
@@ -198,10 +241,13 @@ export default {
       this.showModal = false;
       this.newAlat = {
         namaAlat: "",
-        jumlah: "",
         ruangBengkel: "",
+        jumlah: ""
       };
       this.editIndex = null;
+    },
+    toggleDropdown(index) {
+      this.dropdownIndex = this.dropdownIndex === index ? null : index;
     },
   },
   watch: {
@@ -215,7 +261,6 @@ export default {
 <style scoped>
 .header-alat {
   font-weight: bold;
-  font-style: italic;
   color: #274278;
   font-size: 1.7rem;
   margin-bottom: 10px;
@@ -289,6 +334,22 @@ export default {
   text-align: right;
 }
 
+.filter-buttons {
+  display: flex;
+  margin-left: auto;
+}
+
+.filter-buttons button {
+  border-radius: 5px;
+  height: 2rem; /* reduce the height */
+  width: 2.5rem;
+  padding: 0.2rem; /* add some padding */
+}
+
+.filter-buttons button i {
+  font-size: 1rem; /* increase the font size of the icon */
+}
+
 .search-bar {
   display: flex;
   justify-content: space-between;
@@ -313,28 +374,21 @@ export default {
 .data-table {
   width: 100%;
   border-collapse: collapse;
-
-  margin-top: 20px;
-  overflow-x: auto;
+  margin-top: 15px;
 }
 
-.data-table th,
 .data-table td {
-  border: 1px solid #ccc;
-  padding: 10px;
-  text-align: left;
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
 }
 
-.data-table tbody tr:nth-child(odd) {
-  background-color: #f9f9f9;
+.data-table tr:nth-child(even) {
+  background-color: #f2f2f2;
 }
 
-.data-table tbody tr:hover {
-  background-color: #f1f1f1;
-}
-
-.data-table .fas {
-  cursor: pointer;
+.data-table tr:hover {
+  background-color: #ddd;
 }
 
 .pagination-controls {
