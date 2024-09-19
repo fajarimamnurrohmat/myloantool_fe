@@ -135,12 +135,35 @@
           <td>{{ siswa.jenisKelamin }}</td>
           <td>{{ siswa.jurusan }}</td>
           <td>
-            <i class="fas fa-edit" @click="editSiswa(index)"></i>
-            <i
-              class="fas fa-trash-alt"
-              @click="deleteSiswa(index)"
-              style="color: red; margin-left: 10px; cursor: pointer"
-            ></i>
+            <!-- dropdown set -->
+            <div class="dropdown d-inline-block">
+              <button
+                class="btn btn-sm"
+                type="button"
+                @click="toggleDropdown(index)"
+                :aria-expanded="dropdownIndex === index"
+              >
+                <i class="fas fa-ellipsis-h"></i>
+              </button>
+              <div
+                class="dropdown-menu-act"
+                :class="{ show: dropdownIndex === index }"
+              >
+                <button
+                  class="dropdown-item"
+                  @click="editPeminjaman(index)"
+                  style="color: #274278"
+                  >Edit</button
+                >
+                <button
+                  class="dropdown-item"
+                  @click="deletePeminjaman(index)"
+                  style="color: red"
+                  >Hapus</button
+                >
+              </div>
+            </div>
+            <!-- dropdown set -->
           </td>
         </tr>
         <tr v-if="paginatedSiswaList.length === 0">
@@ -186,6 +209,7 @@ export default {
       currentPage: 1,
       searchQuery: "",
       editIndex: null,
+      dropdownIndex: null,
     };
   },
   computed: {
@@ -251,6 +275,9 @@ export default {
         jurusan: "",
       };
       this.editIndex = null;
+    },
+    toggleDropdown(index) {
+      this.dropdownIndex = this.dropdownIndex === index ? null : index;
     },
   },
   watch: {
