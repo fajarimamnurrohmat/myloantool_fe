@@ -93,7 +93,7 @@
       </div>
       <!-- filter button section -->
       <div class="filter-buttons">
-        <button @click="resetFilter" class="btn-reset">
+        <button @click="resetFilter" class="btn-reset" style="margin-right: -2rem;">
           <i class="fa fa-sync" aria-hidden="true"></i>
         </button>
       </div>
@@ -302,7 +302,6 @@ export default {
 
 .filter-buttons {
   display: flex;
-  margin-right: -2rem;
   margin-left: auto;
 }
 
