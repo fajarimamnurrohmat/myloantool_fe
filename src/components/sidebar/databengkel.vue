@@ -32,34 +32,54 @@
       </div>
       <div style="margin-top: 10px; text-align: left">
         <button @click="addBengkel" class="btn-add-bengkel">
-          <i class="fas fa-save"></i> Simpan Data
+          Simpan Data
         </button>
       </div>
     </div>
   </div>
 
-  <!-- Tabel Bengkel -->
-  <div style="margin-top: 30px">
-    <div class="search-bar">
+  <hr />
+
+  <!-- Date Filter Section -->
+  <div class="filter-section">
+    <div class="date-inputs">
       <div>
-        Tampilkan
-        <select v-model="rowsPerPage" class="select-rows">
-          <option value="5">5</option>
-          <option value="10">10</option>
-          <option value="20">20</option>
-        </select>
-        baris
+        <div class="tampil-baris" style="text-align: left;">
+            Tampilkan:
+            <select v-model="rowsPerPage" class="select-rows" style="width: 3rem">
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="20">20</option>
+              <option value="100">100</option>
+            </select>
+            baris
+        </div>
       </div>
-      <div>
-        Pencarian:
+      <!-- filter button section -->
+      <div class="filter-buttons">
+        <button @click="resetFilter" class="btn-reset">
+          <i class="fa fa-sync" aria-hidden="true"></i>
+        </button>
+      </div>
+      <!-- filter button section -->
+      <!-- search -->
+      <div class="search-bar-container">
+        <i class="fas fa-search search-icon"></i>
         <input
           type="text"
           v-model="searchQuery"
           class="search-input"
-          placeholder="Cari..."
+          style="width: 11rem;"
+          placeholder="Cari.."
         />
       </div>
+      <!-- search -->
     </div>
+  </div>
+  <!-- End of Date Filter Section -->
+
+  <!-- Tabel Bengkel -->
+  <div style="margin-top: 30px">
     <table class="data-table">
       <thead>
         <tr>
@@ -73,12 +93,35 @@
           <td>{{ index + 1 + (currentPage - 1) * rowsPerPage }}</td>
           <td>{{ bengkel.namaRuang }}</td>
           <td>
-            <i class="fas fa-edit" @click="editBengkel(index)"></i>
-            <i
-              class="fas fa-trash-alt"
-              @click="deleteBengkel(index)"
-              style="color: red; margin-left: 10px; cursor: pointer"
-            ></i>
+            <!-- dropdown set -->
+            <div class="dropdown d-inline-block">
+              <button
+                class="btn btn-sm"
+                type="button"
+                @click="toggleDropdown(index)"
+                :aria-expanded="dropdownIndex === index"
+              >
+                <i class="fas fa-ellipsis-h"></i>
+              </button>
+              <div
+                class="dropdown-menu-act"
+                :class="{ show: dropdownIndex === index }"
+              >
+                <button
+                  class="dropdown-item"
+                  @click="editPeminjaman(index)"
+                  style="color: #274278"
+                  >Edit</button
+                >
+                <button
+                  class="dropdown-item"
+                  @click="deletePeminjaman(index)"
+                  style="color: red"
+                  >Hapus</button
+                >
+              </div>
+            </div>
+            <!-- dropdown set -->
           </td>
         </tr>
         <tr v-if="paginatedBengkelList.length === 0">
@@ -121,6 +164,7 @@ export default {
       currentPage: 1,
       searchQuery: "",
       editIndex: null,
+      dropdownIndex: null,
     };
   },
   computed: {
@@ -164,6 +208,9 @@ export default {
     closeModal() {
       this.showModal = false;
       this.resetForm();
+    },
+    toggleDropdown(index) {
+      this.dropdownIndex = this.dropdownIndex === index ? null : index;
     },
     resetForm() {
       this.newBengkel = {
@@ -274,6 +321,7 @@ export default {
 }
 
 .form-controll {
+  color: black;
   width: 16rem;
   padding: 8px;
   font-size: 14px;
