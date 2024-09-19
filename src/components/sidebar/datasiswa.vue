@@ -68,26 +68,35 @@
 
       <div style="margin-top: 10px; text-align: left">
         <button @click="addSiswa" class="btn_add_siswa">
-          <i class="fas fa-save"></i> Simpan Data
+          Simpan Data
         </button>
       </div>
     </div>
   </div>
 
-  <!-- Tabel Siswa -->
-  <div style="margin-top: 30px">
-    <div class="search-bar">
-      <div class="filters2">
+  <hr />
+
+  <!-- Date Filter Section -->
+  <div class="filter-section">
+    <div class="date-inputs">
       <div>
-        <label for="rows" style="font-weight: 400">Tampilkan :</label>
-        <select v-model="rowsPerPage" @change="updateDisplayedData" style="background-color: white; color: black;">
-          <option :value="5">5</option>
-          <option :value="10">10</option>
-          <option :value="20">20</option>
-        </select>
-        baris
+        <div class="tampil-baris" style="text-align: left;">
+            Tampilkan:
+            <select v-model="rowsPerPage" class="select-rows" style="width: 3rem">
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="20">20</option>
+              <option value="100">100</option>
+            </select>
+            baris
+        </div>
       </div>
-    </div>
+      <!-- filter button section -->
+      <div class="filter-buttons">
+        <button @click="resetFilter" class="btn-reset">
+          <i class="fa fa-sync" aria-hidden="true"></i>
+        </button>
+      </div>
       <!-- filter button section -->
       <!-- search -->
       <div class="search-bar-container">
@@ -96,11 +105,17 @@
           type="text"
           v-model="searchQuery"
           class="search-input"
-          style="width: 11rem"
+          style="width: 11rem;"
           placeholder="Cari.."
         />
       </div>
+      <!-- search -->
     </div>
+  </div>
+  <!-- End of Date Filter Section -->
+
+  <!-- Tabel Siswa -->
+  <div style="margin-top: 30px">
     <table class="data-table">
       <thead>
         <tr>
@@ -120,12 +135,35 @@
           <td>{{ siswa.jenisKelamin }}</td>
           <td>{{ siswa.jurusan }}</td>
           <td>
-            <i class="fas fa-edit" @click="editSiswa(index)"></i>
-            <i
-              class="fas fa-trash-alt"
-              @click="deleteSiswa(index)"
-              style="color: red; margin-left: 10px; cursor: pointer"
-            ></i>
+            <!-- dropdown set -->
+            <div class="dropdown d-inline-block">
+              <button
+                class="btn btn-sm"
+                type="button"
+                @click="toggleDropdown(index)"
+                :aria-expanded="dropdownIndex === index"
+              >
+                <i class="fas fa-ellipsis-h"></i>
+              </button>
+              <div
+                class="dropdown-menu-act"
+                :class="{ show: dropdownIndex === index }"
+              >
+                <button
+                  class="dropdown-item"
+                  @click="editPeminjaman(index)"
+                  style="color: #274278"
+                  >Edit</button
+                >
+                <button
+                  class="dropdown-item"
+                  @click="deletePeminjaman(index)"
+                  style="color: red"
+                  >Hapus</button
+                >
+              </div>
+            </div>
+            <!-- dropdown set -->
           </td>
         </tr>
         <tr v-if="paginatedSiswaList.length === 0">
@@ -171,6 +209,7 @@ export default {
       currentPage: 1,
       searchQuery: "",
       editIndex: null,
+      dropdownIndex: null,
     };
   },
   computed: {
@@ -237,6 +276,9 @@ export default {
       };
       this.editIndex = null;
     },
+    toggleDropdown(index) {
+      this.dropdownIndex = this.dropdownIndex === index ? null : index;
+    },
   },
   watch: {
     rowsPerPage() {
@@ -287,7 +329,7 @@ export default {
 
 .filter-buttons {
   display: flex;
-  gap: 8px;
+  margin-right: -2rem;
   margin-left: auto;
 }
 
