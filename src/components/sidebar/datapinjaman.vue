@@ -119,6 +119,9 @@
         </tr>
       </thead>
       <tbody>
+        <tr v-if="displayedData.length === 0">
+          <td colspan="6" style="text-align: center;">Tidak ada data</td>
+        </tr>
         <tr v-for="(record, index) in displayedData" :key="index">
           <td>{{ record.namaPeminjam }}</td>
           <td>{{ record.alat }}</td>
@@ -143,30 +146,7 @@ export default {
   data() {
     return {
       returnedLoans: [
-        {
-          namaPeminjam: "John Doe",
-          alat: "Hammer",
-          bengkel: "Bengkel Mesin",
-          jumlah: 2,
-          tanggalPinjam: "2024-08-01",
-          tanggalKembali: "2024-08-10",
-        },
-        {
-          namaPeminjam: "Jane Smith",
-          alat: "Screwdriver",
-          bengkel: "Bengkel Elektrik",
-          jumlah: 5,
-          tanggalPinjam: "2024-08-03",
-          tanggalKembali: "2024-08-12",
-        },
-        {
-          namaPeminjam: "Michael Johnson",
-          alat: "Wrench",
-          bengkel: "Bengkel Otomotif",
-          jumlah: 3,
-          tanggalPinjam: "2024-08-05",
-          tanggalKembali: "2024-08-15",
-        },
+        
       ],
       displayedData: [],
       rowsPerPage: 5,
