@@ -632,6 +632,7 @@ export default {
   },
   methods: {
     addPeminjaman() {
+      // Check if all required fields are filled
       if (
         this.newPeminjaman.namaPeminjam &&
         this.newPeminjaman.alat &&
@@ -639,6 +640,7 @@ export default {
         this.newPeminjaman.tanggalPinjam &&
         this.newPeminjaman.jumlahAlat
       ) {
+        // If editIndex is not null, update the entry, otherwise add a new one
         if (this.editIndex !== null) {
           this.peminjamanList.splice(this.editIndex, 1, {
             ...this.newPeminjaman,
@@ -647,9 +649,21 @@ export default {
         } else {
           this.peminjamanList.push({ ...this.newPeminjaman });
         }
+
+        // Indicate success and show success alert
+        const success = true; // Set this dynamically if needed
+
+        if (success) {
+          alert("Data berhasil disimpan!");
+        } else {
+          alert("Gagal menyimpan data.");
+        }
+
+        // Close the modal and reset the form
         this.closeModal();
         this.resetForm();
       } else {
+        // Show an alert if not all fields are filled
         alert("Mohon isi semua data");
       }
     },
@@ -907,7 +921,7 @@ export default {
   font-weight: bold;
   font-size: 1.7rem;
   color: #274278;
-  margin-top: -5rem;
+  margin-top: 20px;
   margin-bottom: 1.5rem;
   animation: fadeInDown 1s ease-in-out;
 }
