@@ -526,7 +526,7 @@
           
         </div>
         <div class="modal-footer">
-          <button @click="gotoPengembalian" class="btn_add_peminjaman">
+          <button @click="savePeminjaman" class="btn_add_peminjaman">
             Simpan Data
           </button>
         </div>
@@ -653,6 +653,27 @@ export default {
         alert("Mohon isi semua data");
       }
     },
+    savePeminjaman() {
+      if (
+        this.newPeminjaman.namaPeminjam &&
+        this.newPeminjaman.alat &&
+        this.newPeminjaman.bengkel &&
+        this.newPeminjaman.tanggalPinjam &&
+        this.newPeminjaman.jumlahAlat
+      ) {
+        // Push data peminjaman ke array
+        this.peminjamanList.push({ ...this.newPeminjaman });
+        // Bersihkan form setelah simpan
+        this.resetForm();
+        // Navigasi ke halaman data peminjaman setelah simpan
+        this.$router.push({
+          name: "datapinjaman",
+          params: { peminjamanList: this.peminjamanList }
+        });
+      } else {
+        alert("Mohon isi semua field");
+      }
+    },
     selectOption(option) {
       this.selectedOption = option;
     },
@@ -686,6 +707,7 @@ export default {
         bengkel: "",
         tanggalPinjam: "",
         jumlahAlat: "",
+        tanggalPengembalian: ""
       };
       this.editIndex = null;
     },
