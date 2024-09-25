@@ -251,7 +251,7 @@
                 >
                 <button
                   class="dropdown-item"
-                  @click="deletePeminjaman(index)"
+                  @click="confirmDelete(index)"
                   style="color: red"
                   >Hapus</button
                 >
@@ -393,6 +393,9 @@
                 <!-- tgl pinjam -->
             </div> 
             <!-- form row bawah -->
+            <button @click="gotoPengembalian" class="btn_add_peminjaman">
+                Simpan Data
+            </button>
           <!-- form row -->
         </div>
 
@@ -521,14 +524,11 @@
                 </div>
                 <!-- kondisi alat -->
               </div> 
+              <button @click="gotoPengembalian" class="btn_add_peminjaman">
+                Simpan Data
+              </button>
               <!-- form row bawah -->
           </div>
-          
-        </div>
-        <div class="modal-footer">
-          <button @click="gotoPengembalian" class="btn_add_peminjaman">
-            Simpan Data
-          </button>
         </div>
       </div>
     </div>
@@ -664,7 +664,7 @@ export default {
         this.resetForm();
       } else {
         // Show an alert if not all fields are filled
-        alert("Mohon isi semua data");
+        alert("Mohon isi semua data!");
       }
     },
     selectOption(option) {
@@ -678,9 +678,15 @@ export default {
       this.editIndex = index;
       this.showModal = true;
     },
+    confirmDelete(index) {
+    const confirmation = confirm("Apakah Anda yakin ingin menghapus data ini?");
+    if (confirmation) {
+      this.deletePeminjaman(index);  // Panggil fungsi hapus data
+    }
+    },
     deletePeminjaman(index) {
       this.peminjamanList.splice(index, 1);
-      this.dropdownIndex = null;
+      this.dropdownIndex = null; // Reset dropdown setelah penghapusan
     },
     closeModal() {
       this.isClosing = true;
