@@ -108,30 +108,30 @@
     </div> 
     <!-- Tabel Data -->
     <table>
-      <thead>
-        <tr>
-          <th>Nama Peminjam</th>
-          <th>Alat</th>
-          <th>Bengkel</th>
-          <th>Jumlah</th>
-          <th>Tanggal Pinjam</th>
-          <th>Tanggal Kembali</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-if="displayedData.length === 0">
-          <td colspan="6" style="text-align: center;">Tidak ada data</td>
-        </tr>
-        <tr v-for="(record, index) in displayedData" :key="index">
-          <td>{{ record.namaPeminjam }}</td>
-          <td>{{ record.alat }}</td>
-          <td>{{ record.bengkel }}</td>
-          <td>{{ record.jumlah }}</td>
-          <td>{{ record.tanggalPinjam }}</td>
-          <td>{{ record.tanggalKembali }}</td>
-        </tr>
-      </tbody>
-    </table>
+    <thead>
+      <tr>
+        <th>Nama Peminjam</th>
+        <th>Alat</th>
+        <th>Bengkel</th>
+        <th>Jumlah</th>
+        <th>Tanggal Pinjam</th>
+        <th>Tanggal Kembali</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-if="peminjamanList.length === 0">
+        <td colspan="6" style="text-align: center;">Tidak ada data</td>
+      </tr>
+      <tr v-for="(record, index) in peminjamanList" :key="index">
+        <td>{{ record.namaPeminjam }}</td>
+        <td>{{ record.alat }}</td>
+        <td>{{ record.bengkel }}</td>
+        <td>{{ record.jumlahAlat }}</td>
+        <td>{{ record.tanggalPinjam }}</td>
+        <td>{{ record.tanggalPengembalian }}</td>
+      </tr>
+    </tbody>
+  </table>
   </div>
 </template>
 
@@ -145,9 +145,7 @@ export default {
   name: "DataPengembalianPinjaman",
   data() {
     return {
-      returnedLoans: [
-        
-      ],
+      peminjamanList: [],
       displayedData: [],
       rowsPerPage: 5,
       startDate: "",
@@ -155,6 +153,12 @@ export default {
       searchQuery: "",
       dropdownIndex: null,
     };
+  },
+  created() {
+    // Ambil data peminjaman dari route params jika tersedia
+    if (this.$route.params.peminjamanList) {
+      this.peminjamanList = this.$route.params.peminjamanList;
+    }
   },
   mounted() {
     this.updateDisplayedData();
