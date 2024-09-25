@@ -1,5 +1,5 @@
 <template>
-  <div class="header">
+  <div style="text-align: left">
     <h3 class="header-peminjaman">Halaman Peminjaman</h3>
     <button @click="showModal = true" class="btn_add_siswa">
       <i class="fas fa-plus" style="margin-right: 1rem"></i> Input Peminjaman
@@ -16,34 +16,45 @@
       <div class="modal-body">
         <!-- form row atas -->
         <div class="form-row">
-            <!-- peminjam -->
-            <div class="form-group">
-              <label for="namaPeminjam">Nama Peminjam</label>
-              <p>Masukkan nama peminjam</p>
-              <input
-                type="text"
-                style="width: 16rem"
-                id="namaPeminjam"
-                class="form-control"
-                v-model="newPeminjaman.namaPeminjam"
-              />
-            </div>
-            <!-- peminjam -->
-            <!-- alat -->
-            <div class="form-group" style="margin-left: -4.3rem;">
-              <label for="alat">Alat</label>
-              <p>Masukkan nama alat</p>
-              <input
-                type="text"
-                id="alat"
-                style="width: 19.4rem;"
-                class="form-control"
-                v-model="newPeminjaman.alat"
-              />
-            </div>
-            <!-- alat -->
+          <!-- peminjam -->
+          <div class="form-group">
+            <label for="namaPeminjam">Nama Peminjam</label>
+            <p>Masukkan nama peminjam</p>
+            <input
+              type="text"
+              style="width: 250px"
+              id="namaPeminjam"
+              class="form-control"
+              v-model="newPeminjaman.namaPeminjam"
+            />
           </div>
-          <!-- form row atas -->
+          <!-- peminjam -->
+          <!-- alat -->
+          <div class="form-group">
+            <label for="alat">Alat</label>
+            <p>Masukkan nama alat</p>
+            <input
+              type="text"
+              id="alat"
+              class="form-control"
+              v-model="newPeminjaman.alat"
+            />
+          </div>
+          <!-- alat -->
+          <!-- jumlah -->
+          <div class="form-group">
+            <label for="jumlahAlat">Jumlah Alat</label>
+            <input
+              type="number"
+              style="width: 100px; margin-top: 1.55rem"
+              id="jumlahAlat"
+              class="form-control"
+              v-model="newPeminjaman.jumlahAlat"
+            />
+          </div>
+          <!-- jumlah -->
+        </div>
+        <!-- form row atas -->
         <!-- form row bawah -->
         <div class="form-row">
           <!-- bengkel -->
@@ -60,7 +71,7 @@
           </div>
           <!-- bengkel -->
           <!-- tgl pinjam -->
-          <div class="form-group">
+          <div class="form-group" style="margin-left: -2.3rem">
             <label for="tanggalPinjam">Tanggal Pinjam</label>
             <p>Masukkan tanggal pinjam alat</p>
             <div class="date-input-wrapper">
@@ -69,24 +80,12 @@
                 id="tanggalPinjam"
                 v-model="newPeminjaman.tanggalPinjam"
                 class="date-filter"
-                style="width: 12rem"
+                style="width: 16rem"
               />
               <i class="fas fa-calendar-alt calendar-icon"></i>
             </div>
           </div>
           <!-- tgl pinjam -->
-          <!-- jumlah -->
-          <div class="form-group">
-            <label for="jumlahAlat">Jumlah Alat</label>
-            <input
-              type="number"
-              style="width: 100px; margin-top: 1.55rem"
-              id="jumlahAlat"
-              class="form-control"
-              v-model="newPeminjaman.jumlahAlat"
-            />
-          </div>
-          <!-- jumlah -->
         </div>
         <!-- form row bawah -->
       </div>
@@ -105,7 +104,7 @@
   <div class="filter-section">
     <div class="date-inputs">
       <div class="date-input-wrapper">
-        <label for="startDate" class="date-sort">Sort From:</label>
+        <label for="startDate" class="date-sort">From:</label>
         <input
           type="date"
           id="startDate"
@@ -189,9 +188,7 @@
     </div>
   </div>
   <!-- End of Date Filter Section -->
-
-  <div style="margin-top: 2rem">
-    <div class="tampil-baris" style="text-align: left;">
+  <div class="tampil-baris" style="text-align: left; margin-top: 2rem; margin-bottom: 1rem;">
         Tampilkan:
         <select v-model="rowsPerPage" class="select-rows" style="width: 3rem">
           <option value="5">5</option>
@@ -200,7 +197,8 @@
           <option value="100">100</option>
         </select>
         baris
-    </div>
+    </div> 
+  <div>
     <!-- table section -->
     <table class="data-table">
       <thead>
@@ -535,6 +533,7 @@
     <!-- End of Modal Section -->
 
     <div class="search-bar">
+      
       <div v-if="totalPages > 1" class="pagination-container">
         <button
           @click="currentPage--"
@@ -594,6 +593,7 @@ export default {
   computed: {
     filteredPeminjamanList() {
       let filteredList = this.peminjamanList;
+
       // Filter by search query
       if (this.searchQuery) {
         filteredList = filteredList.filter(
@@ -609,6 +609,7 @@ export default {
               .includes(this.searchQuery.toLowerCase())
         );
       }
+
       // Filter by date range
       if (this.startDate && this.endDate) {
         filteredList = filteredList.filter((peminjaman) => {
@@ -619,6 +620,7 @@ export default {
           );
         });
       }
+
       return filteredList;
     },
     paginatedPeminjamanList() {
@@ -921,16 +923,12 @@ export default {
   color: #f30202; /* Highlight the active option */
 }
 
-.header {
-  text-align: left;
-}
-
 .header-peminjaman {
   font-weight: bold;
   font-size: 1.7rem;
   color: #274278;
-  margin-top: -5rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 10px;
+  margin-top: 50px;
   animation: fadeInDown 1s ease-in-out;
 }
 
@@ -1214,4 +1212,5 @@ export default {
   color: rgb(255, 255, 255); /* Example: Change active color */
   border-bottom: 2px solid rgb(255, 255, 255); /* Example: Active underline */
 }
+
 </style>
