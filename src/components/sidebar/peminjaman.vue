@@ -249,7 +249,7 @@
                 >
                 <button
                   class="dropdown-item"
-                  @click="deletePeminjaman(index)"
+                  @click="confirmDelete(index)"
                   style="color: red"
                   >Hapus</button
                 >
@@ -391,6 +391,9 @@
                 <!-- tgl pinjam -->
             </div> 
             <!-- form row bawah -->
+            <button @click="gotoPengembalian" class="btn_add_peminjaman">
+                Simpan Data
+            </button>
           <!-- form row -->
         </div>
 
@@ -521,10 +524,9 @@
               </div> 
               <!-- form row bawah -->
           </div>
-          
         </div>
         <div class="modal-footer">
-          <button @click="savePeminjaman" class="btn_add_peminjaman">
+          <button @click="gotoPengembalian" class="btn_add_peminjaman">
             Simpan Data
           </button>
         </div>
@@ -634,6 +636,7 @@ export default {
   },
   methods: {
     addPeminjaman() {
+      // Check if all required fields are filled
       if (
         this.newPeminjaman.namaPeminjam &&
         this.newPeminjaman.alat &&
@@ -641,6 +644,7 @@ export default {
         this.newPeminjaman.tanggalPinjam &&
         this.newPeminjaman.jumlahAlat
       ) {
+        // If editIndex is not null, update the entry, otherwise add a new one
         if (this.editIndex !== null) {
           this.peminjamanList.splice(this.editIndex, 1, {
             ...this.newPeminjaman,
@@ -649,10 +653,22 @@ export default {
         } else {
           this.peminjamanList.push({ ...this.newPeminjaman });
         }
+
+        // Indicate success and show success alert
+        const success = true; // Set this dynamically if needed
+
+        if (success) {
+          alert("Data berhasil disimpan!");
+        } else {
+          alert("Gagal menyimpan data.");
+        }
+
+        // Close the modal and reset the form
         this.closeModal();
         this.resetForm();
       } else {
-        alert("Mohon isi semua data");
+        // Show an alert if not all fields are filled
+        alert("Mohon isi semua data!");
       }
     },
     savePeminjaman() {
@@ -687,9 +703,15 @@ export default {
       this.editIndex = index;
       this.showModal = true;
     },
+    confirmDelete(index) {
+    const confirmation = confirm("Apakah Anda yakin ingin menghapus data ini?");
+    if (confirmation) {
+      this.deletePeminjaman(index);  // Panggil fungsi hapus data
+    }
+    },
     deletePeminjaman(index) {
       this.peminjamanList.splice(index, 1);
-      this.dropdownIndex = null;
+      this.dropdownIndex = null; // Reset dropdown setelah penghapusan
     },
     closeModal() {
       this.isClosing = true;
@@ -927,8 +949,8 @@ export default {
   font-weight: bold;
   font-size: 1.7rem;
   color: #274278;
-  margin-bottom: 10px;
-  margin-top: 50px;
+  margin-top: -5rem;
+  margin-bottom: 1.5rem;
   animation: fadeInDown 1s ease-in-out;
 }
 
