@@ -188,7 +188,7 @@
     </div>
   </div>
   <!-- End of Date Filter Section -->
-  <div class="tampil-baris" style="text-align: left; margin-top: 2rem; margin-bottom: 1rem;">
+  <div style="margin-top: 2rem; text-align: left;">
         Tampilkan:
         <select v-model="rowsPerPage" class="select-rows" style="width: 3rem">
           <option value="5">5</option>
@@ -197,7 +197,7 @@
           <option value="100">100</option>
         </select>
         baris
-    </div> 
+      </div>
   <div>
     <!-- table section -->
     <table class="data-table">
@@ -242,7 +242,7 @@
                   >Edit</button
                 >
                 <button 
-                  @click="tampilModal = true"
+                  @click="openPengembalianModal(peminjaman)"
                   class="dropdown-item"
                   style="color: #274278"
                   >Pengembalian</button
@@ -348,18 +348,21 @@
                     id="tanggalPinjam"
                     v-model="newPeminjaman.tanggalPinjam"
                     class="date-filter"
-                    style="width: 12rem"
+                    style="width: 13rem"
                   />
                   <i class="fas fa-calendar-alt calendar-icon"></i>
                 </div>
               </div>
               <!-- tgl pinjam -->
               <!-- jumlah -->
-              <div class="form-group">
-                <label for="jumlahAlat">Jumlah Alat</label>
+              <div class="form-group" style="margin-left: -0.5rem;">
+                <label for="jumlahAlat" style="font-size: small;">Jumlah Alat</label>
                 <input
                   type="number"
-                  style="width: 100px; margin-top: 1.55rem; height: 2.5rem;"
+                  style="
+                    width: 5.58rem;  
+                    margin-top: 1.782rem; 
+                    height: 2.5rem;"
                   id="jumlahAlat"
                   class="form-control"
                   v-model="newPeminjaman.jumlahAlat"
@@ -368,12 +371,10 @@
               <!-- jumlah -->
             </div>
             <!-- form row bawah -->
-              <!-- form row bawah -->
-              <hr style="color: white;">
-              <!-- form row bawah -->
-              
-              <div class="form-row">
-                <!-- tgl pinjam -->
+            <hr style="color: white;">
+            <!-- form row bawah -->
+            <div class="form-row">
+              <!-- tgl pinjam -->
                 <div class="form-group">
                   <label for="tanggalPengembalian">Tanggal Pengembalian</label>
                   <p>Masukkan tanggal pengembalian alat</p>
@@ -391,9 +392,6 @@
                 <!-- tgl pinjam -->
             </div> 
             <!-- form row bawah -->
-            <button @click="gotoPengembalian" class="btn_add_peminjaman">
-                Simpan Data
-            </button>
           <!-- form row -->
         </div>
 
@@ -455,18 +453,21 @@
                     id="tanggalPinjam"
                     v-model="newPeminjaman.tanggalPinjam"
                     class="date-filter"
-                    style="width: 12rem"
+                    style="width: 13rem"
                   />
                   <i class="fas fa-calendar-alt calendar-icon"></i>
                 </div>
               </div>
               <!-- tgl pinjam -->
               <!-- jumlah -->
-              <div class="form-group">
-                <label for="jumlahAlat">Jumlah Alat</label>
+              <div class="form-group" style="margin-left: -0.5rem;">
+                <label for="jumlahAlat" style="font-size: small;">Jumlah Alat</label>
                 <input
                   type="number"
-                  style="width: 100px; margin-top: 1.55rem; height: 2.5rem;"
+                  style="
+                    width: 5.58rem;  
+                    margin-top: 1.782rem; 
+                    height: 2.5rem;"
                   id="jumlahAlat"
                   class="form-control"
                   v-model="newPeminjaman.jumlahAlat"
@@ -478,7 +479,6 @@
               <!-- form row bawah -->
               <hr style="color: white;">
               <!-- form row bawah -->
-              
               <div class="form-row">
                 <!-- tgl pinjam -->
                 <div class="form-group">
@@ -498,10 +498,11 @@
                 <!-- tgl pinjam -->
                 <!-- jml alat rusak -->
                 <div class="form-group" style="margin-left: 0.3rem;">
-                  <label for="jumlahAlatRusak" style="font-size: 0.9rem;">Jumlah Alat Rusak</label>
+                  <label for="jumlahAlatRusak" style="font-size: 0.9rem;">Jumlah</label>
+                  <label for="jumlahAlatRusak" style="font-size: 0.9rem; margin-top: -0.5rem;">Kerusakan</label>
                   <input
                   type="number"
-                  style="margin-top: 1.6rem; height: 2.5rem; width: 12rem;"
+                  style="margin-top: 0.5rem; height: 2.5rem; width: 6.3rem;"
                   id="jumlahAlatRusak"
                   class="form-control"
                   v-model="newPengembalian.jumlahAlatRusak"
@@ -509,7 +510,7 @@
                 </div>
                 <!-- jml alat rusak -->
                 <!-- kondisi alat -->
-                <div class="form-group">
+                <div class="form-group" style="margin-left: -8rem;">
                   <label for="kondisiAlat">Kondisi Alat</label>
                   <select 
                     v-model="showCondi" 
@@ -524,9 +525,10 @@
               </div> 
               <!-- form row bawah -->
           </div>
+          
         </div>
         <div class="modal-footer">
-          <button @click="gotoPengembalian" class="btn_add_peminjaman">
+          <button @click="savePeminjaman" class="btn_add_peminjaman">
             Simpan Data
           </button>
         </div>
@@ -535,7 +537,16 @@
     <!-- End of Modal Section -->
 
     <div class="search-bar">
-      
+      <div>
+        Tampilkan:
+        <select v-model="rowsPerPage" class="select-rows" style="width: 3rem">
+          <option value="5">5</option>
+          <option value="10">10</option>
+          <option value="20">20</option>
+          <option value="100">100</option>
+        </select>
+        baris
+      </div>
       <div v-if="totalPages > 1" class="pagination-container">
         <button
           @click="currentPage--"
@@ -713,6 +724,10 @@ export default {
       this.peminjamanList.splice(index, 1);
       this.dropdownIndex = null; // Reset dropdown setelah penghapusan
     },
+    openPengembalianModal(peminjaman) {
+    this.newPeminjaman = { ...peminjaman }; // Salin data peminjaman ke newPeminjaman
+    this.tampilModal = true; // Tampilkan modal
+    },
     closeModal() {
       this.isClosing = true;
       const modalContent = document.querySelector(".modal-content");
@@ -849,8 +864,8 @@ export default {
   height: 2.5rem;
   background-color: white;
   border-radius: 5px;
+  border-color: solid #6e6d6d;
   color: #000000;
-  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
 }
 
 /* Optional: Tambahkan interaksi klik pada ikon untuk membuka date picker */
