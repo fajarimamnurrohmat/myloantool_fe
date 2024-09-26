@@ -10,8 +10,15 @@
   <div v-if="showModal" class="modal-overlay" @click.self="closeModal">
     <div class="modal-content">
       <div class="modal-header">
-        <h4>{{ editIndex !== null ? 'Edit Data Bengkel' : 'Input Data Bengkel' }}</h4>
-        <span class="close-modal" @click="closeModal" style="color: red; text-align: right">&times;</span>
+        <h4>
+          {{ editIndex !== null ? "Edit Data Bengkel" : "Input Data Bengkel" }}
+        </h4>
+        <span
+          class="close-modal"
+          @click="closeModal"
+          style="color: red; text-align: right"
+          >&times;</span
+        >
       </div>
       <div class="form-row">
         <div class="form-group">
@@ -27,7 +34,7 @@
       </div>
       <div style="margin-top: 10px; text-align: left">
         <button @click="addOrUpdateBengkel" class="btn-add-bengkel">
-          {{ editIndex !== null ? 'Update Data' : 'Simpan Data' }}
+          {{ editIndex !== null ? "Update Data" : "Simpan Data" }}
         </button>
       </div>
     </div>
@@ -39,7 +46,7 @@
   <div class="filter-section">
     <div class="date-inputs">
       <div>
-        <div class="tampil-baris" style="text-align: left;">
+        <div class="tampil-baris" style="text-align: left">
           Tampilkan:
           <select v-model="rowsPerPage" class="select-rows" style="width: 3rem">
             <option value="5">5</option>
@@ -63,7 +70,7 @@
           type="text"
           v-model="searchQuery"
           class="search-input"
-          style="width: 11rem;"
+          style="width: 11rem"
           placeholder="Cari.."
         />
       </div>
@@ -82,17 +89,40 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(bengkel, index) in paginatedBengkelList" :key="bengkel.id_bengkel">
+        <tr
+          v-for="(bengkel, index) in paginatedBengkelList"
+          :key="bengkel.id_bengkel"
+        >
           <td>{{ index + 1 + (currentPage - 1) * rowsPerPage }}</td>
           <td>{{ bengkel.ruang_bengkel }}</td>
           <td>
             <div class="dropdown d-inline-block">
-              <button class="btn btn-sm" type="button" @click="toggleDropdown(index)" :aria-expanded="dropdownIndex === index">
+              <button
+                class="btn btn-sm"
+                type="button"
+                @click="toggleDropdown(index)"
+                :aria-expanded="dropdownIndex === index"
+              >
                 <i class="fas fa-ellipsis-h"></i>
               </button>
-              <div class="dropdown-menu-act" :class="{ show: dropdownIndex === index }">
-                <button class="dropdown-item" @click="editBengkel(bengkel)" style="color: #274278">Edit</button>
-                <button class="dropdown-item" @click="deleteBengkel(bengkel.id_bengkel)" style="color: red">Hapus</button>
+              <div
+                class="dropdown-menu-act"
+                :class="{ show: dropdownIndex === index }"
+              >
+                <button
+                  class="dropdown-item"
+                  @click="editBengkel(bengkel)"
+                  style="color: #274278"
+                >
+                  Edit
+                </button>
+                <button
+                  class="dropdown-item"
+                  @click="deleteBengkel(bengkel.id_bengkel)"
+                  style="color: red"
+                >
+                  Hapus
+                </button>
               </div>
             </div>
           </td>
@@ -103,15 +133,29 @@
       </tbody>
     </table>
     <div v-if="totalPages > 1" class="pagination-container">
-      <button @click="currentPage--" :disabled="currentPage === 1" class="pagination-button">Previous</button>
-      <span class="pagination-info">Page {{ currentPage }} of {{ totalPages }}</span>
-      <button @click="currentPage++" :disabled="currentPage === totalPages" class="pagination-button">Next</button>
+      <button
+        @click="currentPage--"
+        :disabled="currentPage === 1"
+        class="pagination-button"
+      >
+        Previous
+      </button>
+      <span class="pagination-info"
+        >Page {{ currentPage }} of {{ totalPages }}</span
+      >
+      <button
+        @click="currentPage++"
+        :disabled="currentPage === totalPages"
+        class="pagination-button"
+      >
+        Next
+      </button>
     </div>
   </div>
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
 
 export default {
   data() {
@@ -131,7 +175,9 @@ export default {
   computed: {
     filteredBengkelList() {
       return this.bengkelList.filter((bengkel) =>
-        bengkel.ruang_bengkel.toLowerCase().includes(this.searchQuery.toLowerCase())
+        bengkel.ruang_bengkel
+          .toLowerCase()
+          .includes(this.searchQuery.toLowerCase())
       );
     },
     paginatedBengkelList() {
@@ -146,7 +192,7 @@ export default {
   methods: {
     async fetchBengkelList() {
       try {
-        const response = await axios.get('http://localhost:3000/bengkel');
+        const response = await axios.get("http://localhost:3000/bengkel");
         if (response.data.status === "success") {
           this.bengkelList = response.data.data.bengkel.rows;
         } else {
@@ -156,12 +202,12 @@ export default {
         console.error("Error fetching data:", error);
       }
     },
-    
+
     // Method for adding a new 'bengkel'
     async addBengkel() {
       if (this.newBengkel.ruang_bengkel) {
         try {
-          await axios.post('http://localhost:3000/bengkel', this.newBengkel);
+          await axios.post("http://localhost:3000/bengkel", this.newBengkel);
           await this.fetchBengkelList(); // Update table data
           this.closeModal();
           this.resetForm();
@@ -172,13 +218,37 @@ export default {
         alert("Mohon isi nama ruang bengkel");
       }
     },
-    
+
+    editBengkel(bengkel) {
+      // Hanya salin ruang_bengkel
+      this.newBengkel = {
+        ruang_bengkel: bengkel.ruang_bengkel,
+      };
+      this.editIndex = this.bengkelList.findIndex(
+        (b) => b.id_bengkel === bengkel.id_bengkel
+      );
+      this.showModal = true;
+    },
+
     // Method for updating existing 'bengkel'
     async updateBengkel() {
       const bengkelToUpdate = this.bengkelList[this.editIndex];
-      if (this.newBengkel.ruang_bengkel && bengkelToUpdate) {
+
+      // Pastikan hanya ruang_bengkel yang dikirim
+      console.log("Data yang dikirim untuk update:", this.newBengkel); // Log untuk memeriksa
+
+      if (
+        this.newBengkel.ruang_bengkel &&
+        bengkelToUpdate &&
+        bengkelToUpdate.id_bengkel
+      ) {
         try {
-          await axios.put(`http://localhost:3000/bengkel/${bengkelToUpdate.id_bengkel}`, this.newBengkel);
+          await axios.put(
+            `http://localhost:3000/bengkel/${bengkelToUpdate.id_bengkel}`,
+            {
+              ruang_bengkel: this.newBengkel.ruang_bengkel,
+            }
+          );
           await this.fetchBengkelList(); // Update table data
           this.closeModal();
           this.resetForm();
@@ -186,10 +256,12 @@ export default {
           alert("Gagal mengupdate data: " + error.message);
         }
       } else {
-        alert("Data yang akan di-update tidak valid");
+        alert(
+          "Data yang akan di-update tidak valid atau id_bengkel tidak ditemukan"
+        );
       }
     },
-    
+
     // Separate method to handle adding or updating 'bengkel'
     addOrUpdateBengkel() {
       if (this.editIndex !== null) {
@@ -198,13 +270,7 @@ export default {
         this.addBengkel();
       }
     },
-    
-    editBengkel(bengkel) {
-      this.newBengkel = { ...bengkel };
-      this.editIndex = this.bengkelList.findIndex(b => b.id_bengkel === bengkel.id_bengkel);
-      this.showModal = true;
-    },
-    
+
     async deleteBengkel(id_bengkel) {
       if (confirm("Apakah Anda yakin ingin menghapus data ini?")) {
         try {
@@ -215,36 +281,36 @@ export default {
         }
       }
     },
-    
+
     closeModal() {
       this.showModal = false;
       this.resetForm();
     },
-    
+
     toggleDropdown(index) {
       this.dropdownIndex = this.dropdownIndex === index ? null : index;
     },
-    
+
     resetForm() {
       this.newBengkel = {
         ruang_bengkel: "",
       };
       this.editIndex = null;
     },
-    
+
     resetFilter() {
       this.searchQuery = "";
       this.rowsPerPage = 5;
       this.currentPage = 1;
     },
   },
-  
+
   watch: {
     rowsPerPage() {
       this.currentPage = 1;
     },
   },
-  
+
   mounted() {
     this.fetchBengkelList();
   },
