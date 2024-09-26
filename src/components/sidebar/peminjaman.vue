@@ -16,77 +16,81 @@
       <div class="modal-body">
         <!-- form row atas -->
         <div class="form-row">
-          <!-- peminjam -->
-          <div class="form-group">
-            <label for="namaPeminjam">Nama Peminjam</label>
-            <p>Masukkan nama peminjam</p>
-            <input
-              type="text"
-              style="width: 250px"
-              id="namaPeminjam"
-              class="form-control"
-              v-model="newPeminjaman.namaPeminjam"
-            />
-          </div>
-          <!-- peminjam -->
-          <!-- alat -->
-          <div class="form-group">
-            <label for="alat">Alat</label>
-            <p>Masukkan nama alat</p>
-            <input
-              type="text"
-              id="alat"
-              class="form-control"
-              v-model="newPeminjaman.alat"
-            />
-          </div>
-          <!-- alat -->
-          <!-- jumlah -->
-          <div class="form-group">
-            <label for="jumlahAlat">Jumlah Alat</label>
-            <input
-              type="number"
-              style="width: 100px; margin-top: 1.55rem"
-              id="jumlahAlat"
-              class="form-control"
-              v-model="newPeminjaman.jumlahAlat"
-            />
-          </div>
-          <!-- jumlah -->
-        </div>
-        <!-- form row atas -->
-        <!-- form row bawah -->
-        <div class="form-row">
-          <!-- bengkel -->
-          <div class="form-group">
-            <label for="bengkel">Bengkel</label>
-            <p>Masukkan nama bengkel alat</p>
-            <input
-              type="text"
-              style="width: 15.625rem"
-              id="bengkel"
-              class="form-control"
-              v-model="newPeminjaman.bengkel"
-            />
-          </div>
-          <!-- bengkel -->
-          <!-- tgl pinjam -->
-          <div class="form-group" style="margin-left: -2.3rem">
-            <label for="tanggalPinjam">Tanggal Pinjam</label>
-            <p>Masukkan tanggal pinjam alat</p>
-            <div class="date-input-wrapper">
+            <!-- peminjam -->
+            <div class="form-group">
+              <label for="namaPeminjam">Nama Peminjam</label>
+              <p>Masukkan nama peminjam</p>
               <input
-                type="date"
-                id="tanggalPinjam"
-                v-model="newPeminjaman.tanggalPinjam"
-                class="date-filter"
+                type="text"
                 style="width: 16rem"
+                id="namaPeminjam"
+                class="form-control"
+                v-model="newPeminjaman.namaPeminjam"
               />
-              <i class="fas fa-calendar-alt calendar-icon"></i>
             </div>
+            <!-- peminjam -->
+            <!-- alat -->
+            <div class="form-group" style="margin-left: -4.3rem;">
+              <label for="alat">Alat</label>
+              <p>Masukkan nama alat</p>
+              <input
+                type="text"
+                id="alat"
+                style="width: 19.4rem;"
+                class="form-control"
+                v-model="newPeminjaman.alat"
+              />
+            </div>
+            <!-- alat -->
           </div>
-          <!-- tgl pinjam -->
-        </div>
+          <!-- form row atas -->
+          <!-- form row bawah -->
+          <div class="form-row">
+            <!-- bengkel -->
+              <div class="form-group">
+                <label for="bengkel">Bengkel</label>
+                <p>Masukkan nama bengkel alat</p>
+                <input
+                  type="text"
+                  style="width: 16rem; height: 2.5rem;"
+                  id="bengkel"
+                  class="form-control"
+                  v-model="newPeminjaman.bengkel"
+                />
+              </div>
+              <!-- bengkel -->
+              <!-- tgl pinjam -->
+              <div class="form-group">
+                <label for="tanggalPinjam">Tanggal Pinjam</label>
+                <p>Masukkan tanggal pinjam alat</p>
+                <div class="date-input-wrapper">
+                  <input
+                    type="date"
+                    id="tanggalPinjam"
+                    v-model="newPeminjaman.tanggalPinjam"
+                    class="date-filter"
+                    style="width: 13rem"
+                  />
+                  <i class="fas fa-calendar-alt calendar-icon"></i>
+                </div>
+              </div>
+              <!-- tgl pinjam -->
+              <!-- jumlah -->
+              <div class="form-group" style="margin-left: -0.5rem;">
+                <label for="jumlahAlat" style="font-size: small;">Jumlah Alat</label>
+                <input
+                  type="number"
+                  style="
+                    width: 5.58rem;  
+                    margin-top: 1.782rem; 
+                    height: 2.5rem;"
+                  id="jumlahAlat"
+                  class="form-control"
+                  v-model="newPeminjaman.jumlahAlat"
+                />
+              </div>
+              <!-- jumlah -->
+            </div>
         <!-- form row bawah -->
       </div>
       <div class="modal-footer">
@@ -197,7 +201,7 @@
           <option value="100">100</option>
         </select>
         baris
-      </div>
+  </div>
   <div>
     <!-- table section -->
     <table class="data-table">
@@ -370,6 +374,7 @@
               </div>
               <!-- jumlah -->
             </div>
+            <!-- form row atas -->
             <!-- form row bawah -->
             <hr style="color: white;">
             <!-- form row bawah -->
@@ -537,16 +542,6 @@
     <!-- End of Modal Section -->
 
     <div class="search-bar">
-      <div>
-        Tampilkan:
-        <select v-model="rowsPerPage" class="select-rows" style="width: 3rem">
-          <option value="5">5</option>
-          <option value="10">10</option>
-          <option value="20">20</option>
-          <option value="100">100</option>
-        </select>
-        baris
-      </div>
       <div v-if="totalPages > 1" class="pagination-container">
         <button
           @click="currentPage--"
@@ -964,7 +959,7 @@ export default {
   font-weight: bold;
   font-size: 1.7rem;
   color: #274278;
-  margin-top: -5rem;
+  margin-top: 1rem;
   margin-bottom: 1.5rem;
   animation: fadeInDown 1s ease-in-out;
 }
