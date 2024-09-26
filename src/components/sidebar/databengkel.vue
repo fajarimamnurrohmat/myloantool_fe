@@ -10,29 +10,24 @@
   <div v-if="showModal" class="modal-overlay" @click.self="closeModal">
     <div class="modal-content">
       <div class="modal-header">
-        <h4>Input Data Bengkel</h4>
-        <span
-          class="close-modal"
-          @click="closeModal"
-          style="color: red; text-align: right"
-          >&times;</span
-        >
+        <h4>{{ editIndex !== null ? 'Edit Data Bengkel' : 'Input Data Bengkel' }}</h4>
+        <span class="close-modal" @click="closeModal" style="color: red; text-align: right">&times;</span>
       </div>
       <div class="form-row">
         <div class="form-group">
-          <label for="namaRuang">Nama Ruang Bengkel</label>
+          <label for="ruangBengkel">Nama Ruang Bengkel</label>
           <p>Masukkan nama ruang bengkel</p>
           <input
             type="text"
-            id="namaRuang"
+            id="ruangBengkel"
             class="form-controll"
-            v-model="newBengkel.namaRuang"
+            v-model="newBengkel.ruang_bengkel"
           />
         </div>
       </div>
       <div style="margin-top: 10px; text-align: left">
-        <button @click="addBengkel" class="btn-add-bengkel">
-          Simpan Data
+        <button @click="addOrUpdateBengkel" class="btn-add-bengkel">
+          {{ editIndex !== null ? 'Update Data' : 'Simpan Data' }}
         </button>
       </div>
     </div>
@@ -45,14 +40,14 @@
     <div class="date-inputs">
       <div>
         <div class="tampil-baris" style="text-align: left;">
-            Tampilkan:
-            <select v-model="rowsPerPage" class="select-rows" style="width: 3rem">
-              <option value="5">5</option>
-              <option value="10">10</option>
-              <option value="20">20</option>
-              <option value="100">100</option>
-            </select>
-            baris
+          Tampilkan:
+          <select v-model="rowsPerPage" class="select-rows" style="width: 3rem">
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="100">100</option>
+          </select>
+          baris
         </div>
       </div>
       <!-- filter button section -->
@@ -61,7 +56,6 @@
           <i class="fa fa-sync" aria-hidden="true"></i>
         </button>
       </div>
-      <!-- filter button section -->
       <!-- search -->
       <div class="search-bar-container">
         <i class="fas fa-search search-icon"></i>
@@ -73,7 +67,6 @@
           placeholder="Cari.."
         />
       </div>
-      <!-- search -->
     </div>
   </div>
   <!-- End of Date Filter Section -->
@@ -89,39 +82,19 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(bengkel, index) in paginatedBengkelList" :key="index">
+        <tr v-for="(bengkel, index) in paginatedBengkelList" :key="bengkel.id_bengkel">
           <td>{{ index + 1 + (currentPage - 1) * rowsPerPage }}</td>
-          <td>{{ bengkel.namaRuang }}</td>
+          <td>{{ bengkel.ruang_bengkel }}</td>
           <td>
-            <!-- dropdown set -->
             <div class="dropdown d-inline-block">
-              <button
-                class="btn btn-sm"
-                type="button"
-                @click="toggleDropdown(index)"
-                :aria-expanded="dropdownIndex === index"
-              >
+              <button class="btn btn-sm" type="button" @click="toggleDropdown(index)" :aria-expanded="dropdownIndex === index">
                 <i class="fas fa-ellipsis-h"></i>
               </button>
-              <div
-                class="dropdown-menu-act"
-                :class="{ show: dropdownIndex === index }"
-              >
-                <button
-                  class="dropdown-item"
-                  @click="editPeminjaman(index)"
-                  style="color: #274278"
-                  >Edit</button
-                >
-                <button
-                  class="dropdown-item"
-                  @click="deletePeminjaman(index)"
-                  style="color: red"
-                  >Hapus</button
-                >
+              <div class="dropdown-menu-act" :class="{ show: dropdownIndex === index }">
+                <button class="dropdown-item" @click="editBengkel(bengkel)" style="color: #274278">Edit</button>
+                <button class="dropdown-item" @click="deleteBengkel(bengkel.id_bengkel)" style="color: red">Hapus</button>
               </div>
             </div>
-            <!-- dropdown set -->
           </td>
         </tr>
         <tr v-if="paginatedBengkelList.length === 0">
@@ -130,34 +103,22 @@
       </tbody>
     </table>
     <div v-if="totalPages > 1" class="pagination-container">
-      <button
-        @click="currentPage--"
-        :disabled="currentPage === 1"
-        class="pagination-button"
-      >
-        Previous
-      </button>
-      <span class="pagination-info">
-        Page {{ currentPage }} of {{ totalPages }}
-      </span>
-      <button
-        @click="currentPage++"
-        :disabled="currentPage === totalPages"
-        class="pagination-button"
-      >
-        Next
-      </button>
+      <button @click="currentPage--" :disabled="currentPage === 1" class="pagination-button">Previous</button>
+      <span class="pagination-info">Page {{ currentPage }} of {{ totalPages }}</span>
+      <button @click="currentPage++" :disabled="currentPage === totalPages" class="pagination-button">Next</button>
     </div>
   </div>
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   data() {
     return {
       showModal: false,
       newBengkel: {
-        namaRuang: "",
+        ruang_bengkel: "",
       },
       bengkelList: [],
       rowsPerPage: 5,
@@ -170,7 +131,7 @@ export default {
   computed: {
     filteredBengkelList() {
       return this.bengkelList.filter((bengkel) =>
-        bengkel.namaRuang.toLowerCase().includes(this.searchQuery.toLowerCase())
+        bengkel.ruang_bengkel.toLowerCase().includes(this.searchQuery.toLowerCase())
       );
     },
     paginatedBengkelList() {
@@ -183,46 +144,109 @@ export default {
     },
   },
   methods: {
-    addBengkel() {
-      if (this.newBengkel.namaRuang) {
-        if (this.editIndex !== null) {
-          this.bengkelList.splice(this.editIndex, 1, { ...this.newBengkel });
-          this.editIndex = null;
+    async fetchBengkelList() {
+      try {
+        const response = await axios.get('http://localhost:3000/bengkel');
+        if (response.data.status === "success") {
+          this.bengkelList = response.data.data.bengkel.rows;
         } else {
-          this.bengkelList.push({ ...this.newBengkel });
+          console.error("Gagal mendapatkan data:", response.data);
         }
-        this.closeModal();
-        this.resetForm();
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    },
+    
+    // Method for adding a new 'bengkel'
+    async addBengkel() {
+      if (this.newBengkel.ruang_bengkel) {
+        try {
+          await axios.post('http://localhost:3000/bengkel', this.newBengkel);
+          await this.fetchBengkelList(); // Update table data
+          this.closeModal();
+          this.resetForm();
+        } catch (error) {
+          alert("Gagal menambahkan data: " + error.message);
+        }
       } else {
         alert("Mohon isi nama ruang bengkel");
       }
     },
-    editBengkel(index) {
-      this.newBengkel = { ...this.bengkelList[index] };
-      this.editIndex = index;
+    
+    // Method for updating existing 'bengkel'
+    async updateBengkel() {
+      const bengkelToUpdate = this.bengkelList[this.editIndex];
+      if (this.newBengkel.ruang_bengkel && bengkelToUpdate) {
+        try {
+          await axios.put(`http://localhost:3000/bengkel/${bengkelToUpdate.id_bengkel}`, this.newBengkel);
+          await this.fetchBengkelList(); // Update table data
+          this.closeModal();
+          this.resetForm();
+        } catch (error) {
+          alert("Gagal mengupdate data: " + error.message);
+        }
+      } else {
+        alert("Data yang akan di-update tidak valid");
+      }
+    },
+    
+    // Separate method to handle adding or updating 'bengkel'
+    addOrUpdateBengkel() {
+      if (this.editIndex !== null) {
+        this.updateBengkel();
+      } else {
+        this.addBengkel();
+      }
+    },
+    
+    editBengkel(bengkel) {
+      this.newBengkel = { ...bengkel };
+      this.editIndex = this.bengkelList.findIndex(b => b.id_bengkel === bengkel.id_bengkel);
       this.showModal = true;
     },
-    deleteBengkel(index) {
-      this.bengkelList.splice(index, 1);
+    
+    async deleteBengkel(id_bengkel) {
+      if (confirm("Apakah Anda yakin ingin menghapus data ini?")) {
+        try {
+          await axios.delete(`http://localhost:3000/bengkel/${id_bengkel}`);
+          await this.fetchBengkelList(); // Update table data
+        } catch (error) {
+          console.error("Error deleting data:", error);
+        }
+      }
     },
+    
     closeModal() {
       this.showModal = false;
       this.resetForm();
     },
+    
     toggleDropdown(index) {
       this.dropdownIndex = this.dropdownIndex === index ? null : index;
     },
+    
     resetForm() {
       this.newBengkel = {
-        namaRuang: "",
+        ruang_bengkel: "",
       };
       this.editIndex = null;
     },
+    
+    resetFilter() {
+      this.searchQuery = "";
+      this.rowsPerPage = 5;
+      this.currentPage = 1;
+    },
   },
+  
   watch: {
     rowsPerPage() {
       this.currentPage = 1;
     },
+  },
+  
+  mounted() {
+    this.fetchBengkelList();
   },
 };
 </script>
