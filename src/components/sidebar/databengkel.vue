@@ -470,7 +470,7 @@ export default {
 }
 
 .pagination-container {
-  margin-top: 4px;
+  margin-top: 40px;
 }
 
 .pagination-button {
