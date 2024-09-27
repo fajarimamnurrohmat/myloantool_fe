@@ -12,45 +12,26 @@
     <div v-if="showModal" class="modal-overlay" @click.self="closeModal">
       <div class="modal-content">
         <div class="modal-header">
-          <h4>{{ editIndex !== null ? 'Edit Data Siswa' : 'Input Data Siswa' }}</h4>
-          <span
-            class="close-modal"
-            @click="closeModal"
-            style="color: red; text-align: right"
-            >&times;</span
-          >
+          <h4>{{ isEditMode ? 'Edit Data Siswa' : 'Input Data Siswa' }}</h4>
+          <span class="close-modal" @click="closeModal" style="color: red;">&times;</span>
         </div>
         <div class="form-row">
           <div class="form-group">
             <label for="nomorInduk">Nomor Induk</label>
             <p>Masukkan nomor induk</p>
-            <input
-              type="text"
-              id="nomorInduk"
-              class="form-control"
-              v-model="newSiswa.nomorInduk"
-            />
+            <input type="text" id="nomorInduk" class="form-control" v-model="newSiswa.nomorInduk" :disabled="isEditMode" />
           </div>
           <div class="form-group">
             <label for="namaSiswa">Nama Siswa</label>
             <p>Masukkan nama siswa</p>
-            <input
-              type="text"
-              id="namaSiswa"
-              class="form-control"
-              v-model="newSiswa.nama"
-            />
+            <input type="text" id="namaSiswa" class="form-control" v-model="newSiswa.nama" />
           </div>
         </div>
         <div class="form-row">
           <div class="form-group">
             <label for="jenisKelamin">Jenis Kelamin</label>
             <p>Pilih jenis kelamin</p>
-            <select
-              id="jenisKelamin"
-              class="form-control"
-              v-model="newSiswa.jenisKelamin"
-            >
+            <select id="jenisKelamin" class="form-control" v-model="newSiswa.jenisKelamin">
               <option value="">Pilih jenis kelamin</option>
               <option value="Laki-laki">Laki-laki</option>
               <option value="Perempuan">Perempuan</option>
@@ -59,18 +40,13 @@
           <div class="form-group">
             <label for="jurusan">Jurusan</label>
             <p>Masukkan Jurusan</p>
-            <input
-              type="text"
-              id="jurusan"
-              class="form-control"
-              v-model="newSiswa.jurusan"
-            />
+            <input type="text" id="jurusan" class="form-control" v-model="newSiswa.jurusan" />
           </div>
         </div>
 
         <div style="margin-top: 10px; text-align: left">
-          <button @click="addOrUpdateSiswa" class="btn_add_siswa">
-            {{ editIndex !== null ? 'Update Data' : 'Simpan Data' }}
+          <button @click="isEditMode ? editSiswa() : addSiswa()" class="btn_add_siswa">
+            {{ isEditMode ? 'Update Data' : 'Simpan Data' }}
           </button>
         </div>
       </div>
@@ -102,13 +78,7 @@
         <!-- Pencarian -->
         <div class="search-bar-container">
           <i class="fas fa-search search-icon"></i>
-          <input
-            type="text"
-            v-model="searchQuery"
-            class="search-input"
-            style="width: 11rem;"
-            placeholder="Cari.."
-          />
+          <input type="text" v-model="searchQuery" class="search-input" style="width: 11rem;" placeholder="Cari.." />
         </div>
       </div>
     </div>
@@ -137,28 +107,12 @@
             <td>
               <!-- Dropdown Action -->
               <div class="dropdown d-inline-block">
-                <button
-                  class="btn btn-sm"
-                  type="button"
-                  @click="toggleDropdown(index)"
-                  :aria-expanded="dropdownIndex === index"
-                >
+                <button class="btn btn-sm" type="button" @click="toggleDropdown(index)" :aria-expanded="dropdownIndex === index">
                   <i class="fas fa-ellipsis-h"></i>
                 </button>
-                <div
-                  class="dropdown-menu-act"
-                  :class="{ show: dropdownIndex === index }"
-                >
-                  <button
-                    class="dropdown-item"
-                    @click="editSiswa(index)"
-                    style="color: #274278"
-                  >Edit</button>
-                  <button
-                    class="dropdown-item"
-                    @click="deleteSiswa(index)"
-                    style="color: red"
-                  >Hapus</button>
+                <div class="dropdown-menu-act" :class="{ show: dropdownIndex === index }">
+                  <button class="dropdown-item" @click="prepareEditSiswa(siswa)" style="color: #274278">Edit</button>
+                  <button class="dropdown-item" @click="deleteSiswa(siswa.nomorInduk)" style="color: red">Hapus</button>
                 </div>
               </div>
               <!-- End Dropdown Action -->
@@ -171,23 +125,9 @@
       </table>
       <!-- Pagination -->
       <div v-if="totalPages > 1" class="pagination-container">
-        <button
-          @click="changePage(currentPage - 1)"
-          :disabled="currentPage === 1"
-          class="pagination-button"
-        >
-          Previous
-        </button>
-        <span class="pagination-info">
-          Page {{ currentPage }} of {{ totalPages }}
-        </span>
-        <button
-          @click="changePage(currentPage + 1)"
-          :disabled="currentPage === totalPages"
-          class="pagination-button"
-        >
-          Next
-        </button>
+        <button @click="changePage(currentPage - 1)" :disabled="currentPage === 1" class="pagination-button">Previous</button>
+        <span class="pagination-info">Page {{ currentPage }} of {{ totalPages }}</span>
+        <button @click="changePage(currentPage + 1)" :disabled="currentPage === totalPages" class="pagination-button">Next</button>
       </div>
       <!-- End Pagination -->
     </div>
@@ -209,22 +149,21 @@ export default {
       rowsPerPage: 5,
       currentPage: 1,
       searchQuery: "",
-      editIndex: null, // Indeks siswa yang sedang diedit
+      editNomorInduk: null, // Menyimpan nomor induk siswa yang sedang diedit
       dropdownIndex: null, // Indeks dropdown yang terbuka
     };
   },
   computed: {
+    isEditMode() {
+      return this.editNomorInduk !== null;
+    },
     // Filter siswa berdasarkan query pencarian
     filteredSiswaList() {
       return this.siswaList.filter(
         (siswa) =>
-          siswa.nomorInduk
-            .toLowerCase()
-            .includes(this.searchQuery.toLowerCase()) ||
+          siswa.nomorInduk.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
           siswa.nama.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-          siswa.jenisKelamin
-            .toLowerCase()
-            .includes(this.searchQuery.toLowerCase()) ||
+          siswa.jenisKelamin.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
           siswa.jurusan.toLowerCase().includes(this.searchQuery.toLowerCase())
       );
     },
@@ -259,92 +198,96 @@ export default {
         console.error("Error fetching data:", error);
       }
     },
-    // Menambahkan atau memperbarui siswa
-    async addOrUpdateSiswa() {
-      if (
-        this.newSiswa.nomorInduk &&
-        this.newSiswa.nama &&
-        this.newSiswa.jenisKelamin &&
-        this.newSiswa.jurusan
-      ) {
-        if (this.editIndex !== null) {
-          // Update siswa melalui API (jika API mendukung)
-          try {
-            const response = await fetch(`http://localhost:3000/siswa/${this.newSiswa.nomorInduk}`, {
-              method: 'PUT',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                nis: this.newSiswa.nomorInduk,
-                nama_siswa: this.newSiswa.nama,
-                jenis_kelamin: this.newSiswa.jenisKelamin,
-                jurusan: this.newSiswa.jurusan,
-              }),
-            });
-            const data = await response.json();
-            if (data.status === "success") {
-              // Perbarui daftar siswa di frontend
-              this.siswaList.splice(this.editIndex, 1, { ...this.newSiswa });
-              this.closeModal();
-              this.resetForm();
-            } else {
-              alert("Gagal memperbarui data siswa.");
-            }
-          } catch (error) {
-            console.error("Error updating siswa:", error);
+    // Menambahkan siswa
+    async addSiswa() {
+      if (this.newSiswa.nomorInduk && this.newSiswa.nama && this.newSiswa.jenisKelamin && this.newSiswa.jurusan) {
+        try {
+          const response = await fetch('http://localhost:3000/siswa', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              nis: this.newSiswa.nomorInduk,
+              nama_siswa: this.newSiswa.nama,
+              jenis_kelamin: this.newSiswa.jenisKelamin,
+              jurusan: this.newSiswa.jurusan,
+            }),
+          });
+          const data = await response.json();
+          if (data.status === "success") {
+            this.fetchSiswaData(); // Refresh data
+            this.closeModal();
+            this.resetForm();
+          } else {
+            console.error("Gagal menambah siswa:", data);
           }
-        } else {
-          // Tambah siswa melalui API (jika API mendukung)
-          try {
-            const response = await fetch('http://localhost:3000/siswa', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                nis: this.newSiswa.nomorInduk,
-                nama_siswa: this.newSiswa.nama,
-                jenis_kelamin: this.newSiswa.jenisKelamin,
-                jurusan: this.newSiswa.jurusan,
-              }),
-            });
-            const data = await response.json();
-            if (data.status === "success") {
-              // Tambahkan siswa ke daftar di frontend
-              this.siswaList.push({ ...this.newSiswa });
-              this.closeModal();
-              this.resetForm();
-            } else {
-              alert("Gagal menambahkan data siswa.");
-            }
-          } catch (error) {
-            console.error("Error adding siswa:", error);
-          }
+        } catch (error) {
+          console.error("Error adding siswa:", error);
         }
       } else {
-        alert("Mohon isi semua data");
+        alert('Lengkapi data siswa');
       }
     },
     // Mengedit siswa
-    editSiswa(index) {
-      this.newSiswa = { ...this.siswaList[index] };
-      this.editIndex = index;
+    async editSiswa() {
+      try {
+        // Log data yang akan dikirim dan URL
+        console.log('Mengirim data ke URL:', `http://localhost:3000/siswa/${this.editNomorInduk}`);
+        console.log('Data yang dikirim untuk update:', {
+          nis: this.newSiswa.nomorInduk, // Pastikan field ini disertakan
+          nama_siswa: this.newSiswa.nama,
+          jenis_kelamin: this.newSiswa.jenisKelamin,
+          jurusan: this.newSiswa.jurusan,
+        });
+
+        const response = await fetch(`http://localhost:3000/siswa/${this.editNomorInduk}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            nis: this.newSiswa.nomorInduk, // Tambahkan nis di sini
+            nama_siswa: this.newSiswa.nama,
+            jenis_kelamin: this.newSiswa.jenisKelamin,
+            jurusan: this.newSiswa.jurusan,
+          }),
+        });
+
+        // Log response status dan data
+        console.log('Response status:', response.status);
+        const data = await response.json();
+        console.log('Data dari server:', data);
+
+        if (data.status === "success") {
+          this.fetchSiswaData(); // Refresh data
+          this.closeModal();
+          this.resetForm();
+        } else {
+          console.error("Gagal mengedit siswa:", data);
+        }
+      } catch (error) {
+        console.error("Error editing siswa:", error);
+      }
+    },
+    // Mempersiapkan data untuk edit
+    prepareEditSiswa(siswa) {
+      this.newSiswa = { ...siswa };
+      this.editNomorInduk = siswa.nomorInduk;
       this.showModal = true;
     },
     // Menghapus siswa
-    async deleteSiswa(index) {
-      const siswa = this.siswaList[index];
-      if (confirm(`Apakah Anda yakin ingin menghapus siswa dengan NIS ${siswa.nomorInduk}?`)) {
+    async deleteSiswa(nomorInduk) {
+      if (confirm('Apakah Anda yakin ingin menghapus data ini?')) {
         try {
-          const response = await fetch(`http://localhost:3000/siswa/${siswa.nomorInduk}`, {
+          const response = await fetch(`http://localhost:3000/siswa/${nomorInduk}`, {
             method: 'DELETE',
           });
           const data = await response.json();
           if (data.status === "success") {
-            this.siswaList.splice(index, 1);
+            this.fetchSiswaData(); // Refresh data
           } else {
-            alert("Gagal menghapus data siswa.");
+            console.error("Gagal menghapus siswa:", data);
           }
         } catch (error) {
           console.error("Error deleting siswa:", error);
@@ -356,7 +299,7 @@ export default {
       this.showModal = false;
       this.resetForm();
     },
-    // Reset form input
+    // Mereset form input siswa
     resetForm() {
       this.newSiswa = {
         nomorInduk: "",
@@ -364,39 +307,37 @@ export default {
         jenisKelamin: "",
         jurusan: "",
       };
-      this.editIndex = null;
+      this.editNomorInduk = null;
     },
-    // Toggle dropdown action
-    toggleDropdown(index) {
-      this.dropdownIndex = this.dropdownIndex === index ? null : index;
-    },
-    // Reset filter pencarian dan pagination
+    // Reset filter pencarian
     resetFilter() {
       this.searchQuery = "";
       this.rowsPerPage = 5;
       this.currentPage = 1;
     },
-    // Mengubah halaman pada pagination
+    // Mengganti halaman saat paginasi
     changePage(page) {
       if (page >= 1 && page <= this.totalPages) {
         this.currentPage = page;
         this.dropdownIndex = null;
       }
     },
-  },
-  watch: {
-    // Reset halaman ke 1 ketika jumlah baris per halaman berubah
-    rowsPerPage() {
-      this.currentPage = 1;
+    // Toggle dropdown
+    toggleDropdown(index) {
+      if (this.dropdownIndex === index) {
+        this.dropdownIndex = null;
+      } else {
+        this.dropdownIndex = index;
+      }
     },
   },
-  created() {
-    this.fetchSiswaData(); // Mengambil data siswa saat komponen dibuat
+  mounted() {
+    this.fetchSiswaData();
   },
 };
 </script>
 
-<style>
+<style scoped>
 /* Modal Styles */
 .modal-overlay {
   position: fixed;
