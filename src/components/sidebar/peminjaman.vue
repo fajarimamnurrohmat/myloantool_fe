@@ -1,7 +1,7 @@
 <template>
   <div style="text-align: left">
     <h3 class="header-peminjaman">Halaman Peminjaman</h3>
-    <button @click="showModal = true" class="btn_add_siswa">
+    <button @click="showModal = true" class="btn_add_siswa" style="background-color: #007bff;">
       <i class="fas fa-plus" style="margin-right: 1rem"></i> Input Peminjaman
     </button>
   </div>
@@ -913,6 +913,20 @@ export default {
   margin-bottom: 10px;
   font-size: 12px;
   font-weight: 400;
+}
+
+.form-control {
+  width: 100%;
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.search-bar-container {
+  position: relative;
+  display: inline-block;
+  margin-left: 1.5rem;
 }
 
 .modal-content .form-control {

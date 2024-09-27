@@ -295,6 +295,12 @@ export default {
   font-size: 1rem; /* increase the font size of the icon */
 }
 
+.search-bar-container {
+  position: relative;
+  display: inline-block;
+  margin-left: 1.5rem;
+}
+
 .btn-reset {
   background-color: #ffffff;
   color: #4b6cb7;

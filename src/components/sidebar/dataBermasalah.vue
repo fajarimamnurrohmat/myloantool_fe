@@ -318,6 +318,12 @@ export default {
   background-color: #fff; /* Warna latar belakang untuk input teks */
 }
 
+.search-bar-container {
+  position: relative;
+  display: inline-block;
+  margin-left: 1.5rem;
+}
+
 /* Dropdown Styling */
 .dropdown-menu-export {
   display: none;

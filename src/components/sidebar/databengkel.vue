@@ -59,7 +59,7 @@
       </div>
       <!-- filter button section -->
       <div class="filter-buttons">
-        <button @click="resetFilter" class="btn-reset">
+        <button @click="resetFilter" class="btn-reset" style="margin-right: -1.5rem;">
           <i class="fa fa-sync" aria-hidden="true"></i>
         </button>
       </div>

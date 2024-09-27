@@ -376,22 +376,6 @@ export default {
   margin-top: 1rem;
 }
 
-.filter-buttons {
-  display: flex;
-  margin-left: auto;
-}
-
-.filter-buttons button {
-  border-radius: 5px;
-  height: 2rem; /* reduce the height */
-  width: 2.5rem;
-  padding: 0.2rem; /* add some padding */
-}
-
-.filter-buttons button i {
-  font-size: 1rem; /* increase the font size of the icon */
-}
-
 .search-bar-container {
   position: relative;
   display: inline-block;

@@ -80,7 +80,7 @@
       </div>
       <!-- filter button section -->
       <div class="filter-buttons">
-        <button @click="resetFilter" class="btn-reset" >
+        <button @click="resetFilter" class="btn-reset" style="margin-right: -1.5rem;">
           <i class="fa fa-sync" aria-hidden="true"></i>
         </button>
       </div>
@@ -332,22 +332,6 @@ export default {
 
 .modal-footer {
   text-align: right;
-}
-
-.filter-buttons {
-  display: flex;
-  margin-left: auto;
-}
-
-.filter-buttons button {
-  border-radius: 5px;
-  height: 2rem; /* reduce the height */
-  width: 2.5rem;
-  padding: 0.2rem; /* add some padding */
-}
-
-.filter-buttons button i {
-  font-size: 1rem; /* increase the font size of the icon */
 }
 
 .search-bar {
