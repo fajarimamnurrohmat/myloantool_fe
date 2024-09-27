@@ -71,7 +71,7 @@
         </div>
         <!-- Tombol Reset Filter -->
         <div class="filter-buttons">
-          <button @click="resetFilter" class="btn-reset" style="margin-right: -2rem;">
+          <button @click="resetFilter" class="btn-reset" style="margin-right: -1.5rem;">
             <i class="fa fa-sync" aria-hidden="true"></i>
           </button>
         </div>
@@ -532,7 +532,6 @@ export default {
 }
 
 .dropdown-item {
-  padding: 8px 12px;
   cursor: pointer;
   background: none;
   border: none;
@@ -548,7 +547,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 20px;
+  margin-top: 40px;
 }
 
 .pagination-button {

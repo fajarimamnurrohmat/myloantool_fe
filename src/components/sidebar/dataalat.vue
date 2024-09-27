@@ -80,7 +80,7 @@
       </div>
       <!-- filter button section -->
       <div class="filter-buttons">
-        <button @click="resetFilter" class="btn-reset" style="margin-right: -2rem;">
+        <button @click="resetFilter" class="btn-reset" >
           <i class="fa fa-sync" aria-hidden="true"></i>
         </button>
       </div>
