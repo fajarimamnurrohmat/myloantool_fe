@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Header dan Tombol Tambah Siswa -->
-    <div style="text-align: left">
+    <div class="header-siswa-container">
       <h3 class="header-siswa">Halaman Data Siswa</h3>
       <button @click="showModal = true" class="btn_add_siswa">
         <i class="fas fa-plus"></i> Inputkan Data
@@ -51,90 +51,111 @@
         </div>
       </div>
     </div>
-
-    <hr />
-
-    <!-- Section Filter dan Pencarian -->
-    <div class="filter-section">
-      <div class="date-inputs">
-        <div>
-          <div class="tampil-baris" style="text-align: left;">
-            Tampilkan:
-            <select v-model="rowsPerPage" class="select-rows" style="width: 3rem">
-              <option value="5">5</option>
-              <option value="10">10</option>
-              <option value="20">20</option>
-              <option value="100">100</option>
-            </select>
-            baris
-          </div>
-        </div>
-        <!-- Tombol Reset Filter -->
-        <div class="filter-buttons">
-          <button @click="resetFilter" class="btn-reset" style="margin-right: -1.5rem;">
-            <i class="fa fa-sync" aria-hidden="true"></i>
-          </button>
-        </div>
-        <!-- Pencarian -->
-        <div class="search-bar-container">
-          <i class="fas fa-search search-icon"></i>
-          <input type="text" v-model="searchQuery" class="search-input" style="width: 11rem;" placeholder="Cari.." />
-        </div>
-      </div>
-    </div>
-    <!-- End Section Filter dan Pencarian -->
-
+   
     <!-- Tabel Siswa -->
     <div style="margin-top: 30px">
-      <table class="data-table">
-        <thead>
-          <tr>
-            <th>No</th>
-            <th>Nomor Induk</th>
-            <th>Nama Siswa</th>
-            <th>Jenis Kelamin</th>
-            <th>Jurusan</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(siswa, index) in paginatedSiswaList" :key="siswa.nomorInduk">
-            <td>{{ index + 1 + (currentPage - 1) * rowsPerPage }}</td>
-            <td>{{ siswa.nomorInduk }}</td>
-            <td>{{ siswa.nama }}</td>
-            <td>{{ siswa.jenisKelamin }}</td>
-            <td>{{ siswa.jurusan }}</td>
-            <td>
-              <!-- Dropdown Action -->
-              <div class="dropdown d-inline-block">
-                <button class="btn btn-sm" type="button" @click="toggleDropdown(index)" :aria-expanded="dropdownIndex === index">
-                  <i class="fas fa-ellipsis-h"></i>
-                </button>
-                <div class="dropdown-menu-act" :class="{ show: dropdownIndex === index }">
+      <!-- tabel wrapper -->
+      <div class="table-wrapper">
+        <!-- Section Filter dan Pencarian -->
+        <div class="filter-section">
+          <div class="date-inputs">
+            <div>
+              <div class="tampil-baris" style="text-align: left;">
+                Tampilkan:
+                <select v-model="rowsPerPage" class="select-rows" style="width: 3rem">
+                  <option value="5">5</option>
+                  <option value="10">10</option>
+                  <option value="20">20</option>
+                  <option value="100">100</option>
+                </select>
+                baris
+              </div>
+            </div>
+            <!-- Pencarian -->
+            <div class="search-bar-container">
+              <i class="fas fa-search search-icon"></i>
+              <input type="text" v-model="searchQuery" class="search-input" placeholder="Cari.." />
+            </div>
+            <!-- pencarian -->
+          </div>
+        </div>
+        <!-- End Section Filter dan Pencarian -->
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>No</th>
+              <th>Nomor Induk</th>
+              <th>Nama Siswa</th>
+              <th>Jenis Kelamin</th>
+              <th>Jurusan</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(siswa, index) in paginatedSiswaList" :key="index">
+              <td>{{ index + 1 + (currentPage - 1) * rowsPerPage }}</td>
+              <td>{{ siswa.nomorInduk }}</td>
+              <td>{{ siswa.nama }}</td>
+              <td>{{ siswa.jenisKelamin }}</td>
+              <td>{{ siswa.jurusan }}</td>
+              <td>
+                <!-- dropdown set -->
+                <div class="dropdown d-inline-block">
+                  <button
+                    class="btn btn-sm"
+                    type="button"
+                    @click="toggleDropdown(index)"
+                    :aria-expanded="dropdownIndex === index"
+                  >
+                    <i class="fas fa-ellipsis-h"></i>
+                  </button>
+                  <div
+                    class="dropdown-menu-act"
+                    :class="{ show: dropdownIndex === index }"
+                  >
                   <button class="dropdown-item" @click="prepareEditSiswa(siswa)" style="color: #274278">Edit</button>
                   <button class="dropdown-item" @click="deleteSiswa(siswa.nomorInduk)" style="color: red">Hapus</button>
+                  </div>
                 </div>
-              </div>
-              <!-- End Dropdown Action -->
-            </td>
-          </tr>
-          <tr v-if="paginatedSiswaList.length === 0">
-            <td colspan="6" style="text-align: center">Tidak ada data</td>
-          </tr>
-        </tbody>
-      </table>
-      <!-- Pagination -->
-      <div v-if="totalPages > 1" class="pagination-container">
-        <button @click="changePage(currentPage - 1)" :disabled="currentPage === 1" class="pagination-button">Previous</button>
-        <span class="pagination-info">Page {{ currentPage }} of {{ totalPages }}</span>
-        <button @click="changePage(currentPage + 1)" :disabled="currentPage === totalPages" class="pagination-button">Next</button>
+                <!-- dropdown set -->
+              </td>
+            </tr>
+            <tr v-if="paginatedSiswaList.length === 0">
+              <td colspan="6" style="text-align: center">Tidak ada data</td>
+            </tr>
+          </tbody>
+        </table>
+        <!-- pagination -->
+        <div v-if="totalPages > 1" class="pagination-container">
+            <button
+              @click="currentPage--"
+              :disabled="currentPage === 1"
+              class="pagination-button"
+            >
+              Previous
+            </button>
+            <span class="pagination-info">
+              Page {{ currentPage }} of {{ totalPages }}
+            </span>
+            <button
+              @click="currentPage++"
+              :disabled="currentPage === totalPages"
+              class="pagination-button"
+            >
+              Next
+            </button>
+        </div>
+        <!-- pagination -->
       </div>
-      <!-- End Pagination -->
+      <!-- tabel wrapper -->
     </div>
+    <!-- Tabel Siswa -->
   </div>
 </template>
 
 <script>
+import Swal from 'sweetalert2';
+
 export default {
   data() {
     return {
@@ -219,14 +240,38 @@ export default {
             this.fetchSiswaData(); // Refresh data
             this.closeModal();
             this.resetForm();
+            Swal.fire({
+              title: "Sukses!",
+              text: "Data siswa berhasil disimpan.",
+              icon: "success",
+              confirmButtonText: "OK"
+            });
           } else {
             console.error("Gagal menambah siswa:", data);
+            Swal.fire({
+              title: "Error!",
+              text: "Gagal menambah siswa. NIS sudah terdaftar.",
+              icon: "error",
+              confirmButtonText: "OK"
+            });
           }
         } catch (error) {
           console.error("Error adding siswa:", error);
+          Swal.fire({
+            title: "Error!",
+            text: "Terjadi kesalahan saat menambah siswa.",
+            icon: "error",
+            confirmButtonText: "OK"
+          });
         }
-      } else {
-        alert('Lengkapi data siswa');
+      }
+      else {
+        Swal.fire({
+          title: "Peringatan!",
+          text: "Lengkapi data siswa.",
+          icon: "warning",
+          confirmButtonText: "OK"
+        });
       }
     },
     // Mengedit siswa
@@ -263,11 +308,29 @@ export default {
           this.fetchSiswaData(); // Refresh data
           this.closeModal();
           this.resetForm();
+          Swal.fire({
+              title: "Sukses!",
+              text: "Data siswa berhasil disimpan.",
+              icon: "success",
+              confirmButtonText: "OK"
+          });
         } else {
           console.error("Gagal mengedit siswa:", data);
+          Swal.fire({
+            title: "Error!",
+            text: data.message || "Terjadi kesalahan saat mengedit siswa.", // Menyertakan pesan spesifik jika ada
+            icon: "error",
+            confirmButtonText: "OK"
+          });
         }
       } catch (error) {
         console.error("Error editing siswa:", error);
+        Swal.fire({
+          title: "Error!",
+          text: "Terjadi kesalahan saat mengedit siswa.",
+          icon: "error",
+          confirmButtonText: "OK"
+        });
       }
     },
     // Mempersiapkan data untuk edit
@@ -278,19 +341,47 @@ export default {
     },
     // Menghapus siswa
     async deleteSiswa(nomorInduk) {
-      if (confirm('Apakah Anda yakin ingin menghapus data ini?')) {
+      const result = await Swal.fire({
+        title: 'Anda yakin?',
+        text: "Data siswa ini akan dihapus!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Ya, hapus!',
+      });
+
+      if (result.isConfirmed) {
         try {
           const response = await fetch(`http://localhost:3000/siswa/${nomorInduk}`, {
             method: 'DELETE',
           });
           const data = await response.json();
+
           if (data.status === "success") {
-            this.fetchSiswaData(); // Refresh data
+            this.fetchSiswaData();
+            Swal.fire({
+              title: 'Terhapus!',
+              text: 'Data siswa berhasil dihapus.',
+              icon: 'success',
+            });
           } else {
             console.error("Gagal menghapus siswa:", data);
+            Swal.fire({
+              title: 'Error!',
+              text: 'Gagal menghapus data siswa.',
+              icon: 'error',
+              confirmButtonText: 'OK',
+            });
           }
         } catch (error) {
           console.error("Error deleting siswa:", error);
+          Swal.fire({
+            title: 'Error!',
+            text: 'Gagal menghapus data siswa.',
+            icon: 'error',
+            confirmButtonText: 'OK',
+          });
         }
       }
     },
@@ -337,7 +428,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 /* Modal Styles */
 .modal-overlay {
   position: fixed;
@@ -360,6 +451,35 @@ export default {
   max-width: 90%;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   animation: fadeIn 0.3s ease-in-out;
+}
+
+.date-inputs {
+  display: flex;
+  justify-content: space-between; 
+  align-items: center; 
+}
+  
+.search-bar-container {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ccc;
+  padding: 0.25rem 0.5rem;
+  border-radius: 5px;
+  width: fit-content;
+}
+
+.search-input {
+  border: none;
+  outline: none;
+  text-align: left;
+}
+
+.search-icon {
+  color: #888; 
+}
+
+.search-bar-container:focus-within {
+  border-color: #636364; 
 }
 
 .filters2 {
@@ -403,13 +523,17 @@ export default {
   margin-top: 0;
 }
 
-/* Other styles remain the same */
+.header-siswa-container {
+  display: flex;
+  justify-content: space-between; 
+  align-items: center; 
+  margin-top: 3rem;
+}
+
 .header-siswa {
   font-weight: bold;
   color: #274278;
   font-size: 1.7rem;
-  margin-bottom: 10px;
-  margin-top: 20px;
   animation: fadeInDown 1s ease-in-out;
 }
 
@@ -477,88 +601,56 @@ export default {
   border: 1px solid #ccc;
 }
 
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  background-color: white;
+  margin-top: -1rem;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
 .data-table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 15px;
+  min-width: 600px; 
 }
 
-.data-table th,
-.data-table td {
+.data-table th, .data-table td {
   border: 1px solid #ddd;
   padding: 8px;
-  text-align: center;
+  text-align: left;
 }
 
-.data-table th {
-  background-color: #f2f2f2;
+.data-table th:last-child, .data-table td:last-child {
+  text-align: center; /* Kolom action tetap di tengah */
 }
 
 .data-table tr:nth-child(even) {
-  background-color: #f9f9f9;
+  background-color: #f2f2f2;
 }
 
 .data-table tr:hover {
   background-color: #ddd;
 }
 
-.dropdown-menu-act {
-  display: none;
-  position: absolute;
-  background-color: #f9f9f9;
-  min-width: 100px;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-  z-index: 1;
+@media (max-width: 768px) {
+  .data-table th, .data-table td {
+    font-size: 0.875rem; /* Ukuran font lebih kecil di layar kecil */
+    padding: 6px;
+  }
+
+  .pagination-container {
+    justify-content: start;
+  }
+
+  .header-siswa {
+    font-size: 1.5rem;
+  }
 }
 
-.dropdown-menu-act.show {
-  display: block;
-}
 
-.dropdown-item {
-  cursor: pointer;
-  background: none;
-  border: none;
-  width: 100%;
-  text-align: left;
-}
-
-.dropdown-item:hover {
-  background-color: #f1f1f1;
-}
-
-.pagination-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 40px;
-}
-
-.pagination-button {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  padding: 8px 12px;
-  margin: 0 10px;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.pagination-button:disabled {
-  background-color: #cccccc;
-  cursor: not-allowed;
-}
-
-.pagination-button:hover:not(:disabled) {
-  background-color: #0056b3;
-}
-
-.pagination-info {
-  font-size: 16px;
-}
-
-/* Animations */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -579,5 +671,38 @@ export default {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+.pagination-container {
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px 0;
+  margin-bottom: -1rem;
+}
+
+.pagination-button {
+  background-color: #007bff; 
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  margin: 0 5px;
+  font-size: 0.9rem; 
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.pagination-button:hover {
+  background-color: #0056b3; 
+}
+
+.pagination-button:disabled {
+  background-color: #cccccc; 
+  cursor: not-allowed;
+}
+
+.pagination-info {
+  font-size: 0.9rem; 
+  color: #555;
 }
 </style>

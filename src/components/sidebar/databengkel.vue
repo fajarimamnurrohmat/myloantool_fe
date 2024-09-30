@@ -448,7 +448,7 @@ export default {
 .data-table td {
   border: 1px solid #ddd;
   padding: 8px;
-  text-align: center;
+  text-align: left;
 }
 
 .data-table th {
