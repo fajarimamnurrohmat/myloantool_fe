@@ -70,38 +70,37 @@
       </div>
     </div>
 
-    <!-- Filter Section -->
-    <div class="filter-section">
-      <div class="date-inputs">
-        <div>
-          <div class="tampil-baris">
-            Tampilkan:
-            <select v-model.number="rowsPerPage" class="select-rows">
-              <option value="5">5</option>
-              <option value="10">10</option>
-              <option value="20">20</option>
-              <option value="100">100</option>
-            </select>
-            baris
-          </div>
-        </div>
-        <!-- Search Bar -->
-        <div class="search-bar-container">
-          <i class="fas fa-search search-icon"></i>
-          <input
-            type="text"
-            v-model="searchQuery"
-            class="search-input"
-            placeholder="Cari.."
-          />
-        </div>
-      </div>
-    </div>
-    <!-- End of Filter Section -->
-
     <!-- Tabel Alat -->
     <div style="margin-top: 30px">
       <div class="table-wrapper">
+        <!-- Filter Section -->
+        <div class="filter-section">
+          <div class="date-inputs">
+            <div>
+              <div class="tampil-baris">
+                Tampilkan:
+                <select v-model.number="rowsPerPage" class="select-rows">
+                  <option value="5">5</option>
+                  <option value="10">10</option>
+                  <option value="20">20</option>
+                  <option value="100">100</option>
+                </select>
+                baris
+              </div>
+            </div>
+            <!-- Search Bar -->
+            <div class="search-bar-container">
+              <i class="fas fa-search search-icon"></i>
+              <input
+                type="text"
+                v-model="searchQuery"
+                class="search-input"
+                placeholder="Cari.."
+              />
+            </div>
+          </div>
+        </div>
+        <!-- End of Filter Section -->
         <table class="data-table">
           <thead>
             <tr>
@@ -605,10 +604,6 @@ export default {
   color: #274278;
   font-size: 1.7rem;
   animation: fadeInDown 1s ease-in-out;
-}
-
-.filter-section {
-  margin-top: 20px;
 }
 
 .date-inputs {

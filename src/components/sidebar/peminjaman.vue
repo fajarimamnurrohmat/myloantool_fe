@@ -102,107 +102,106 @@
   </div>
   <!-- End of Modal Section -->
 
-  <hr />
-
-  <!-- Date Filter Section -->
-  <div class="filter-section">
-    <div class="date-inputs">
-      <div class="date-input-wrapper">
-        <label for="startDate" class="date-sort">From:</label>
-        <input
-          type="date"
-          id="startDate"
-          v-model="startDate"
-          class="date-filter"
-        />
-        <i class="fas fa-calendar-alt calendar-icon"></i>
-      </div>
-      <div class="date-input-wrapper">
-        <label for="endDate" class="date-sort">To:</label>
-        <input type="date" id="endDate" v-model="endDate" class="date-filter" />
-        <i class="fas fa-calendar-alt calendar-icon"></i>
-      </div>
-      <!-- filter button section -->
-      <div class="filter-buttons">
-        <button @click="resetFilter" class="btn-reset">
-          <i class="fa fa-sync" aria-hidden="true"></i>
-        </button>
-        <div class="dropdown d-inline-block">
-          <button
-            class="btn-export"
-            type="button"
-            @click="toggleDropdown(index)"
-            :aria-expanded="dropdownIndex === index"
-            style="
-              color: #4b6cb7; 
-              background-color: white; 
-              width: 6rem;"
-          ><i class="fa-solid fa-arrow-up-from-bracket" 
-              style="
-                      margin-left: 0.5rem;
-                      margin-right: 0.4rem;">
-          </i>
-            Export
+  <div class="table-wrapper" style="margin-top: 30px;">
+    <!-- Date Filter Section -->
+    <div class="filter-section">
+      <div class="date-inputs">
+        <div class="date-input-wrapper">
+          <label for="startDate" class="date-sort">From:</label>
+          <input
+            type="date"
+            id="startDate"
+            v-model="startDate"
+            class="date-filter"
+          />
+          <i class="fas fa-calendar-alt calendar-icon"></i>
+        </div>
+        <div class="date-input-wrapper">
+          <label for="endDate" class="date-sort">To:</label>
+          <input type="date" id="endDate" v-model="endDate" class="date-filter" />
+          <i class="fas fa-calendar-alt calendar-icon"></i>
+        </div>
+        <!-- filter button section -->
+        <div class="filter-buttons">
+          <button @click="resetFilter" class="btn-reset">
+            <i class="fa fa-sync" aria-hidden="true"></i>
           </button>
-          <div
-            class="dropdown-menu-export"
-            :class="{ show: dropdownIndex === index }"
-          >
-            <a
-              class="dropdown-item-export"
-              @click="exportData('pdf')"
-              style="color: #4b6cb7"
-              ><i class="fa fa-file-pdf" 
-                  aria-hidden="true"
-                  style="
-                      margin-left: 0.2rem;
-                      margin-right: 0.1rem;">
-              </i>
-              .pdf
-            </a>
-            <a
-              class="dropdown-item-export"
-              @click="exportData('csv')"
-              style="color: #4b6cb7;"
-              ><i class="fa-solid fa-file-csv" 
-                  aria-hidden="true"
-                  style="
-                      margin-left: 0.2rem;
-                      margin-right: 0.1rem;
-                      margin-top: 0.5rem;">
-              </i>
-              .csv
-            </a>
+          <div class="dropdown d-inline-block">
+            <button
+              class="btn-export"
+              type="button"
+              @click="toggleDropdown(index)"
+              :aria-expanded="dropdownIndex === index"
+              style="
+                color: #4b6cb7; 
+                background-color: white; 
+                width: 6rem;"
+            ><i class="fa-solid fa-arrow-up-from-bracket" 
+                style="
+                  margin-left: 0.5rem;
+                  margin-right: 0.4rem;
+                  color: #4b6cb7; ">
+            </i>
+              Export
+            </button>
+            <div
+              class="dropdown-menu-export"
+              :class="{ show: dropdownIndex === index }"
+            >
+              <a
+                class="dropdown-item-export"
+                @click="exportData('pdf')"
+                style="color: #4b6cb7"
+                ><i class="fa fa-file-pdf" 
+                    aria-hidden="true"
+                    style="
+                        margin-left: 0.2rem;
+                        margin-right: 0.1rem;">
+                </i>
+                .pdf
+              </a>
+              <a
+                class="dropdown-item-export"
+                @click="exportData('csv')"
+                style="color: #4b6cb7;"
+                ><i class="fa-solid fa-file-csv" 
+                    aria-hidden="true"
+                    style="
+                        margin-left: 0.2rem;
+                        margin-right: 0.1rem;
+                        margin-top: 0.5rem;">
+                </i>
+                .csv
+              </a>
+            </div>
           </div>
         </div>
+        <!-- filter button section -->
+        <!-- search -->
+        <div class="search-bar-container">
+          <i class="fas fa-search search-icon"></i>
+          <input
+            type="text"
+            v-model="searchQuery"
+            class="search-input"
+            style="width: 11rem;"
+            placeholder="Cari.."
+          />
+        </div>
+        <!-- search -->
       </div>
-      <!-- filter button section -->
-      <!-- search -->
-      <div class="search-bar-container">
-        <i class="fas fa-search search-icon"></i>
-        <input
-          type="text"
-          v-model="searchQuery"
-          class="search-input"
-          style="width: 11rem;"
-          placeholder="Cari.."
-        />
-      </div>
-      <!-- search -->
     </div>
-  </div>
-  <!-- End of Date Filter Section -->
-  <div style="margin-top: 2rem; text-align: left;">
-        Tampilkan:
-        <select v-model="rowsPerPage" class="select-rows" style="width: 3rem">
-          <option value="5">5</option>
-          <option value="10">10</option>
-          <option value="20">20</option>
-          <option value="100">100</option>
-        </select>
-        baris
-  </div>
-  <div>
+    <!-- End of Date Filter Section -->
+    <div style="margin-top: 1rem; text-align: left;">
+          Tampilkan:
+          <select v-model="rowsPerPage" class="select-rows" style="width: 3rem">
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="100">100</option>
+          </select>
+          baris
+    </div>
     <!-- table section -->
     <table class="data-table">
       <thead>
@@ -923,6 +922,16 @@ export default {
   border-radius: 4px;
 }
 
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  background-color: white;
+  margin-top: -1rem;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
 .search-bar-container {
   position: relative;
   display: inline-block;
@@ -1162,7 +1171,7 @@ export default {
 .date-filter {
   padding: 0.5rem 0.9rem;
   width: 13rem;
-  border: 1px solid #ffffff;
+  border: 1px solid #d3d2d2 !important;
   border-radius: 5px;
   background-color: white;
   color: #7b8291;
@@ -1170,7 +1179,6 @@ export default {
 
 .filter-buttons {
   display: flex;
-  gap: 8px;
   margin-left: auto;
 }
 
@@ -1187,21 +1195,18 @@ export default {
 
 .btn-reset {
   background-color: #ffffff;
+  border: 1px solid #d3d2d2 !important;
   color: #4b6cb7;
   padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
   cursor: pointer;
+  margin-right: 0.5rem;
   transition: background-color 0.3s ease-in-out;
 }
 
 .btn-filter,
 .btn-export {
-  background-color: #ffffff;
-  color: #4b6cb7;
-  padding: 10px 20px;
-  border: none;
   border-radius: 5px;
+  border: 1px solid #d3d2d2 !important;
   cursor: pointer;
   transition: background-color 0.3s ease-in-out;
   text-align: left;

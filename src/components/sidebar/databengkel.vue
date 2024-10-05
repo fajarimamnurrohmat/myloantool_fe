@@ -40,116 +40,109 @@
     </div>
   </div>
 
-  <hr />
-
-  <!-- Date Filter Section -->
-  <div class="filter-section">
-    <div class="date-inputs">
-      <div>
-        <div class="tampil-baris" style="text-align: left">
-          Tampilkan:
-          <select v-model="rowsPerPage" class="select-rows" style="width: 3rem">
-            <option value="5">5</option>
-            <option value="10">10</option>
-            <option value="20">20</option>
-            <option value="100">100</option>
-          </select>
-          baris
-        </div>
-      </div>
-      <!-- filter button section -->
-      <div class="filter-buttons">
-        <button @click="resetFilter" class="btn-reset" style="margin-right: -1.5rem;">
-          <i class="fa fa-sync" aria-hidden="true"></i>
-        </button>
-      </div>
-      <!-- search -->
-      <div class="search-bar-container">
-        <i class="fas fa-search search-icon"></i>
-        <input
-          type="text"
-          v-model="searchQuery"
-          class="search-input"
-          style="width: 11rem"
-          placeholder="Cari.."
-        />
-      </div>
-    </div>
-  </div>
-  <!-- End of Date Filter Section -->
-
   <!-- Tabel Bengkel -->
   <div style="margin-top: 30px">
-    <table class="data-table">
-      <thead>
-        <tr>
-          <th>No</th>
-          <th>Nama Ruang Bengkel</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          v-for="(bengkel, index) in paginatedBengkelList"
-          :key="bengkel.id_bengkel"
-        >
-          <td>{{ index + 1 + (currentPage - 1) * rowsPerPage }}</td>
-          <td>{{ bengkel.ruang_bengkel }}</td>
-          <td>
-            <div class="dropdown d-inline-block">
-              <button
-                class="btn btn-sm"
-                type="button"
-                @click="toggleDropdown(index)"
-                :aria-expanded="dropdownIndex === index"
-              >
-                <i class="fas fa-ellipsis-h"></i>
-              </button>
-              <div
-                class="dropdown-menu-act"
-                :class="{ show: dropdownIndex === index }"
-              >
-                <button
-                  class="dropdown-item"
-                  @click="editBengkel(bengkel)"
-                  style="color: #274278"
-                >
-                  Edit
-                </button>
-                <button
-                  class="dropdown-item"
-                  @click="deleteBengkel(bengkel.id_bengkel)"
-                  style="color: red"
-                >
-                  Hapus
-                </button>
+    <div class="table-wrapper">
+        <!-- Date Filter Section -->
+        <div class="filter-section">
+          <div class="date-inputs">
+            <div>
+              <div class="tampil-baris" style="text-align: left">
+                Tampilkan:
+                <select v-model="rowsPerPage" class="select-rows" style="width: 3rem">
+                  <option value="5">5</option>
+                  <option value="10">10</option>
+                  <option value="20">20</option>
+                  <option value="100">100</option>
+                </select>
+                baris
               </div>
             </div>
-          </td>
-        </tr>
-        <tr v-if="paginatedBengkelList.length === 0">
-          <td colspan="3" style="text-align: center">Tidak ada data</td>
-        </tr>
-      </tbody>
-    </table>
-    <div v-if="totalPages > 1" class="pagination-container">
-      <button
-        @click="currentPage--"
-        :disabled="currentPage === 1"
-        class="pagination-button"
-      >
-        Previous
-      </button>
-      <span class="pagination-info"
-        >Page {{ currentPage }} of {{ totalPages }}</span
-      >
-      <button
-        @click="currentPage++"
-        :disabled="currentPage === totalPages"
-        class="pagination-button"
-      >
-        Next
-      </button>
+            <!-- filter button section -->
+            <div class="search-bar-container">
+              <i class="fas fa-search search-icon"></i>
+              <input
+                type="text"
+                v-model="searchQuery"
+                class="search-input"
+                style="width: 11rem"
+                placeholder="Cari.."
+              />
+            </div>
+          </div>
+        </div>
+        <!-- End of Date Filter Section -->
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>No</th>
+              <th>Nama Ruang Bengkel</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-for="(bengkel, index) in paginatedBengkelList"
+              :key="bengkel.id_bengkel"
+            >
+              <td>{{ index + 1 + (currentPage - 1) * rowsPerPage }}</td>
+              <td>{{ bengkel.ruang_bengkel }}</td>
+              <td>
+                <div class="dropdown d-inline-block">
+                  <button
+                    class="btn btn-sm"
+                    type="button"
+                    @click="toggleDropdown(index)"
+                    :aria-expanded="dropdownIndex === index"
+                  >
+                    <i class="fas fa-ellipsis-h"></i>
+                  </button>
+                  <div
+                    class="dropdown-menu-act"
+                    :class="{ show: dropdownIndex === index }"
+                  >
+                    <button
+                      class="dropdown-item"
+                      @click="editBengkel(bengkel)"
+                      style="color: #274278"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      class="dropdown-item"
+                      @click="deleteBengkel(bengkel.id_bengkel)"
+                      style="color: red"
+                    >
+                      Hapus
+                    </button>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr v-if="paginatedBengkelList.length === 0">
+              <td colspan="3" style="text-align: center">Tidak ada data</td>
+            </tr>
+          </tbody>
+        </table>
+        <div v-if="totalPages > 1" class="pagination-container">
+          <button
+            @click="currentPage--"
+            :disabled="currentPage === 1"
+            class="pagination-button"
+          >
+            Previous
+          </button>
+          <span class="pagination-info"
+            >Page {{ currentPage }} of {{ totalPages }}</span
+          >
+          <button
+            @click="currentPage++"
+            :disabled="currentPage === totalPages"
+            class="pagination-button"
+          >
+            Next
+          </button>
+        </div>
     </div>
   </div>
 </template>
@@ -418,6 +411,16 @@ export default {
   border: 1px solid #ccc;
   border-radius: 4px;
   background-color: white;
+}
+
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  background-color: white;
+  margin-top: -1rem;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .search-bar {
