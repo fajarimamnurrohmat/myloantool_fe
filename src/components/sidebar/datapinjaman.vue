@@ -6,98 +6,117 @@
         Data pada halaman ini merupakan data barang yang memiliki kondisi baik.
       </p>
     </div>
-    <hr />
 
+    <!-- filter wrapper -->
+  <div class="filter-wrapper">
     <!-- Date Filter Section -->
-  <div class="filter-section">
-    <div class="date-inputs">
-      <div class="date-input-wrapper">
-        <label for="startDate" class="date-sort">Sort From:</label>
-        <input
-          type="date"
-          id="startDate"
-          v-model="startDate"
-          class="date-filter"
-        />
-        <i class="fas fa-calendar-alt calendar-icon"></i>
-      </div>
-      <div class="date-input-wrapper">
-        <label for="endDate" class="date-sort">To:</label>
-        <input type="date" id="endDate" v-model="endDate" class="date-filter" />
-        <i class="fas fa-calendar-alt calendar-icon"></i>
-      </div>
-      <!-- filter button section -->
-      <div class="filter-buttons">
-        <button @click="resetFilter" class="btn-reset">
-          <i class="fa fa-sync" aria-hidden="true"></i>
-        </button>
-        <div class="dropdown d-inline-block">
-          <button
-            class="btn-export"
-            type="button"
-            @click="toggleDropdown(index)"
-            :aria-expanded="dropdownIndex === index"
+    <div class="filter-section">
+      <div class="date-inputs">
+        <div class="date-input-wrapper">
+          <label for="startDate" class="date-sort">Sort Date From:</label>
+          <input
+            type="date"
+            id="startDate"
+            v-model="startDate"
+            class="date-filter"
+          />
+          <i class="fas fa-calendar-alt calendar-icon"></i>
+        </div>
+        <div class="date-input-wrapper">
+          <label for="endDate" class="date-sort">To:</label>
+          <input 
+            type="date" 
+            id="endDate" 
+            v-model="endDate" 
+            class="date-filter" 
+          />
+          <i class="fas fa-calendar-alt calendar-icon"></i>
+        </div>
+        <!-- filter button section -->
+        <div class="filter-buttons">
+          <button @click="resetFilter" 
+            class="btn-reset" 
             style="
-              color: #4b6cb7; 
-              background-color: white; 
-              width: 6rem;"
-          ><i class="fa-solid fa-arrow-up-from-bracket" 
-              style="
-                      margin-left: 0.5rem;
-                      margin-right: 0.4rem;">
-          </i>
-            Export
+              height: 2.7rem; 
+              width: 3rem;"
+            >
+            <i class="fa fa-sync" aria-hidden="true"></i>
           </button>
-          <div
-            class="dropdown-menu-export"
-            :class="{ show: dropdownIndex === index }"
-          >
-            <a
-              class="dropdown-item-export"
-              @click="exportData('pdf')"
-              style="color: #4b6cb7"
-              ><i class="fa fa-file-pdf" 
-                  aria-hidden="true"
-                  style="
-                      margin-left: 0.2rem;
-                      margin-right: 0.1rem;">
+          <div class="dropdown d-inline-block">
+            <button
+              class="btn-export"
+              type="button"
+              @click="toggleDropdown(index)"
+              :aria-expanded="dropdownIndex === index"
+              style="
+                color: #4b6cb7; 
+                background-color: white; 
+                width: 6.5rem;
+                height: 2.72rem;"
+            > 
+              <i class="fa-solid fa-arrow-up-from-bracket" 
+                style="
+                  margin-left: 0.7rem;
+                  margin-right: 0.4rem;
+                  color: #4b6cb7; ">
               </i>
-              .pdf
-            </a>
-            <a
-              class="dropdown-item-export"
-              @click="exportData('csv')"
-              style="color: #4b6cb7;"
-              ><i class="fa-solid fa-file-csv" 
-                  aria-hidden="true"
-                  style="
-                      margin-left: 0.2rem;
-                      margin-right: 0.1rem;
-                      margin-top: 0.5rem;">
-              </i>
-              .csv
-            </a>
+              Export
+            </button>
+            <div
+              class="dropdown-menu-export"
+              :class="{ show: dropdownIndex === index }"
+            >
+              <a
+                class="dropdown-item-export"
+                @click="exportData('pdf')"
+                style="color: #4b6cb7;"
+                ><i class="fa fa-file-pdf" 
+                    aria-hidden="true"
+                    style="
+                        margin-left: 0.5rem;
+                        margin-right: 0.1rem;">
+                </i>
+                .pdf
+              </a>
+              <a
+                class="dropdown-item-export"
+                @click="exportData('csv')"
+                style="color: #4b6cb7;"
+                ><i class="fa-solid fa-file-csv" 
+                    aria-hidden="true"
+                    style="
+                        margin-left: 0.5rem;
+                        margin-right: 0.1rem;
+                        margin-top: 0.5rem;">
+                </i>
+                .csv
+              </a>
+            </div>
           </div>
         </div>
+        <!-- filter button section -->
+        <!-- search -->
+        <div class="search-bar-container">
+          <i class="fas fa-search search-icon"></i>
+          <input
+            type="text"
+            v-model="searchQuery"
+            class="search-input"
+            style="padding-right: 30px;
+                  width: 10rem;"
+            placeholder="Cari data..."
+          />
+        </div>
+        <!-- search -->
       </div>
-      <!-- filter button section -->
-      <!-- search -->
-      <div class="search-bar-container">
-        <i class="fas fa-search search-icon"></i>
-        <input
-          type="text"
-          v-model="searchQuery"
-          class="search-input"
-          style="width: 11rem;"
-          placeholder="Cari.."
-        />
-      </div>
-      <!-- search -->
     </div>
+    <!-- End of Date Filter Section -->
   </div>
-  <!-- End of Date Filter Section -->
-    <div class="tampil-baris" style="text-align: left; margin-top: 2rem; margin-bottom: 1rem;">
-        Tampilkan:
+  <!-- End of filter wrapper -->
+
+  <div class="table-wrapper">
+    <div class="tampil-baris" style="text-align: left; margin-bottom: 1rem;">
+      Tampilkan:
         <select v-model="rowsPerPage" class="select-rows" style="width: 3rem">
           <option value="5">5</option>
           <option value="10">10</option>
@@ -106,32 +125,34 @@
         </select>
         baris
     </div> 
+
     <!-- Tabel Data -->
     <table>
-    <thead>
-      <tr>
-        <th>Nama Peminjam</th>
-        <th>Alat</th>
-        <th>Bengkel</th>
-        <th>Jumlah</th>
-        <th>Tanggal Pinjam</th>
-        <th>Tanggal Kembali</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-if="peminjamanList.length === 0">
-        <td colspan="6" style="text-align: center;">Tidak ada data</td>
-      </tr>
-      <tr v-for="(record, index) in peminjamanList" :key="index">
-        <td>{{ record.namaPeminjam }}</td>
-        <td>{{ record.alat }}</td>
-        <td>{{ record.bengkel }}</td>
-        <td>{{ record.jumlahAlat }}</td>
-        <td>{{ record.tanggalPinjam }}</td>
-        <td>{{ record.tanggalPengembalian }}</td>
-      </tr>
-    </tbody>
-  </table>
+      <thead>
+        <tr>
+          <th>Nama Peminjam</th>
+          <th>Alat</th>
+          <th>Bengkel</th>
+          <th>Jumlah</th>
+          <th>Tanggal Pinjam</th>
+          <th>Tanggal Kembali</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-if="peminjamanList.length === 0">
+            <td colspan="6" style="text-align: center;">Tidak ada data</td>
+          </tr>
+          <tr v-for="(record, index) in peminjamanList" :key="index">
+            <td>{{ record.namaPeminjam }}</td>
+            <td>{{ record.alat }}</td>
+            <td>{{ record.bengkel }}</td>
+            <td>{{ record.jumlahAlat }}</td>
+            <td>{{ record.tanggalPinjam }}</td>
+            <td>{{ record.tanggalPengembalian }}</td>
+          </tr>
+        </tbody>
+    </table>
+  </div>
   </div>
 </template>
 
@@ -249,42 +270,88 @@ export default {
   animation: fadeInDown 1s ease-in-out;
 }
 
-.filters {
-  margin-bottom: 20px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
+.filter-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  background-color: white;
+  margin-top: 0.2rem !important;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.filters2 {
-  margin-top: 20px;
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  background-color: white;
+  margin-top: 1rem !important;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.search-bar {
   display: flex;
   justify-content: space-between;
-  gap: 10px;
+  align-items: center;
+  margin-top: 1rem;
 }
 
-.filters label {
-  font-weight: bold;
+.search-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #7b8291; /* Change the color of the icon if needed */
+  pointer-events: none; /* Make sure the icon doesn't interfere with input interactions */
 }
 
-.filters2 select,
-.filters input[type="date"] {
-  margin-left: 10px;
+.search-input,
+.select-rows {
   padding: 5px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  border: 1px solid #fff;
   background-color: #fff;
-  color: #333; /* Warna teks agar kontras dengan latar belakang */
+  color: #333;
 }
 
-.filters input[type="date"] {
-  background-color: #f9f9f9; /* Warna latar belakang untuk input tanggal */
-  color: #7b8291; /* Warna teks untuk input tanggal */
+.search-input::placeholder {
+  color: #999;
+}
+
+.search-bar-container {
+  position: relative;
+  display: inline-block;
+  border: 1px solid #7a7979;
+  margin-left: 1.5rem;
+}
+
+.date-inputs {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.date-sort {
+  color: #7a7979;
+  font-weight: 300;
+}
+
+.date-inputs label {
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.date-filter {
+  padding: 0.5rem 0.9rem;
+  width: 13rem;
+  border: 1px solid #d3d2d2 !important;
+  border-radius: 5px;
+  background-color: white;
+  color: #7b8291;
 }
 
 .filter-buttons {
   display: flex;
-  gap: 8px;
   margin-left: auto;
 }
 
@@ -301,34 +368,33 @@ export default {
 
 .btn-reset {
   background-color: #ffffff;
+  border: 1px solid #d3d2d2 !important;
   color: #4b6cb7;
   padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
   cursor: pointer;
+  margin-right: 0.5rem;
   transition: background-color 0.3s ease-in-out;
 }
 
 .btn-filter,
 .btn-export {
-  background-color: #ffffff;
-  color: #4b6cb7;
-  padding: 10px 20px;
-  border: none;
   border-radius: 5px;
+  border: 1px solid #d3d2d2 !important;
   cursor: pointer;
-  transition: background-color 0.3s ease-in-out;
   text-align: left;
   margin-right: -2.3rem;
 }
 
 .btn-reset:hover {
-  background-color: #e9e9e9;
+  background-color: #f5f5f5;
 }
 
-.btn-filter:hover,
-.btn-export:hover {
-  background-color: #e9e9e9;
+.pagination-container {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px; /* Add space between the buttons and text */
 }
 
 table {
