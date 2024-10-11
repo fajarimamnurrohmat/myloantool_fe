@@ -41,29 +41,17 @@
   </div>
 
   <!-- Tabel Bengkel -->
-  <div style="margin-top: 30px">
-    <div class="table-wrapper">
+  <div class="filter-wrapper" style="margin-top: 30px"> 
         <!-- Filter Section -->
         <div class="filter-section">
-          <!-- Show Row -->
-          <div class="tampil-baris">
-            Tampilkan:
-            <select v-model.number="rowsPerPage" class="select-rows">
-              <option value="5">5</option>
-              <option value="10">10</option>
-              <option value="20">20</option>
-              <option value="100">100</option>
-            </select>
-            baris
-          </div>
-          <!-- End of Show Row -->
-
           <div class="import-search-wrapper">
             <!-- Import Button and File Input -->
             <div class="import-data">
               <button class="btn-import" type="button" @click="importData" style="
                   color: #4b6cb7; 
-                  background-color: white; 
+                  background-color: white;
+                  justify-content: space-between;
+                  text-align: left; 
                   width: 7.5rem;">
                   <i class="fa-solid fa-arrow-up-from-bracket" 
                   style="
@@ -98,6 +86,20 @@
           <!-- End of Search and Import Wrapper -->
         </div>
         <!-- End of Filter Section -->
+        </div>
+        <div class="table-wrapper">
+          <!-- Show Row -->
+          <div class="tampil-baris" style="text-align: left;">
+            Tampilkan:
+            <select v-model.number="rowsPerPage" class="select-rows">
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="20">20</option>
+              <option value="100">100</option>
+            </select>
+            baris
+          </div>
+          <!-- End of Show Row -->
         <table class="data-table">
           <thead>
             <tr>
@@ -170,7 +172,6 @@
           </button>
         </div>
     </div>
-  </div>
 </template>
 
 <script>
@@ -530,11 +531,21 @@ export default {
   background-color: white;
 }
 
+.filter-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  background-color: white;
+  margin-top: 0.2rem !important;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
 .table-wrapper {
   width: 100%;
   overflow-x: auto;
   background-color: white;
-  margin-top: -1rem;
+  margin-top: 1rem;
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -547,14 +558,14 @@ export default {
 
 .import-search-wrapper {
   display: flex;
-  margin-left: auto;
+  justify-content: space-between; /* Menyebarkan elemen di kiri dan kanan */
+  width: 100%; /* Pastikan elemen mengambil lebar penuh */
+  align-items: center;
 }
 
 .import-data {
   display: flex;
   align-items: center;
-  width: fit-content;
-  margin-right: -1rem;
 }
 
 .btn-import {
@@ -570,6 +581,7 @@ export default {
   border: 1px solid #ccc;
   padding: 0.25rem 0.5rem;
   border-radius: 5px;
+  margin-left: auto; /* Pastikan elemen ini tetap di kanan */
 }
 
 .search-input {
@@ -689,7 +701,7 @@ export default {
 
   .tampil-baris {
     width: 100%;
-    justify-content: space-between;
+    text-align: left;
     margin-bottom: 10px;
   }
 
