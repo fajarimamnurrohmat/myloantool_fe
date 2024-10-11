@@ -1,5 +1,5 @@
 <template>
-  <div style="text-align: left">
+  <div class="header-bengkel-container">
     <h3 class="header-bengkel">Halaman Data Bengkel</h3>
     <button @click="showModal = true" class="btn-add-bengkel">
       <i class="fas fa-plus"></i> Inputkan Data
@@ -10,7 +10,9 @@
   <div v-if="showModal" class="modal-overlay" @click.self="closeModal">
     <div class="modal-content">
       <div class="modal-header">
-        <h4>Input Data Bengkel</h4>
+        <h4>
+          {{ editIndex !== null ? "Edit Data Bengkel" : "Input Data Bengkel" }}
+        </h4>
         <span
           class="close-modal"
           @click="closeModal"
@@ -20,144 +22,174 @@
       </div>
       <div class="form-row">
         <div class="form-group">
-          <label for="namaRuang">Nama Ruang Bengkel</label>
+          <label for="ruangBengkel">Nama Ruang Bengkel</label>
           <p>Masukkan nama ruang bengkel</p>
           <input
             type="text"
-            id="namaRuang"
+            id="ruangBengkel"
             class="form-controll"
-            v-model="newBengkel.namaRuang"
+            v-model="newBengkel.ruang_bengkel"
           />
         </div>
       </div>
       <div style="margin-top: 10px; text-align: left">
-        <button @click="addBengkel" class="btn-add-bengkel">
-          Simpan Data
+        <button @click="addOrUpdateBengkel" class="btn-add-bengkel">
+          {{ editIndex !== null ? "Update Data" : "Simpan Data" }}
         </button>
       </div>
     </div>
   </div>
 
-  <hr />
-
-  <!-- Date Filter Section -->
-  <div class="filter-section">
-    <div class="date-inputs">
-      <div>
-        <div class="tampil-baris" style="text-align: left;">
+  <!-- Tabel Bengkel -->
+  <div style="margin-top: 30px">
+    <div class="table-wrapper">
+        <!-- Filter Section -->
+        <div class="filter-section">
+          <!-- Show Row -->
+          <div class="tampil-baris">
             Tampilkan:
-            <select v-model="rowsPerPage" class="select-rows" style="width: 3rem">
+            <select v-model.number="rowsPerPage" class="select-rows">
               <option value="5">5</option>
               <option value="10">10</option>
               <option value="20">20</option>
               <option value="100">100</option>
             </select>
             baris
-        </div>
-      </div>
-      <!-- filter button section -->
-      <div class="filter-buttons">
-        <button @click="resetFilter" class="btn-reset">
-          <i class="fa fa-sync" aria-hidden="true"></i>
-        </button>
-      </div>
-      <!-- filter button section -->
-      <!-- search -->
-      <div class="search-bar-container">
-        <i class="fas fa-search search-icon"></i>
-        <input
-          type="text"
-          v-model="searchQuery"
-          class="search-input"
-          style="width: 11rem;"
-          placeholder="Cari.."
-        />
-      </div>
-      <!-- search -->
-    </div>
-  </div>
-  <!-- End of Date Filter Section -->
+          </div>
+          <!-- End of Show Row -->
 
-  <!-- Tabel Bengkel -->
-  <div style="margin-top: 30px">
-    <table class="data-table">
-      <thead>
-        <tr>
-          <th>No</th>
-          <th>Nama Ruang Bengkel</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(bengkel, index) in paginatedBengkelList" :key="index">
-          <td>{{ index + 1 + (currentPage - 1) * rowsPerPage }}</td>
-          <td>{{ bengkel.namaRuang }}</td>
-          <td>
-            <!-- dropdown set -->
-            <div class="dropdown d-inline-block">
-              <button
-                class="btn btn-sm"
-                type="button"
-                @click="toggleDropdown(index)"
-                :aria-expanded="dropdownIndex === index"
-              >
-                <i class="fas fa-ellipsis-h"></i>
+          <div class="import-search-wrapper">
+            <!-- Import Button and File Input -->
+            <div class="import-data">
+              <button class="btn-import" type="button" @click="importData" style="
+                  color: #4b6cb7; 
+                  background-color: white; 
+                  width: 7.5rem;">
+                  <i class="fa-solid fa-arrow-up-from-bracket" 
+                  style="
+                    margin-right: 0.4rem;
+                    color: #4b6cb7; ">
+                  </i>
+                  Import
               </button>
-              <div
-                class="dropdown-menu-act"
-                :class="{ show: dropdownIndex === index }"
-              >
-                <button
-                  class="dropdown-item"
-                  @click="editPeminjaman(index)"
-                  style="color: #274278"
-                  >Edit</button
-                >
-                <button
-                  class="dropdown-item"
-                  @click="deletePeminjaman(index)"
-                  style="color: red"
-                  >Hapus</button
-                >
-              </div>
+              <input 
+                type="file" 
+                id="importFile" 
+                class="file-input" 
+                accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+                @change="fileChange($event)" 
+                style="display: none;"
+              />
             </div>
-            <!-- dropdown set -->
-          </td>
-        </tr>
-        <tr v-if="paginatedBengkelList.length === 0">
-          <td colspan="3" style="text-align: center">Tidak ada data</td>
-        </tr>
-      </tbody>
-    </table>
-    <div v-if="totalPages > 1" class="pagination-container">
-      <button
-        @click="currentPage--"
-        :disabled="currentPage === 1"
-        class="pagination-button"
-      >
-        Previous
-      </button>
-      <span class="pagination-info">
-        Page {{ currentPage }} of {{ totalPages }}
-      </span>
-      <button
-        @click="currentPage++"
-        :disabled="currentPage === totalPages"
-        class="pagination-button"
-      >
-        Next
-      </button>
+            <!-- End of Import Button and File Input -->
+
+            <!-- Search Bar -->
+            <div class="search-bar-container">
+                <i class="fas fa-search search-icon"></i>
+                <input
+                  type="text"
+                  v-model="searchQuery"
+                  class="search-input"
+                  placeholder="Cari data..."
+                />
+            </div>
+            <!-- End of Search Bar -->
+          </div>
+          <!-- End of Search and Import Wrapper -->
+        </div>
+        <!-- End of Filter Section -->
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>No</th>
+              <th>Nama Ruang Bengkel</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-for="(bengkel, index) in paginatedBengkelList"
+              :key="bengkel.id_bengkel"
+            >
+              <td>{{ index + 1 + (currentPage - 1) * rowsPerPage }}</td>
+              <td>{{ bengkel.ruang_bengkel }}</td>
+              <td>
+                <div class="dropdown d-inline-block">
+                  <button
+                    class="btn btn-sm"
+                    type="button"
+                    @click="toggleDropdown(index)"
+                    :aria-expanded="dropdownIndex === index"
+                  >
+                    <i class="fas fa-ellipsis-h"></i>
+                  </button>
+                  <div
+                    class="dropdown-menu-act"
+                    :class="{ show: dropdownIndex === index }"
+                  >
+                    <button
+                      class="dropdown-item"
+                      @click="editBengkel(bengkel)"
+                      style="color: #274278"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      class="dropdown-item"
+                      @click="deleteBengkel(bengkel.id_bengkel)"
+                      style="color: red"
+                    >
+                      Hapus
+                    </button>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr v-if="paginatedBengkelList.length === 0">
+              <td colspan="3" style="text-align: center">Tidak ada data</td>
+            </tr>
+          </tbody>
+        </table>
+        <div v-if="totalPages > 1" class="pagination-container">
+          <button
+            @click="currentPage--"
+            :disabled="currentPage === 1"
+            class="pagination-button"
+          >
+            Previous
+          </button>
+          <span class="pagination-info"
+            >Page {{ currentPage }} of {{ totalPages }}</span
+          >
+          <button
+            @click="currentPage++"
+            :disabled="currentPage === totalPages"
+            class="pagination-button"
+          >
+            Next
+          </button>
+        </div>
     </div>
   </div>
 </template>
 
 <script>
+import Swal from "sweetalert2";
+import axios from "axios";
+import "@mescius/spread-sheets/styles/gc.spread.sheets.excel2016colorful.css";
+
+// // SpreadJS imports
+// import GC from "@mescius/spread-sheets";
+// import "@mescius/spread-sheets-vue"; 
+// import Excel from "@mescius/spread-excelio";
+// import { saveAs } from 'file-saver';
+
 export default {
   data() {
     return {
       showModal: false,
       newBengkel: {
-        namaRuang: "",
+        ruang_bengkel: "",
       },
       bengkelList: [],
       rowsPerPage: 5,
@@ -170,7 +202,9 @@ export default {
   computed: {
     filteredBengkelList() {
       return this.bengkelList.filter((bengkel) =>
-        bengkel.namaRuang.toLowerCase().includes(this.searchQuery.toLowerCase())
+        bengkel.ruang_bengkel
+          .toLowerCase()
+          .includes(this.searchQuery.toLowerCase())
       );
     },
     paginatedBengkelList() {
@@ -183,51 +217,217 @@ export default {
     },
   },
   methods: {
-    addBengkel() {
-      if (this.newBengkel.namaRuang) {
-        if (this.editIndex !== null) {
-          this.bengkelList.splice(this.editIndex, 1, { ...this.newBengkel });
-          this.editIndex = null;
+    async fetchBengkelList() {
+      try {
+        const response = await axios.get("http://localhost:3000/bengkel");
+        if (response.data.status === "success") {
+          this.bengkelList = response.data.data.bengkel.rows;
         } else {
-          this.bengkelList.push({ ...this.newBengkel });
+          console.error("Gagal mendapatkan data:", response.data);
+          Swal.fire({
+            title: "Error!",
+            text: "Gagal mengambil data bengkel.",
+            icon: "error",
+            confirmButtonText: "OK",
+          });
         }
-        this.closeModal();
-        this.resetForm();
-      } else {
-        alert("Mohon isi nama ruang bengkel");
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        Swal.fire({
+          title: "Error!",
+          text: "Terjadi kesalahan saat mengambil data bengkel.",
+          icon: "error",
+          confirmButtonText: "OK",
+        });
       }
     },
-    editBengkel(index) {
-      this.newBengkel = { ...this.bengkelList[index] };
-      this.editIndex = index;
+
+    // Method for adding a new 'bengkel'
+    async addBengkel() {
+      if (this.newBengkel.ruang_bengkel) {
+        try {
+          await axios.post("http://localhost:3000/bengkel", this.newBengkel);
+          await this.fetchBengkelList(); // Update table data
+          this.closeModal();
+          this.resetForm();
+        } catch (error) {
+          Swal.fire({
+            title: "Error!",
+            text: "Gagal mengambil data bengkel.",
+            icon: "error",
+            confirmButtonText: "OK",
+          });
+        }
+      } else {
+        Swal.fire({
+            title: "Error!",
+            text: "Terjadi kesalahan saat mengambil data bengkel.",
+            icon: "error",
+            confirmButtonText: "OK",
+        });
+      }
+    },
+
+    editBengkel(bengkel) {
+      // Hanya salin ruang_bengkel
+      this.newBengkel = {
+        ruang_bengkel: bengkel.ruang_bengkel,
+      };
+      this.editIndex = this.bengkelList.findIndex(
+        (b) => b.id_bengkel === bengkel.id_bengkel
+      );
       this.showModal = true;
     },
-    deleteBengkel(index) {
-      this.bengkelList.splice(index, 1);
+
+    // Method for updating existing 'bengkel'
+    async updateBengkel() {
+      const bengkelToUpdate = this.bengkelList[this.editIndex];
+
+      // Pastikan hanya ruang_bengkel yang dikirim
+      console.log("Data yang dikirim untuk update:", this.newBengkel); // Log untuk memeriksa
+
+      if (
+        this.newBengkel.ruang_bengkel &&
+        bengkelToUpdate &&
+        bengkelToUpdate.id_bengkel
+      ) {
+        try {
+          await axios.put(
+            `http://localhost:3000/bengkel/${bengkelToUpdate.id_bengkel}`,
+            {
+              ruang_bengkel: this.newBengkel.ruang_bengkel,
+            }
+          );
+          await this.fetchBengkelList(); // Update table data
+          this.closeModal();
+          this.resetForm();
+          Swal.fire({
+                title: "Sukses!",
+                text: "Data bengkel berhasil diperbarui.",
+                icon: "success",
+                confirmButtonText: "OK",
+          });
+        } catch (error) {
+          Swal.fire({
+                title: "Error!",
+                text: response.data.message || "Gagal memperbarui data bengkel.",
+                icon: "error",
+                confirmButtonText: "OK",
+          });
+        }
+      } else {
+        Swal.fire({
+                title: "Error!",
+                text: "Data tidak valid atau id bengkel tidak ditemukan.",
+                icon: "error",
+                confirmButtonText: "OK",
+        });
+      }
     },
+
+    // Separate method to handle adding or updating 'bengkel'
+    addOrUpdateBengkel() {
+      if (this.editIndex !== null) {
+        this.updateBengkel();
+      } else {
+        this.addBengkel();
+      }
+    },
+
+    async deleteBengkel(id_bengkel) {
+      const result = await Swal.fire({
+        title: "Anda yakin?",
+        text: "Data bengkel ini akan dihapus!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Ya, hapus!",
+      });
+
+      if (result.isConfirmed) {
+        try {
+          const response = await axios.delete(
+            `http://localhost:3000/bengkel/${id_bengkel}`
+          );
+
+          if (response.data.status === "success") {
+            const index = this.bengkelList.findIndex(
+              (bengkel) => bengkel.id_bengkel === id_bengkel
+            );
+            if (index !== -1) {
+              this.bengkelList.splice(index, 1);
+            }
+            Swal.fire({
+              title: "Terhapus!",
+              text: "Data bengkel berhasil dihapus.",
+              icon: "success",
+              confirmButtonText: "OK",
+            });
+          } else {
+            console.error("Gagal menghapus bengkel:", response.data);
+            Swal.fire({
+              title: "Error!",
+              text: response.data.message || "Gagal menghapus data bengkel.",
+              icon: "error",
+              confirmButtonText: "OK",
+            });
+          }
+        } catch (error) {
+          console.error("Error deleting bengkel:", error);
+          Swal.fire({
+            title: "Error!",
+            text: "Terjadi kesalahan saat menghapus data bengkel.",
+            icon: "error",
+            confirmButtonText: "OK",
+          });
+        }
+      }
+    },
+
     closeModal() {
       this.showModal = false;
       this.resetForm();
     },
+
     toggleDropdown(index) {
       this.dropdownIndex = this.dropdownIndex === index ? null : index;
     },
+
     resetForm() {
       this.newBengkel = {
-        namaRuang: "",
+        ruang_bengkel: "",
       };
       this.editIndex = null;
     },
+
+    resetFilter() {
+      this.searchQuery = "";
+      this.rowsPerPage = 5;
+      this.currentPage = 1;
+    },
   },
+
   watch: {
     rowsPerPage() {
       this.currentPage = 1;
     },
   },
+
+  mounted() {
+    this.fetchBengkelList();
+  },
 };
 </script>
 
 <style>
+.header-bengkel-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 3rem;
+}
+
 /* Modal Styles */
 .modal-overlay {
   position: fixed;
@@ -330,10 +530,55 @@ export default {
   background-color: white;
 }
 
-.search-bar {
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  background-color: white;
+  margin-top: -1rem;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.filter-section {
   display: flex;
-  justify-content: space-between;
-  margin-bottom: 15px;
+  align-items: center;
+}
+
+.import-search-wrapper {
+  display: flex;
+  margin-left: auto;
+}
+
+.import-data {
+  display: flex;
+  align-items: center;
+  width: fit-content;
+  margin-right: -1rem;
+}
+
+.btn-import {
+  border-radius: 5px;
+  border: 1px solid #d3d2d2 !important;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.search-bar-container {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ccc;
+  padding: 0.25rem 0.5rem;
+  border-radius: 5px;
+}
+
+.search-input {
+  outline: none;
+  text-align: left;
+  padding: 5px;
+  width: 200px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
 }
 
 .select-rows {
@@ -342,33 +587,22 @@ export default {
   border: 1px solid #ccc;
 }
 
-.search-input {
-  padding: 5px;
-  width: 200px;
-  border-radius: 4px;
-  border: 1px solid #ccc;
-}
-
 .data-table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 15px;
-}
-
-.data-table td {
-  border: 1px solid #ddd;
-  padding: 8px;
-  text-align: center;
-}
-
-.data-table th {
-  background-color: white;
-  color: rgb(69, 67, 67);
+  min-width: 600px;
 }
 
 .data-table th,
 .data-table td {
+  border: 1px solid #ddd;
   padding: 10px;
+  text-align: left;
+}
+
+.data-table th:last-child,
+.data-table td:last-child {
+  text-align: center;
 }
 
 .data-table tr:nth-child(even) {
@@ -380,7 +614,10 @@ export default {
 }
 
 .pagination-container {
-  margin-top: 4px;
+  display: flex;
+  justify-content: center;
+  padding: 10px 0;
+  margin-top: 20px;
 }
 
 .pagination-button {
@@ -391,6 +628,11 @@ export default {
   border-radius: 3px;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  margin: 0 5px;
+}
+
+.pagination-button:hover:not(:disabled) {
+  background-color: #0056b3;
 }
 
 .pagination-button:disabled {
@@ -400,12 +642,7 @@ export default {
 
 .pagination-info {
   margin: 0 10px;
-  align-self: center;
-  color: black;
-}
-
-.pagination-button:hover:not(:disabled) {
-  background-color: #0056b3;
+  color: #333;
 }
 
 /* Add fade-in animation */
@@ -428,4 +665,42 @@ export default {
     transform: translateY(0);
   }
 }
+
+/* Responsivitas */
+@media (max-width: 768px) {
+  .data-table th,
+  .data-table td {
+    font-size: 0.875rem;
+    padding: 6px;
+  }
+
+  .header-alat {
+    font-size: 1.5rem;
+  }
+
+  .search-bar-container {
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  .search-input {
+    width: 100%;
+  }
+
+  .tampil-baris {
+    width: 100%;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+
+  .pagination-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .pagination-info {
+    margin: 10px 0;
+  }
+}
+/* end of responsive */
 </style>
