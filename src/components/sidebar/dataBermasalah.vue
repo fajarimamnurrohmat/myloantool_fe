@@ -6,97 +6,100 @@
         Data pada halaman ini merupakan data alat yang dikembalikan dalam kondisi bermasalah.
       </p>
     </div>
-    <hr />
-
-    <!-- Date Filter Section -->
-  <div class="filter-section">
-    <div class="date-inputs">
-      <div class="date-input-wrapper">
-        <label for="startDate" class="date-sort">Sort From:</label>
-        <input
-          type="date"
-          id="startDate"
-          v-model="startDate"
-          class="date-filter"
-        />
-        <i class="fas fa-calendar-alt calendar-icon"></i>
-      </div>
-      <div class="date-input-wrapper">
-        <label for="endDate" class="date-sort">To:</label>
-        <input type="date" id="endDate" v-model="endDate" class="date-filter" />
-        <i class="fas fa-calendar-alt calendar-icon"></i>
-      </div>
-      <!-- filter button section -->
-      <div class="filter-buttons">
-        <button @click="resetFilter" class="btn-reset">
-          <i class="fa fa-sync" aria-hidden="true"></i>
-        </button>
-        <div class="dropdown d-inline-block">
-          <button
-            class="btn-export"
-            type="button"
-            @click="toggleDropdown(index)"
-            :aria-expanded="dropdownIndex === index"
-            style="
-              color: #4b6cb7; 
-              background-color: white; 
-              width: 6rem;"
-          ><i class="fa-solid fa-arrow-up-from-bracket" 
-              style="
-                      margin-left: 0.5rem;
-                      margin-right: 0.4rem;">
-          </i>
-            Export
-          </button>
-          <div
-            class="dropdown-menu-export"
-            :class="{ show: dropdownIndex === index }"
-          >
-            <a
-              class="dropdown-item-export"
-              @click="exportData('pdf')"
-              style="color: #4b6cb7"
-              ><i class="fa fa-file-pdf" 
-                  aria-hidden="true"
-                  style="
-                      margin-left: 0.2rem;
-                      margin-right: 0.1rem;">
-              </i>
-              .pdf
-            </a>
-            <a
-              class="dropdown-item-export"
-              @click="exportData('csv')"
-              style="color: #4b6cb7;"
-              ><i class="fa-solid fa-file-csv" 
-                  aria-hidden="true"
-                  style="
-                      margin-left: 0.2rem;
-                      margin-right: 0.1rem;
-                      margin-top: 0.5rem;">
-              </i>
-              .csv
-            </a>
+    
+    <div class="filter-wrapper">
+      <!-- Date Filter Section -->
+      <div class="filter-section">
+        <div class="date-inputs">
+          <div class="date-input-wrapper">
+            <label for="startDate" class="date-sort">Sort From:</label>
+            <input
+              type="date"
+              id="startDate"
+              v-model="startDate"
+              class="date-filter"
+            />
+            <i class="fas fa-calendar-alt calendar-icon"></i>
           </div>
+          <div class="date-input-wrapper">
+            <label for="endDate" class="date-sort">To:</label>
+            <input type="date" id="endDate" v-model="endDate" class="date-filter" />
+            <i class="fas fa-calendar-alt calendar-icon"></i>
+          </div>
+          <!-- filter button section -->
+          <div class="filter-buttons">
+            <button @click="resetFilter" class="btn-reset">
+              <i class="fa fa-sync" aria-hidden="true"></i>
+            </button>
+            <div class="dropdown d-inline-block">
+              <button
+                class="btn-export"
+                type="button"
+                @click="toggleDropdown(index)"
+                :aria-expanded="dropdownIndex === index"
+                style="
+                  color: #4b6cb7; 
+                  background-color: white; 
+                  width: 6rem;"
+              ><i class="fa-solid fa-arrow-up-from-bracket" 
+                  style="
+                          margin-left: 0.5rem;
+                          margin-right: 0.4rem;">
+              </i>
+                Export
+              </button>
+              <div
+                class="dropdown-menu-export"
+                :class="{ show: dropdownIndex === index }"
+              >
+                <a
+                  class="dropdown-item-export"
+                  @click="exportData('pdf')"
+                  style="color: #4b6cb7"
+                  ><i class="fa fa-file-pdf" 
+                      aria-hidden="true"
+                      style="
+                          margin-left: 0.2rem;
+                          margin-right: 0.1rem;">
+                  </i>
+                  .pdf
+                </a>
+                <a
+                  class="dropdown-item-export"
+                  @click="exportData('csv')"
+                  style="color: #4b6cb7;"
+                  ><i class="fa-solid fa-file-csv" 
+                      aria-hidden="true"
+                      style="
+                          margin-left: 0.2rem;
+                          margin-right: 0.1rem;
+                          margin-top: 0.5rem;">
+                  </i>
+                  .csv
+                </a>
+              </div>
+            </div>
+          </div>
+          <!-- filter button section -->
+          <!-- search -->
+          <div class="search-bar-container">
+            <i class="fas fa-search search-icon"></i>
+            <input
+              type="text"
+              v-model="searchQuery"
+              class="search-input"
+              style="width: 11rem;"
+              placeholder="Cari.."
+            />
+          </div>
+          <!-- search -->
         </div>
       </div>
-      <!-- filter button section -->
-      <!-- search -->
-      <div class="search-bar-container">
-        <i class="fas fa-search search-icon"></i>
-        <input
-          type="text"
-          v-model="searchQuery"
-          class="search-input"
-          style="width: 11rem;"
-          placeholder="Cari.."
-        />
-      </div>
-      <!-- search -->
+      <!-- End of Date Filter Section -->
     </div>
-  </div>
-  <!-- End of Date Filter Section -->
-    <div class="tampil-baris" style="text-align: left; margin-top: 2rem; margin-bottom: 1rem;">
+
+    <div class="table-wrapper">
+      <div class="tampil-baris" style="text-align: left; margin-bottom: 1rem;">
         Tampilkan:
         <select v-model="rowsPerPage" class="select-rows" style="width: 3rem">
           <option value="5">5</option>
@@ -105,47 +108,48 @@
           <option value="100">100</option>
         </select>
         baris
-    </div> 
-    <!-- Tabel Data -->
-    <table>
-      <thead>
-        <tr>
-          <th>Nama Peminjam</th>
-          <th>Alat</th>
-          <th>Bengkel</th>
-          <th>Jumlah</th>
-          <th>Tgl Pinjam</th>
-          <th>Tgl Permasalahan</th>
-          <th>Kondisi</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(record, index) in displayedData" :key="index">
-          <td>{{ record.namaPeminjam }}</td>
-          <td>{{ record.alat }}</td>
-          <td>{{ record.bengkel }}</td>
-          <td>{{ record.jumlah }}</td>
-          <td>{{ record.tanggalPinjam }}</td>
-          <td>{{ record.tanggalPermasalahan }}</td>
-          <td>{{ record.kondisi }}</td>
-          <td>
-            <div class="dropdown d-inline-block">
-              <button
-                class="btn btn-sm"
-                type="button"
-                @click="toggleDropdown(index)"
-                :aria-expanded="dropdownIndex === index"
-              >
-              <span class="material-symbols-outlined">
-              priority
-              </span>
-              </button>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+      </div> 
+      <!-- Tabel Data -->
+      <table>
+        <thead>
+          <tr>
+            <th>Nama Peminjam</th>
+            <th>Alat</th>
+            <th>Bengkel</th>
+            <th>Jumlah</th>
+            <th>Tgl Pinjam</th>
+            <th>Tgl Permasalahan</th>
+            <th>Kondisi</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(record, index) in displayedData" :key="index">
+            <td>{{ record.namaPeminjam }}</td>
+            <td>{{ record.alat }}</td>
+            <td>{{ record.bengkel }}</td>
+            <td>{{ record.jumlah }}</td>
+            <td>{{ record.tanggalPinjam }}</td>
+            <td>{{ record.tanggalPermasalahan }}</td>
+            <td>{{ record.kondisi }}</td>
+            <td>
+              <div class="dropdown d-inline-block">
+                <button
+                  class="btn btn-sm"
+                  type="button"
+                  @click="toggleDropdown(index)"
+                  :aria-expanded="dropdownIndex === index"
+                >
+                <span class="material-symbols-outlined">
+                priority
+                </span>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </template>
 
@@ -358,31 +362,7 @@ export default {
 }
 /* end of dropdown style */
 
-.export-button {
-  background-color: #274278;
-  color: white;
-  padding: 8px 12px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
 
-.export-button:hover {
-  background-color: #1f3664;
-}
-
-.reset-button {
-  background-color: #ccc;
-  color: #333;
-  padding: 8px 12px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.reset-button:hover {
-  background-color: #999;
-}
 
 table {
   width: 100%;

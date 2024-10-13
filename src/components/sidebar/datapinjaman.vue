@@ -34,67 +34,40 @@
           </div>
           <!-- filter button section -->
           <div class="filter-buttons">
-            <button @click="resetFilter" 
+            <button @click="resetFilters" 
               class="btn-reset" 
-              style="
-                height: 2.7rem; 
-                width: 3rem;"
-              >
+              style="height: 2.7rem; width: 3rem;">
               <i class="fa fa-sync" aria-hidden="true"></i>
             </button>
             <div class="dropdown d-inline-block">
               <button
                 class="btn-export"
                 type="button"
-                @click="toggleDropdown(index)"
-                :aria-expanded="dropdownIndex === index"
-                style="
-                  color: #4b6cb7; 
-                  background-color: white; 
-                  width: 6.5rem;
-                  height: 2.72rem;"
-              > 
+                @click="toggleDropdown"
+                :aria-expanded="dropdownOpen"
+                style="color: #4b6cb7; background-color: white; width: 6.5rem; height: 2.72rem;">
                 <i class="fa-solid fa-arrow-up-from-bracket" 
-                  style="
-                    margin-left: 0.7rem;
-                    margin-right: 0.4rem;
-                    color: #4b6cb7; ">
-                </i>
-                Export
+                  style="margin-left: 0.7rem; margin-right: 0.4rem; color: #4b6cb7;">
+                </i> Export
               </button>
               <div
-                class="dropdown-menu-export"
-                :class="{ show: dropdownIndex === index }"
-              >
+                v-if="dropdownOpen"
+                class="dropdown-menu-export">
                 <a
                   class="dropdown-item-export"
                   @click="exportData('pdf')"
-                  style="color: #4b6cb7;"
-                  ><i class="fa fa-file-pdf" 
-                      aria-hidden="true"
-                      style="
-                          margin-left: 0.5rem;
-                          margin-right: 0.1rem;">
-                  </i>
-                  .pdf
+                  style="color: #4b6cb7;">
+                  <i class="fa fa-file-pdf" aria-hidden="true" style="margin-left: 0.5rem; margin-right: 0.1rem;"></i> .pdf
                 </a>
                 <a
                   class="dropdown-item-export"
                   @click="exportData('csv')"
-                  style="color: #4b6cb7;"
-                  ><i class="fa-solid fa-file-csv" 
-                      aria-hidden="true"
-                      style="
-                          margin-left: 0.5rem;
-                          margin-right: 0.1rem;
-                          margin-top: 0.5rem;">
-                  </i>
-                  .csv
+                  style="color: #4b6cb7;">
+                  <i class="fa-solid fa-file-csv" aria-hidden="true" style="margin-left: 0.5rem; margin-right: 0.1rem;"></i> .csv
                 </a>
               </div>
             </div>
           </div>
-          <!-- filter button section -->
           <!-- search -->
           <div class="search-bar-container">
             <i class="fas fa-search search-icon"></i>
@@ -102,8 +75,7 @@
               type="text"
               v-model="searchQuery"
               class="search-input"
-              style="padding-right: 30px;
-                    width: 10rem;"
+              style="padding-right: 30px; width: 10rem;"
               placeholder="Cari data..."
             />
           </div>
@@ -114,9 +86,9 @@
     </div>
     <!-- End of filter wrapper -->
 
-  <div class="table-wrapper">
-    <div class="tampil-baris" style="text-align: left; margin-bottom: 1rem;">
-      Tampilkan:
+    <div class="table-wrapper">
+      <div class="tampil-baris" style="text-align: left; margin-bottom: 1rem;">
+        Tampilkan:
         <select v-model="rowsPerPage" class="select-rows" style="width: 3rem">
           <option value="5">5</option>
           <option value="10">10</option>
@@ -124,35 +96,35 @@
           <option value="100">100</option>
         </select>
         baris
-    </div> 
+      </div> 
 
-    <!-- Tabel Data -->
-    <table>
-      <thead>
-        <tr>
-          <th>Nama Peminjam</th>
-          <th>Alat</th>
-          <th>Bengkel</th>
-          <th>Jumlah</th>
-          <th>Tanggal Pinjam</th>
-          <th>Tanggal Kembali</th>
+      <!-- Tabel Data -->
+      <table>
+        <thead>
+          <tr>
+            <th>Nama Peminjam</th>
+            <th>Alat</th>
+            <th>Bengkel</th>
+            <th>Jumlah</th>
+            <th>Tanggal Pinjam</th>
+            <th>Tanggal Kembali</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-if="peminjamanList.length === 0">
+          <tr v-if="filteredLoans.length === 0">
             <td colspan="6" style="text-align: center;">Tidak ada data</td>
           </tr>
-          <tr v-for="(record, index) in peminjamanList" :key="index">
+          <tr v-for="(record, index) in filteredLoans" :key="index">
             <td>{{ record.namaPeminjam }}</td>
             <td>{{ record.alat }}</td>
             <td>{{ record.bengkel }}</td>
             <td>{{ record.jumlahAlat }}</td>
             <td>{{ record.tanggalPinjam }}</td>
-            <td>{{ record.tanggalPengembalian }}</td>
+            <td>{{ record.tanggalKembali }}</td>
           </tr>
         </tbody>
-    </table>
-  </div>
+      </table>
+    </div>
   </div>
 </template>
 
@@ -166,26 +138,21 @@ export default {
   name: "DataPengembalianPinjaman",
   data() {
     return {
-      returnedLoans: [
-        
-      ],
-      displayedData: [],
+      returnedLoans: [], // Pastikan data diisi dari API
       rowsPerPage: 5,
       startDate: "",
       endDate: "",
       searchQuery: "",
-      dropdownIndex: null,
+      dropdownOpen: false,
     };
   },
-  mounted() {
-    this.updateDisplayedData();
-  },
-  methods: {
-    updateDisplayedData() {
-      let filteredData = this.returnedLoans;
+  computed: {
+    filteredLoans() {
+      let filtered = this.returnedLoans;
+
       // Filter berdasarkan tanggal
       if (this.startDate || this.endDate) {
-        filteredData = filteredData.filter((record) => {
+        filtered = filtered.filter((record) => {
           const kembaliDate = new Date(record.tanggalKembali);
           return (
             (!this.startDate || kembaliDate >= new Date(this.startDate)) &&
@@ -193,10 +160,11 @@ export default {
           );
         });
       }
+
       // Filter berdasarkan pencarian
       if (this.searchQuery) {
         const query = this.searchQuery.toLowerCase();
-        filteredData = filteredData.filter((record) => {
+        filtered = filtered.filter((record) => {
           return (
             record.namaPeminjam.toLowerCase().includes(query) ||
             record.alat.toLowerCase().includes(query) ||
@@ -204,14 +172,14 @@ export default {
           );
         });
       }
+
       // Ambil data sesuai dengan rowsPerPage
-      this.displayedData = filteredData.slice(0, this.rowsPerPage);
+      return filtered.slice(0, this.rowsPerPage);
     },
-    filterData() {
-      this.updateDisplayedData();
-    },
+  },
+  methods: {
     exportData(type) {
-      const exportData = this.displayedData;
+      const exportData = this.filteredLoans;
 
       if (type === "csv") {
         const ws = XLSX.utils.json_to_sheet(exportData);
@@ -235,7 +203,7 @@ export default {
             record.namaPeminjam,
             record.alat,
             record.bengkel,
-            record.jumlah,
+            record.jumlahAlat,
             record.tanggalPinjam,
             record.tanggalKembali,
           ]),
@@ -243,14 +211,13 @@ export default {
         doc.save("data_pengembalian.pdf");
       }
     },
-    toggleDropdown(index) {
-      this.dropdownIndex = this.dropdownIndex === index ? null : index;
+    toggleDropdown() {
+      this.dropdownOpen = !this.dropdownOpen;
     },
     resetFilters() {
       this.startDate = "";
       this.endDate = "";
       this.searchQuery = "";
-      this.updateDisplayedData();
     },
   },
 };

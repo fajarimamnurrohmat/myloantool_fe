@@ -531,16 +531,6 @@
     <!-- End of Modal Section -->
 
     <div class="search-bar">
-      <div>
-        Tampilkan:
-        <select v-model="rowsPerPage" class="select-rows" style="width: 3rem">
-          <option value="5">5</option>
-          <option value="10">10</option>
-          <option value="20">20</option>
-          <option value="100">100</option>
-        </select>
-        baris
-      </div>
       <div v-if="totalPages > 1" class="pagination-container">
         <button
           @click="currentPage--"
@@ -1030,7 +1020,7 @@ export default {
   font-weight: bold;
   font-size: 1.7rem;
   color: #274278;
-  margin-top: -5rem;
+  margin-top: 1rem;
   margin-bottom: 1.5rem;
   animation: fadeInDown 1s ease-in-out;
 }
