@@ -684,34 +684,35 @@ export default {
 
 .pagination-container {
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
   padding: 10px 0;
-  margin-top: 20px;
+  margin-bottom: -1rem;
 }
 
 .pagination-button {
-  background-color: #007bff;
+  background-color: #007bff; 
   color: white;
-  padding: 5px 10px;
   border: none;
-  border-radius: 3px;
+  border-radius: 5px;
+  padding: 5px 10px;
+  margin: 0 5px;
+  font-size: 0.9rem; 
   cursor: pointer;
   transition: background-color 0.3s ease;
-  margin: 0 5px;
 }
 
-.pagination-button:hover:not(:disabled) {
-  background-color: #0056b3;
+.pagination-button:hover {
+  background-color: #0056b3; 
 }
 
 .pagination-button:disabled {
-  background-color: #cccccc;
+  background-color: #cccccc; 
   cursor: not-allowed;
 }
 
 .pagination-info {
-  margin: 0 10px;
-  color: #333;
+  font-size: 0.9rem; 
+  color: #555;
 }
 
 /* Dropdown Styles */
@@ -795,11 +796,6 @@ export default {
     width: 100%;
     justify-content: space-between;
     margin-bottom: 10px;
-  }
-
-  .pagination-container {
-    flex-direction: column;
-    align-items: center;
   }
 
   .pagination-info {
