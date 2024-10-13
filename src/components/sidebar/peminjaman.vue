@@ -1,7 +1,7 @@
 <template>
-  <div style="text-align: left">
+  <div class="header-peminjaman-container">
     <h3 class="header-peminjaman">Halaman Peminjaman</h3>
-    <button @click="showModal = true" class="btn_add_siswa" style="background-color: #007bff;">
+    <button @click="showModal = true" class="btn-add" style="background-color: #007bff;">
       <i class="fas fa-plus" style="margin-right: 1rem"></i> Input Peminjaman
     </button>
   </div>
@@ -99,107 +99,124 @@
   </div>
   <!-- End of Modal Section -->
 
-  <hr />
-
-  <!-- Date Filter Section -->
-  <div class="filter-section">
-    <div class="date-inputs">
-      <div class="date-input-wrapper">
-        <label for="startDate" class="date-sort">Sort From:</label>
-        <input
-          type="date"
-          id="startDate"
-          v-model="startDate"
-          class="date-filter"
-        />
-        <i class="fas fa-calendar-alt calendar-icon"></i>
-      </div>
-      <div class="date-input-wrapper">
-        <label for="endDate" class="date-sort">To:</label>
-        <input type="date" id="endDate" v-model="endDate" class="date-filter" />
-        <i class="fas fa-calendar-alt calendar-icon"></i>
-      </div>
-      <!-- filter button section -->
-      <div class="filter-buttons">
-        <button @click="resetFilter" class="btn-reset">
-          <i class="fa fa-sync" aria-hidden="true"></i>
-        </button>
-        <div class="dropdown d-inline-block">
-          <button
-            class="btn-export"
-            type="button"
-            @click="toggleDropdown(index)"
-            :aria-expanded="dropdownIndex === index"
+  <!-- filter wrapper -->
+  <div class="filter-wrapper">
+    <!-- Date Filter Section -->
+    <div class="filter-section">
+      <div class="date-inputs">
+        <div class="date-input-wrapper">
+          <label for="startDate" class="date-sort">Sort Date From:</label>
+          <input
+            type="date"
+            id="startDate"
+            v-model="startDate"
+            class="date-filter"
+          />
+          <i class="fas fa-calendar-alt calendar-icon"></i>
+        </div>
+        <div class="date-input-wrapper">
+          <label for="endDate" class="date-sort">To:</label>
+          <input 
+            type="date" 
+            id="endDate" 
+            v-model="endDate" 
+            class="date-filter" 
+          />
+          <i class="fas fa-calendar-alt calendar-icon"></i>
+        </div>
+        <!-- filter button section -->
+        <div class="filter-buttons">
+          <button @click="resetFilter" 
+            class="btn-reset" 
             style="
-              color: #4b6cb7; 
-              background-color: white; 
-              width: 6rem;"
-          ><i class="fa-solid fa-arrow-up-from-bracket" 
-              style="
-                      margin-left: 0.5rem;
-                      margin-right: 0.4rem;">
-          </i>
-            Export
+              height: 2.7rem; 
+              width: 3rem;"
+            >
+            <i class="fa fa-sync" aria-hidden="true"></i>
           </button>
-          <div
-            class="dropdown-menu-export"
-            :class="{ show: dropdownIndex === index }"
-          >
-            <a
-              class="dropdown-item-export"
-              @click="exportData('pdf')"
-              style="color: #4b6cb7"
-              ><i class="fa fa-file-pdf" 
-                  aria-hidden="true"
-                  style="
-                      margin-left: 0.2rem;
-                      margin-right: 0.1rem;">
+          <div class="dropdown d-inline-block">
+            <button
+              class="btn-export"
+              type="button"
+              @click="toggleDropdown(index)"
+              :aria-expanded="dropdownIndex === index"
+              style="
+                color: #4b6cb7; 
+                background-color: white; 
+                width: 6.5rem;
+                height: 2.72rem;"
+            > 
+              <i class="fa-solid fa-arrow-up-from-bracket" 
+                style="
+                  margin-left: 0.7rem;
+                  margin-right: 0.4rem;
+                  color: #4b6cb7; ">
               </i>
-              .pdf
-            </a>
-            <a
-              class="dropdown-item-export"
-              @click="exportData('csv')"
-              style="color: #4b6cb7;"
-              ><i class="fa-solid fa-file-csv" 
-                  aria-hidden="true"
-                  style="
-                      margin-left: 0.2rem;
-                      margin-right: 0.1rem;
-                      margin-top: 0.5rem;">
-              </i>
-              .csv
-            </a>
+              Export
+            </button>
+            <div
+              class="dropdown-menu-export"
+              :class="{ show: dropdownIndex === index }"
+            >
+              <a
+                class="dropdown-item-export"
+                @click="exportData('pdf')"
+                style="color: #4b6cb7;"
+                ><i class="fa fa-file-pdf" 
+                    aria-hidden="true"
+                    style="
+                        margin-left: 0.5rem;
+                        margin-right: 0.1rem;">
+                </i>
+                .pdf
+              </a>
+              <a
+                class="dropdown-item-export"
+                @click="exportData('csv')"
+                style="color: #4b6cb7;"
+                ><i class="fa-solid fa-file-csv" 
+                    aria-hidden="true"
+                    style="
+                        margin-left: 0.5rem;
+                        margin-right: 0.1rem;
+                        margin-top: 0.5rem;">
+                </i>
+                .csv
+              </a>
+            </div>
           </div>
         </div>
+        <!-- filter button section -->
+        <!-- search -->
+        <div class="search-bar-container">
+          <i class="fas fa-search search-icon"></i>
+          <input
+            type="text"
+            v-model="searchQuery"
+            class="search-input"
+            style="padding-right: 30px;
+                  width: 10rem;"
+            placeholder="Cari data..."
+          />
+        </div>
+        <!-- search -->
       </div>
-      <!-- filter button section -->
-      <!-- search -->
-      <div class="search-bar-container">
-        <i class="fas fa-search search-icon"></i>
-        <input
-          type="text"
-          v-model="searchQuery"
-          class="search-input"
-          style="width: 11rem;"
-          placeholder="Cari.."
-        />
-      </div>
-      <!-- search -->
     </div>
+    <!-- End of Date Filter Section -->
   </div>
-  <!-- End of Date Filter Section -->
+  <!-- End of filter wrapper -->
 
-  <div style="margin-top: 2rem">
-    <div class="tampil-baris" style="text-align: left;">
-        Tampilkan:
-        <select v-model="rowsPerPage" class="select-rows" style="width: 3rem">
-          <option value="5">5</option>
-          <option value="10">10</option>
-          <option value="20">20</option>
-          <option value="100">100</option>
-        </select>
-        baris
+  <!-- Table wrapper -->
+  <div class="table-wrapper">
+    <div style="text-align: left;">
+          Tampilkan:
+          <select v-model="rowsPerPage" class="select-rows" style="width: 3rem">
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="100">100</option>
+          </select>
+          baris
     </div>
     <!-- table section -->
     <table class="data-table">
@@ -550,6 +567,7 @@
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import Papa from "papaparse";
+import Swal from 'sweetalert2';
 
 export default {
   data() {
@@ -641,17 +659,32 @@ export default {
         const success = true; // Set this dynamically if needed
 
         if (success) {
-          alert("Data berhasil disimpan!");
+          // Close the modal and reset the form
+          this.closeModal();
+          this.resetForm();
+          Swal.fire({
+              title: "Sukses!",
+              text: "Data peminjaman berhasil disimpan.",
+              icon: "success",
+              confirmButtonText: "OK"
+            });
         } else {
-          alert("Gagal menyimpan data.");
+          console.error("Gagal menambahkan peminjaman:", data);
+            Swal.fire({
+              title: "Error!",
+              text: "Gagal menambahkan peminjaman.",
+              icon: "error",
+              confirmButtonText: "OK"
+            });
         }
-
-        // Close the modal and reset the form
-        this.closeModal();
-        this.resetForm();
       } else {
         // Show an alert if not all fields are filled
-        alert("Mohon isi semua data!");
+        Swal.fire({
+              title: "Peringatan!",
+              text: "Mohon isi semua data.",
+              icon: "warning",
+              confirmButtonText: "OK"
+        });
       }
     },
     savePeminjaman() {
@@ -672,7 +705,12 @@ export default {
           params: { peminjamanList: this.peminjamanList }
         });
       } else {
-        alert("Mohon isi semua field");
+        Swal.fire({
+              title: "Error!",
+              text: "Mohon isi semua data!",
+              icon: "error",
+              confirmButtonText: "OK"
+        });
       }
     },
     goToPengembalian() {
@@ -684,10 +722,24 @@ export default {
       this.showModal = true;
     },
     confirmDelete(index) {
-    const confirmation = confirm("Apakah Anda yakin ingin menghapus data ini?");
-    if (confirmation) {
-      this.deletePeminjaman(index);  // Panggil fungsi hapus data
-    }
+      Swal.fire({
+        title: 'Anda yakin?',
+        text: "Data peminjaman ini akan dihapus!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Ya, hapus!',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.deletePeminjaman(index);  // Panggil fungsi hapus data
+          Swal.fire(
+            'Dihapus!',
+            'Data peminjaman telah dihapus.',
+            'success'
+          );
+        }
+      });
     },
     deletePeminjaman(index) {
       this.peminjamanList.splice(index, 1);
@@ -860,6 +912,13 @@ export default {
   color: white;
 }
 
+.header-peminjaman-container {
+  display: flex;
+  justify-content: space-between; 
+  align-items: center; 
+  margin-top: 3rem;
+}
+
 .modal-header .close-modal {
   font-size: 2rem;
   color: #f30202;
@@ -897,11 +956,21 @@ export default {
   border-radius: 4px;
 }
 
+.filter-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  background-color: white;
+  margin-top: 0.2rem !important;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
 .table-wrapper {
   width: 100%;
   overflow-x: auto;
   background-color: white;
-  margin-top: -1rem;
+  margin-top: 1rem !important;
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -994,10 +1063,6 @@ export default {
   display: inline-block;
 }
 
-.search-input {
-  padding-right: 30px; /* Add some extra padding to accommodate the icon */
-}
-
 .search-icon {
   position: absolute;
   right: 10px;
@@ -1079,10 +1144,10 @@ export default {
   position: absolute;
   top: 100%;
   right: auto;
-  left: 3rem;
+  left: 3.3rem;
   background-color: #fff;
-  width: 6rem;
-  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  width: 6.5rem;
+  box-shadow: 0px 0.2rem 0.5rem 0px rgba(73, 73, 73, 0.2);
   z-index: 1;
   border-radius: 5px;
   padding: 10px;
@@ -1095,15 +1160,6 @@ export default {
 
 .dropdown-menu-export.show {
   display: block;
-}
-
-.dropdown-menu-export button:hover {
-  background-color: #a72828;
-  color: #0056b3;
-}
-
-.dropdown-item-export {
-  margin-top: 0.3rem;
 }
 /* end of dropdown style */
 
@@ -1163,18 +1219,12 @@ export default {
   border-radius: 5px;
   border: 1px solid #d3d2d2 !important;
   cursor: pointer;
-  transition: background-color 0.3s ease-in-out;
   text-align: left;
   margin-right: -2.3rem;
 }
 
 .btn-reset:hover {
-  background-color: #e9e9e9;
-}
-
-.btn-filter:hover,
-.btn-export:hover {
-  background-color: #e9e9e9;
+  background-color: #f5f5f5;
 }
 
 .pagination-container {

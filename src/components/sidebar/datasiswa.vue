@@ -1,5 +1,4 @@
 <template>
-  <div>
     <!-- Header dan Tombol Tambah Siswa -->
     <div class="header-siswa-container">
       <h3 class="header-siswa">Halaman Data Siswa</h3>
@@ -150,7 +149,6 @@
       <!-- tabel wrapper -->
     </div>
     <!-- Tabel Siswa -->
-  </div>
 </template>
 
 <script>
@@ -341,7 +339,8 @@ export default {
     },
     // Menghapus siswa
     async deleteSiswa(nomorInduk) {
-      const result = await Swal.fire({
+      const result = await
+      Swal.fire({
         title: 'Anda yakin?',
         text: "Data siswa ini akan dihapus!",
         icon: 'warning',
