@@ -7,12 +7,13 @@
       </p>
     </div>
     
+    <!-- filter wrapper -->
     <div class="filter-wrapper">
       <!-- Date Filter Section -->
       <div class="filter-section">
         <div class="date-inputs">
           <div class="date-input-wrapper">
-            <label for="startDate" class="date-sort">Sort From:</label>
+            <label for="startDate" class="date-sort">Sort Date From:</label>
             <input
               type="date"
               id="startDate"
@@ -23,64 +24,50 @@
           </div>
           <div class="date-input-wrapper">
             <label for="endDate" class="date-sort">To:</label>
-            <input type="date" id="endDate" v-model="endDate" class="date-filter" />
+            <input 
+              type="date" 
+              id="endDate" 
+              v-model="endDate" 
+              class="date-filter" 
+            />
             <i class="fas fa-calendar-alt calendar-icon"></i>
           </div>
           <!-- filter button section -->
           <div class="filter-buttons">
-            <button @click="resetFilter" class="btn-reset">
+            <button @click="resetFilters" 
+              class="btn-reset" 
+              style="height: 2.7rem; width: 3rem;">
               <i class="fa fa-sync" aria-hidden="true"></i>
             </button>
             <div class="dropdown d-inline-block">
               <button
                 class="btn-export"
                 type="button"
-                @click="toggleDropdown(index)"
-                :aria-expanded="dropdownIndex === index"
-                style="
-                  color: #4b6cb7; 
-                  background-color: white; 
-                  width: 6rem;"
-              ><i class="fa-solid fa-arrow-up-from-bracket" 
-                  style="
-                          margin-left: 0.5rem;
-                          margin-right: 0.4rem;">
-              </i>
-                Export
+                @click="toggleDropdown"
+                :aria-expanded="dropdownOpen"
+                style="color: #4b6cb7; background-color: white; width: 6.5rem; height: 2.72rem;">
+                <i class="fa-solid fa-arrow-up-from-bracket" 
+                  style="margin-left: 0.7rem; margin-right: 0.4rem; color: #4b6cb7;">
+                </i> Export
               </button>
               <div
-                class="dropdown-menu-export"
-                :class="{ show: dropdownIndex === index }"
-              >
+                v-if="dropdownOpen"
+                class="dropdown-menu-export">
                 <a
                   class="dropdown-item-export"
                   @click="exportData('pdf')"
-                  style="color: #4b6cb7"
-                  ><i class="fa fa-file-pdf" 
-                      aria-hidden="true"
-                      style="
-                          margin-left: 0.2rem;
-                          margin-right: 0.1rem;">
-                  </i>
-                  .pdf
+                  style="color: #4b6cb7;">
+                  <i class="fa fa-file-pdf" aria-hidden="true" style="margin-left: 0.5rem; margin-right: 0.1rem;"></i> .pdf
                 </a>
                 <a
                   class="dropdown-item-export"
                   @click="exportData('csv')"
-                  style="color: #4b6cb7;"
-                  ><i class="fa-solid fa-file-csv" 
-                      aria-hidden="true"
-                      style="
-                          margin-left: 0.2rem;
-                          margin-right: 0.1rem;
-                          margin-top: 0.5rem;">
-                  </i>
-                  .csv
+                  style="color: #4b6cb7;">
+                  <i class="fa-solid fa-file-csv" aria-hidden="true" style="margin-left: 0.5rem; margin-right: 0.1rem;"></i> .csv
                 </a>
               </div>
             </div>
           </div>
-          <!-- filter button section -->
           <!-- search -->
           <div class="search-bar-container">
             <i class="fas fa-search search-icon"></i>
@@ -88,8 +75,8 @@
               type="text"
               v-model="searchQuery"
               class="search-input"
-              style="width: 11rem;"
-              placeholder="Cari.."
+              style="padding-right: 30px; width: 10rem;"
+              placeholder="Cari data..."
             />
           </div>
           <!-- search -->
@@ -97,6 +84,7 @@
       </div>
       <!-- End of Date Filter Section -->
     </div>
+    <!-- End of filter wrapper -->
 
     <div class="table-wrapper">
       <div class="tampil-baris" style="text-align: left; margin-bottom: 1rem;">

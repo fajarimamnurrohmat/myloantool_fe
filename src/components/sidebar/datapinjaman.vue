@@ -235,7 +235,7 @@ export default {
 
 .filter-wrapper {
   width: 100%;
-  overflow-x: auto;
+  /* overflow-x: auto; */
   background-color: white;
   margin-top: 0.2rem !important;
   padding: 20px;
@@ -245,7 +245,7 @@ export default {
 
 .table-wrapper {
   width: 100%;
-  overflow-x: auto;
+  /* overflow-x: auto; */
   background-color: white;
   margin-top: 1rem !important;
   padding: 20px;
