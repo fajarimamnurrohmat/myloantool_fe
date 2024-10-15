@@ -281,7 +281,7 @@ export default {
 .search-input,
 .select-rows {
   padding: 5px;
-  border: 1px solid #fff;
+  border: 1px solid #ccc;
   background-color: #fff;
   color: #333;
 }
