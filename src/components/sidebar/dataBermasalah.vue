@@ -362,7 +362,37 @@ export default {
 }
 /* end of dropdown style */
 
+.btn-reset {
+  background-color: #ffffff;
+  border: 1px solid #d3d2d2 !important;
+  color: #4b6cb7;
+  padding: 5px 5px;
+  cursor: pointer;
+  margin-right: 0.5rem;
+  transition: background-color 0.3s ease-in-out;
+}
 
+.btn-filter,
+.btn-export {
+  border-radius: 5px;
+  border: 1px solid #d3d2d2 !important;
+  cursor: pointer;
+  text-align: left;
+  margin-right: -2.3rem;
+  z-index: 99999;
+}
+
+.btn-reset:hover {
+  background-color: #f5f5f5;
+}
+
+.pagination-container {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px; /* Add space between the buttons and text */
+}
 
 table {
   width: 100%;
