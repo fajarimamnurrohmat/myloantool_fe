@@ -6,7 +6,7 @@
         <div class="name_desc">Peminjaman Alat Bengkel</div>
       </div>
       <!-- form -->
-      <form>
+      <form @submit.prevent="handleLogin">
         <div class="mb-4 input-group">
           <span class="input-group-text">
             <i class="fas fa-user" style="color: #182848"></i>
@@ -16,6 +16,8 @@
             class="form-control"
             placeholder="Username"
             autocomplete="off"
+            v-model="username"
+            required
           />
         </div>
         <div class="mb-4 input-group">
@@ -27,6 +29,8 @@
             class="form-control"
             placeholder="Password"
             autocomplete="off"
+            v-model="password"
+            required
           />
           <span
             class="input-group-text toggle-password"
@@ -35,28 +39,36 @@
             <i :class="passwordFieldIcon" style="color: #182848"></i>
           </span>
         </div>
-        <router-link to="/mainsidebar/dashboard">
-          <button
-            type="submit"
-            class="btn btn-custom mt-4"
-            style="background-color: white"
-          >
-            Login
-          </button>
-        </router-link>
+        <button
+          type="submit"
+          class="btn btn-custom mt-4"
+          :disabled="isLoading"
+        >
+          <span v-if="isLoading">Logging in...</span>
+          <span v-else>Login</span>
+        </button>
         <a href="#" class="forgot-password">Lupa password?</a>
       </form>
       <!-- form end -->
+      <div v-if="errorMessage" class="alert alert-danger mt-3">
+        {{ errorMessage }}
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   data() {
     return {
+      username: '',
+      password: '',
       passwordFieldType: "password",
       passwordFieldIcon: "fas fa-eye",
+      isLoading: false,
+      errorMessage: '',
     };
   },
   methods: {
@@ -67,6 +79,40 @@ export default {
       } else {
         this.passwordFieldType = "password";
         this.passwordFieldIcon = "fas fa-eye";
+      }
+    },
+    async handleLogin() {
+      this.isLoading = true;
+      this.errorMessage = '';
+
+      try {
+        const response = await axios.post('http://localhost:3000/authentications', {
+          username: this.username,
+          password: this.password,
+        });
+
+        if (response.data.status === 'success') {
+          const { accessToken, refreshToken } = response.data.data;
+
+          // Simpan token, misalnya di localStorage
+          localStorage.setItem('accessToken', accessToken);
+          localStorage.setItem('refreshToken', refreshToken);
+
+          // Redirect ke dashboard
+          this.$router.push('/mainsidebar/dashboard');
+        } else {
+          // Tangani kasus jika status bukan 'success'
+          this.errorMessage = response.data.message || 'Login gagal.';
+        }
+      } catch (error) {
+        // Tangani error jaringan atau lainnya
+        if (error.response && error.response.data && error.response.data.message) {
+          this.errorMessage = error.response.data.message;
+        } else {
+          this.errorMessage = 'Terjadi kesalahan. Silakan coba lagi.';
+        }
+      } finally {
+        this.isLoading = false;
       }
     },
   },
@@ -149,7 +195,7 @@ input {
 
 .btn-custom:hover {
   background-color: #182848;
-  color: #182848;
+  color: #f8c291;
   box-shadow: 0 8px 15px #4b6cb7;
   transform: translateY(-3px);
 }
@@ -164,5 +210,13 @@ input {
     width: 90%;
     padding: 20px;
   }
+}
+
+/* Tambahkan styling untuk alert error */
+.alert {
+  padding: 10px;
+  border-radius: 5px;
+  color: white;
+  background-color: #e74c3c;
 }
 </style>

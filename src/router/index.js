@@ -18,7 +18,20 @@ const routes = [
     {
         path: "/mainsidebar",
         component: MainSidebar,
-        children:[
+        // Menambahkan beforeEnter untuk pemeriksaan autentikasi
+        beforeEnter: (to, from, next) => {
+            const accessToken = localStorage.getItem('accessToken');
+            const refreshToken = localStorage.getItem('refreshToken');
+            console.log('Access Token:', accessToken);
+            console.log('Refresh Token:', refreshToken);  // Debugging
+            if (accessToken) {
+                next(); // Izinkan akses jika token ada
+            } else {
+                console.log('Access denied, redirecting to login.'); // Debugging
+                next({ path: '/' }); // Alihkan ke halaman login jika tidak ada token
+            }
+        },
+        children: [
             {
                 path: "dashboard",
                 component: Dashboard,
@@ -45,7 +58,7 @@ const routes = [
             },
             {
                 path: "peminjaman",
-                component: Peminjaman, 
+                component: Peminjaman,
             },
             {
                 path: "pengembalian",
@@ -54,6 +67,7 @@ const routes = [
         ],
     },
 ];
+
 const router = createRouter({
     history: createWebHistory(),
     routes,

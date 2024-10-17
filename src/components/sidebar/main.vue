@@ -116,6 +116,7 @@
                 to=""
                 class="nav-link nav-logout"
                 @click="closeNavbar"
+                @click.prevent="handleLogout"
               >
                 Logout
               </router-link>
@@ -138,6 +139,8 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   data() {
     return {
@@ -150,6 +153,33 @@ export default {
     },
     closeNavbar() {
       this.navbarOpen = false;
+    },
+    async handleLogout() {
+      const refreshToken = localStorage.getItem('refreshToken');
+
+      if (refreshToken) {
+        try {
+          // Kirim permintaan DELETE untuk logout dari backend
+          await axios.delete('http://localhost:3000/authentications', {
+            data: {
+              refreshToken: refreshToken
+            }
+          });
+          
+          // Setelah berhasil, hapus token dari localStorage
+          localStorage.removeItem('accessToken');
+          localStorage.removeItem('refreshToken');
+
+          // Redirect ke halaman login
+          this.$router.push('/');
+        } catch (error) {
+          console.error('Logout gagal:', error);
+          // Anda bisa menambahkan logika error handling di sini
+        }
+      } else {
+        // Jika tidak ada refresh token, langsung logout
+        this.$router.push('/');
+      }
     },
   },
 };
