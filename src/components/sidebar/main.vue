@@ -139,7 +139,8 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
+import Swal from "sweetalert2";
 
 export default {
   data() {
@@ -155,30 +156,59 @@ export default {
       this.navbarOpen = false;
     },
     async handleLogout() {
-      const refreshToken = localStorage.getItem('refreshToken');
+      // Konfirmasi Logout menggunakan SweetAlert2
+      const result = await Swal.fire({
+        title: "Apakah Anda yakin?",
+        text: "Anda akan keluar dari akun!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Ya, keluar!",
+        cancelButtonText: "Batal",
+      });
 
-      if (refreshToken) {
-        try {
-          // Kirim permintaan DELETE untuk logout dari backend
-          await axios.delete('http://localhost:3000/authentications', {
-            data: {
-              refreshToken: refreshToken
-            }
-          });
-          
-          // Setelah berhasil, hapus token dari localStorage
-          localStorage.removeItem('accessToken');
-          localStorage.removeItem('refreshToken');
+      if (result.isConfirmed) {
+        const refreshToken = localStorage.getItem("refreshToken");
 
-          // Redirect ke halaman login
-          this.$router.push('/');
-        } catch (error) {
-          console.error('Logout gagal:', error);
-          // Anda bisa menambahkan logika error handling di sini
+        if (refreshToken) {
+          try {
+            // Kirim permintaan DELETE untuk logout dari backend
+            await axios.delete("http://localhost:3000/authentications", {
+              data: {
+                refreshToken: refreshToken,
+              },
+            });
+
+            // Setelah berhasil, hapus token dari localStorage
+            localStorage.removeItem("accessToken");
+            localStorage.removeItem("refreshToken");
+
+            // Tampilkan pesan sukses
+            Swal.fire({
+              title: "Logout Berhasil!",
+              text: "Anda telah keluar.",
+              icon: "success",
+              confirmButtonColor: "#3085d6",
+            }).then(() => {
+              // Redirect ke halaman login setelah SweetAlert ditutup
+              this.$router.push("/");
+            });
+          } catch (error) {
+            console.error("Logout gagal:", error);
+
+            // Tampilkan pesan error
+            Swal.fire({
+              title: "Logout Gagal",
+              text: "Terjadi kesalahan saat logout.",
+              icon: "error",
+              confirmButtonColor: "#d33",
+            });
+          }
+        } else {
+          // Jika tidak ada refresh token, langsung logout
+          this.$router.push("/");
         }
-      } else {
-        // Jika tidak ada refresh token, langsung logout
-        this.$router.push('/');
       }
     },
   },
