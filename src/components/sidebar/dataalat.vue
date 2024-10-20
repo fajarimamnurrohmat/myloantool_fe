@@ -70,115 +70,130 @@
       </div>
     </div>
 
-    <!-- Tabel Alat -->
-    <div style="margin-top: 30px">
-      <div class="table-wrapper">
-        <!-- Filter Section -->
-        <div class="filter-section">
-          <div class="date-inputs">
-            <div>
-              <div class="tampil-baris">
-                Tampilkan:
-                <select v-model.number="rowsPerPage" class="select-rows">
-                  <option value="5">5</option>
-                  <option value="10">10</option>
-                  <option value="20">20</option>
-                  <option value="100">100</option>
-                </select>
-                baris
-              </div>
-            </div>
-            <!-- Search Bar -->
-            <div class="search-bar-container">
-              <i class="fas fa-search search-icon"></i>
-              <input
-                type="text"
-                v-model="searchQuery"
-                class="search-input"
-                placeholder="Cari.."
-              />
-            </div>
-          </div>
+    <!-- Import Button and File Input -->
+    <div class="import-search-wrapper"> 
+      <div class="import-data">
+        <button class="btn-import" type="button" @click="importData" style="
+            color: #4b6cb7; 
+            background-color: white;
+            justify-content: space-between;
+            text-align: left; 
+            width: 7.5rem;">
+            <i class="fa-solid fa-arrow-up-from-bracket" 
+              style="
+              margin-right: 0.4rem;
+              color: #4b6cb7; ">
+            </i>
+          Import
+          </button>
+          <input 
+            type="file" 
+            id="importFile" 
+            class="file-input" 
+            accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+            @change="fileChange($event)" 
+            style="display: none;"
+          />
         </div>
-        <!-- End of Filter Section -->
-        <table class="data-table">
-          <thead>
-            <tr>
-              <th>No</th>
-              <th>Nama Alat</th>
-              <th>Jumlah</th>
-              <th>Ruang Bengkel</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(alat, index) in paginatedAlatList" :key="alat.id_alat">
-              <td>{{ index + 1 + (currentPage - 1) * rowsPerPage }}</td>
-              <td>{{ alat.nama_alat }}</td>
-              <td>{{ alat.jumlah }}</td>
-              <td>{{ alat.ruang_bengkel }}</td>
-              <td>
-                <!-- Dropdown Actions -->
-                <div class="dropdown d-inline-block">
+      
+        <!-- Search Bar -->
+        <div class="search-bar-container">
+          <i class="fas fa-search search-icon"></i>
+          <input
+          type="text"
+          v-model="searchQuery"
+          class="search-input"
+          placeholder="Cari data..."
+          />
+        </div>
+        <!-- End of Search Bar -->
+    </div>
+    <!-- End of Import Button and File Input -->
+    <div class="table-wrapper">
+      <div class="tampil-baris">
+        Tampilkan:
+        <select v-model.number="rowsPerPage" class="select-rows">
+          <option value="5">5</option>
+          <option value="10">10</option>
+          <option value="20">20</option>
+          <option value="100">100</option>
+        </select>
+        baris
+      </div>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>Nama Alat</th>
+            <th>Jumlah</th>
+            <th>Ruang Bengkel</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(alat, index) in paginatedAlatList" :key="alat.id_alat">
+            <td>{{ index + 1 + (currentPage - 1) * rowsPerPage }}</td>
+            <td>{{ alat.nama_alat }}</td>
+            <td>{{ alat.jumlah }}</td>
+            <td>{{ alat.ruang_bengkel }}</td>
+            <td>
+              <!-- Dropdown Actions -->
+              <div class="dropdown d-inline-block">
+                <button
+                  class="btn btn-sm"
+                  type="button"
+                  @click="toggleDropdown(index)"
+                  :aria-expanded="dropdownIndex === index"
+                >
+                  <i class="fas fa-ellipsis-h"></i>
+                </button>
+                <div
+                  class="dropdown-menu-act"
+                  :class="{ show: dropdownIndex === index }"
+                >
                   <button
-                    class="btn btn-sm"
-                    type="button"
-                    @click="toggleDropdown(index)"
-                    :aria-expanded="dropdownIndex === index"
+                    class="dropdown-item"
+                    @click="openEditModal(alat)"
+                    style="color: #274278"
                   >
-                    <i class="fas fa-ellipsis-h"></i>
+                    Edit
                   </button>
-                  <div
-                    class="dropdown-menu-act"
-                    :class="{ show: dropdownIndex === index }"
+                  <button
+                    class="dropdown-item"
+                    @click="deleteAlat(alat.id_alat)"
+                    style="color: red"
                   >
-                    <button
-                      class="dropdown-item"
-                      @click="openEditModal(alat)"
-                      style="color: #274278"
-                    >
-                      Edit
-                    </button>
-                    <button
-                      class="dropdown-item"
-                      @click="deleteAlat(alat.id_alat)"
-                      style="color: red"
-                    >
-                      Hapus
-                    </button>
-                  </div>
+                    Hapus
+                  </button>
                 </div>
-                <!-- End Dropdown Actions -->
-              </td>
-            </tr>
-            <tr v-if="paginatedAlatList.length === 0">
-              <td colspan="5" style="text-align: center">Tidak ada data</td>
-            </tr>
-          </tbody>
-        </table>
-        <!-- Pagination -->
-        <div v-if="totalPages > 1" class="pagination-container">
-          <button
-            @click="prevPage"
-            :disabled="currentPage === 1"
-            class="pagination-button"
+              </div>
+              <!-- End Dropdown Actions -->
+            </td>
+          </tr>
+          <tr v-if="paginatedAlatList.length === 0">
+            <td colspan="5" style="text-align: center">Tidak ada data</td>
+          </tr>
+        </tbody>
+      </table>
+      <!-- Pagination -->
+      <div v-if="totalPages > 1" class="pagination-container">
+        <button
+          @click="prevPage"
+          :disabled="currentPage === 1"
+          class="pagination-button"
           >
-            Previous
-          </button>
-          <span class="pagination-info">
-            Page {{ currentPage }} of {{ totalPages }}
-          </span>
-          <button
-            @click="nextPage"
-            :disabled="currentPage === totalPages"
-            class="pagination-button"
+          Previous
+        </button>
+        <span class="pagination-info"> Page {{ currentPage }} of {{ totalPages }}</span>
+        <button
+          @click="nextPage"
+          :disabled="currentPage === totalPages"
+          class="pagination-button"
           >
-            Next
-          </button>
-        </div>
+          Next
+        </button>
       </div>
     </div>
-    <!-- End Tabel Alat -->
   </div>
 </template>
 
@@ -581,6 +596,7 @@ export default {
   color: white;
   padding: 10px 20px;
   border: none;
+  margin-bottom: 1rem;
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.3s ease;
@@ -659,27 +675,23 @@ export default {
 .data-table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 600px;
+  margin-top: 20px;
+  overflow-x: auto;
 }
 
 .data-table th,
 .data-table td {
-  border: 1px solid #ddd;
+  border: 1px solid #ccc;
   padding: 10px;
-  text-align: left;
-}
-
-.data-table th:last-child,
-.data-table td:last-child {
   text-align: center;
 }
 
-.data-table tr:nth-child(even) {
-  background-color: #f2f2f2;
+.data-table tbody tr:nth-child(odd) {
+  background-color: none;
 }
 
-.data-table tr:hover {
-  background-color: #ddd;
+.data-table tbody tr:hover {
+  background-color: #f1f1f1;
 }
 
 .pagination-container {
@@ -746,6 +758,18 @@ export default {
 
 .dropdown-menu-act button:hover {
   background-color: #f1f1f1;
+}
+
+.import-search-wrapper {
+  display: flex;
+  justify-content: space-between; /* Menyebarkan elemen di kiri dan kanan */
+  width: 100%; /* Pastikan elemen mengambil lebar penuh */
+  align-items: center;
+}
+
+.import-data {
+  display: flex;
+  align-items: center;
 }
 
 /* Animations */

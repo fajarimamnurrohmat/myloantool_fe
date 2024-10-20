@@ -10,7 +10,6 @@
     <!-- filter wrapper -->
     <div class="filter-wrapper">
       <!-- Date Filter Section -->
-      <div class="filter-section">
         <div class="date-inputs">
           <div class="date-input-wrapper">
             <label for="startDate" class="date-sort">Sort Date From:</label>
@@ -81,7 +80,6 @@
           </div>
           <!-- search -->
         </div>
-      </div>
       <!-- End of Date Filter Section -->
     </div>
     <!-- End of filter wrapper -->

@@ -53,30 +53,57 @@
    
     <!-- Tabel Siswa -->
     <div style="margin-top: 30px">
+      <!-- End of Search and Import Wrapper -->
+      <div class="import-search-wrapper">
+        <!-- Import Button and File Input -->
+        <div class="import-data">
+          <button class="btn-import" type="button" @click="importData" style="
+            color: #4b6cb7; 
+            background-color: white;
+            justify-content: space-between;
+            text-align: left; 
+            width: 7.5rem;">
+            <i class="fa-solid fa-arrow-up-from-bracket" 
+              style="
+              margin-right: 0.4rem;
+              color: #4b6cb7; ">
+            </i>
+          Import
+          </button>
+          <input 
+            type="file" 
+            id="importFile" 
+            class="file-input" 
+            accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+            @change="fileChange($event)" 
+            style="display: none;"
+          />
+        </div>
+        <!-- End of Import Button and File Input -->
+        <!-- Search Bar -->
+        <div class="search-bar-container">
+          <i class="fas fa-search search-icon"></i>
+          <input
+          type="text"
+          v-model="searchQuery"
+          class="search-input"
+          placeholder="Cari data..."
+          />
+        </div>
+        <!-- End of Search Bar -->
+      </div>
+      <!-- End of Search and Import Wrapper -->
       <!-- tabel wrapper -->
       <div class="table-wrapper">
-        <!-- Section Filter dan Pencarian -->
-        <div class="filter-section">
-          <div class="date-inputs">
-            <div>
-              <div class="tampil-baris" style="text-align: left;">
-                Tampilkan:
-                <select v-model="rowsPerPage" class="select-rows" style="width: 3rem">
-                  <option value="5">5</option>
-                  <option value="10">10</option>
-                  <option value="20">20</option>
-                  <option value="100">100</option>
-                </select>
-                baris
-              </div>
-            </div>
-            <!-- Pencarian -->
-            <div class="search-bar-container">
-              <i class="fas fa-search search-icon"></i>
-              <input type="text" v-model="searchQuery" class="search-input" placeholder="Cari.." />
-            </div>
-            <!-- pencarian -->
-          </div>
+        <div class="tampil-baris" style="text-align: left;">
+          Tampilkan:
+          <select v-model="rowsPerPage" class="select-rows">
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="100">100</option>
+          </select>
+          baris
         </div>
         <!-- End Section Filter dan Pencarian -->
         <table class="data-table">
@@ -458,6 +485,13 @@ export default {
   align-items: center; 
 }
   
+.import-search-wrapper {
+  display: flex;
+  justify-content: space-between; /* Menyebarkan elemen di kiri dan kanan */
+  width: 100%; /* Pastikan elemen mengambil lebar penuh */
+  align-items: center;
+}
+
 .search-bar-container {
   display: flex;
   align-items: center;

@@ -2,7 +2,7 @@
   <div class="col d-flex align-items-center justify-content-center">
     <div class="form-container">
       <div class="text-center mb-4 mt-2">
-        <div class="name_brand">TeknoLend</div>
+        <div class="name_brand">MyLoanTool</div>
         <div class="name_desc">Peminjaman Alat Bengkel</div>
       </div>
       <!-- form -->
