@@ -359,6 +359,26 @@ export default {
   background-color: #f5f5f5;
 }
 
+/* Dropdown Styling */
+.dropdown-menu-export {
+  position: absolute;
+  top: 100%;
+  right: auto;
+  left: 3.3rem;
+  background-color: #fff;
+  width: 6.5rem;
+  box-shadow: 0px 0.2rem 0.5rem 0px rgba(73, 73, 73, 0.2);
+  z-index: 1;
+  border-radius: 5px;
+  padding: 10px;
+  max-height: 26rem;
+  overflow-y: auto;
+  margin-top: 5px;
+  transform: translateX(-50%);
+  text-align: left;
+}
+/* end of dropdown style */
+
 .pagination-container {
   text-align: center;
   display: flex;

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div style="text-align: left; margin-bottom: 1rem">
+    <div style="text-align: left; margin-bottom: 1rem" class="header-dataPinjaman-container">
       <h3 class="header-DataPinjaman">Data Pinjaman Bermasalah</h3>
       <p>
         Data pada halaman ini merupakan data alat yang dikembalikan dalam kondisi bermasalah.
@@ -33,40 +33,67 @@
           </div>
           <!-- filter button section -->
           <div class="filter-buttons">
-            <button @click="resetFilters" 
+            <button @click="resetFilter" 
               class="btn-reset" 
-              style="height: 2.7rem; width: 3rem;">
+              style="
+                height: 2.7rem; 
+                width: 3rem;"
+              >
               <i class="fa fa-sync" aria-hidden="true"></i>
             </button>
             <div class="dropdown d-inline-block">
               <button
                 class="btn-export"
                 type="button"
-                @click="toggleDropdown"
-                :aria-expanded="dropdownOpen"
-                style="color: #4b6cb7; background-color: white; width: 6.5rem; height: 2.72rem;">
+                @click="toggleDropdown(index)"
+                :aria-expanded="dropdownIndex === index"
+                style="
+                  color: #4b6cb7; 
+                  background-color: white; 
+                  width: 6.5rem;
+                  height: 2.72rem;"
+              > 
                 <i class="fa-solid fa-arrow-up-from-bracket" 
-                  style="margin-left: 0.7rem; margin-right: 0.4rem; color: #4b6cb7;">
-                </i> Export
+                  style="
+                    margin-left: 0.7rem;
+                    margin-right: 0.4rem;
+                    color: #4b6cb7; ">
+                </i>
+                Export
               </button>
               <div
-                v-if="dropdownOpen"
-                class="dropdown-menu-export">
+                class="dropdown-menu-exports"
+                :class="{ show: dropdownIndex === index }"
+              >
                 <a
                   class="dropdown-item-export"
                   @click="exportData('pdf')"
-                  style="color: #4b6cb7;">
-                  <i class="fa fa-file-pdf" aria-hidden="true" style="margin-left: 0.5rem; margin-right: 0.1rem;"></i> .pdf
+                  style="color: #4b6cb7;"
+                  ><i class="fa fa-file-pdf" 
+                      aria-hidden="true"
+                      style="
+                          margin-left: 0.5rem;
+                          margin-right: 0.1rem;">
+                  </i>
+                  .pdf
                 </a>
                 <a
                   class="dropdown-item-export"
                   @click="exportData('csv')"
-                  style="color: #4b6cb7;">
-                  <i class="fa-solid fa-file-csv" aria-hidden="true" style="margin-left: 0.5rem; margin-right: 0.1rem;"></i> .csv
+                  style="color: #4b6cb7;"
+                  ><i class="fa-solid fa-file-csv" 
+                      aria-hidden="true"
+                      style="
+                          margin-left: 0.5rem;
+                          margin-right: 0.1rem;
+                          margin-top: 0.5rem;">
+                  </i>
+                  .csv
                 </a>
               </div>
             </div>
           </div>
+          <!-- filter button section -->
           <!-- search -->
           <div class="search-bar-container">
             <i class="fas fa-search search-icon"></i>
@@ -74,7 +101,8 @@
               type="text"
               v-model="searchQuery"
               class="search-input"
-              style="padding-right: 30px; width: 10rem;"
+              style="padding-right: 30px;
+                    width: 13rem;"
               placeholder="Cari data..."
             />
           </div>
@@ -253,6 +281,10 @@ export default {
 </script>
 
 <style scoped>
+.header-dataPinjaman-container {
+  margin-top: -3rem;
+}
+
 .header-DataPinjaman {
   font-weight: bold;
   color: #274278;
@@ -315,15 +347,15 @@ export default {
 }
 
 /* Dropdown Styling */
-.dropdown-menu-export {
+.dropdown-menu-exports {
   display: none;
   position: absolute;
   top: 100%;
   right: auto;
-  left: 3rem;
+  left: 3.3rem;
   background-color: #fff;
-  width: 6rem;
-  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  width: 6.5rem;
+  box-shadow: 0px 0.2rem 0.5rem 0px rgba(73, 73, 73, 0.2);
   z-index: 1;
   border-radius: 5px;
   padding: 10px;
@@ -334,17 +366,8 @@ export default {
   text-align: left;
 }
 
-.dropdown-menu-export.show {
+.dropdown-menu-exports.show {
   display: block;
-}
-
-.dropdown-menu-export button:hover {
-  background-color: #a72828;
-  color: #0056b3;
-}
-
-.dropdown-item-export {
-  margin-top: 0.3rem;
 }
 /* end of dropdown style */
 
@@ -365,7 +388,6 @@ export default {
   cursor: pointer;
   text-align: left;
   margin-right: -2.3rem;
-  z-index: 99999;
 }
 
 .btn-reset:hover {

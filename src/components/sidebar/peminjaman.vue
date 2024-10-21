@@ -157,7 +157,7 @@
               Export
             </button>
             <div
-              class="dropdown-menu-export"
+              class="dropdown-menu-exports"
               :class="{ show: dropdownIndex === index }"
             >
               <a
@@ -941,7 +941,7 @@ export default {
   display: flex;
   justify-content: space-between; 
   align-items: center; 
-  margin-top: 3rem;
+  margin-top: -3.5rem;
 }
 
 .modal-header .close-modal {
@@ -1162,7 +1162,7 @@ export default {
 /* end of dropdown style */
 
 /* Dropdown Styling */
-.dropdown-menu-export {
+.dropdown-menu-exports {
   display: none;
   position: absolute;
   top: 100%;
@@ -1181,7 +1181,7 @@ export default {
   text-align: left;
 }
 
-.dropdown-menu-export.show {
+.dropdown-menu-exports.show {
   display: block;
 }
 /* end of dropdown style */
