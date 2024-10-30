@@ -2,7 +2,7 @@
   <div class="col d-flex align-items-center justify-content-center">
     <div class="form-container">
       <div class="text-center mb-4 mt-2">
-        <div class="name_brand">MyLoanTool</div>
+        <div class="name_brand">TeknoLend</div>
         <div class="name_desc">Peminjaman Alat Bengkel</div>
       </div>
       <!-- form -->
@@ -100,12 +100,13 @@ export default {
 
           // Redirect ke dashboard
           this.$router.push('/mainsidebar/dashboard');
+
+          // Mulai interval untuk refresh token
+          this.startTokenRefresh();
         } else {
-          // Tangani kasus jika status bukan 'success'
           this.errorMessage = response.data.message || 'Login gagal.';
         }
       } catch (error) {
-        // Tangani error jaringan atau lainnya
         if (error.response && error.response.data && error.response.data.message) {
           this.errorMessage = error.response.data.message;
         } else {
@@ -114,6 +115,36 @@ export default {
       } finally {
         this.isLoading = false;
       }
+    },
+    async refreshAccessToken() {
+      try {
+        console.log('Attempting to refresh access token...'); // Debugging
+        const refreshToken = localStorage.getItem('refreshToken');
+        const response = await axios.put('http://localhost:3000/authentications', {
+          refreshToken: refreshToken,
+        });
+
+        if (response.data.status === 'success') {
+          const { accessToken } = response.data.data;
+          localStorage.setItem('accessToken', accessToken);
+          console.log('Access token updated:', accessToken); // Debugging
+        } else {
+          console.log('Failed to refresh access token:', response.data.message); // Debugging
+        }
+      } catch (error) {
+        console.log('Error while refreshing access token:', error); // Debugging
+      }
+    },
+    startTokenRefresh() {
+      const tokenAge = 50;
+      const refreshTime = tokenAge - 10; //jadinya setiap 40 detik ada udate accessToken
+
+      console.log('Starting token refresh interval...'); // Debugging
+
+      this.refreshInterval = setInterval(() => {
+        console.log('Refreshing token...'); // Debugging
+        this.refreshAccessToken();
+      }, refreshTime * 1000); // Menggunakan milidetik
     },
   },
 };
