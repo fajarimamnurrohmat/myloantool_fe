@@ -5,14 +5,13 @@
     </h1>
   </div>
 
-  <div
+  <div class="card-container"
     style="
       display: flex;
       justify-content: space-between;
       gap: 20px;
-      margin-top: 30px;
-    "
-  >
+      margin-top: 30px;"
+    >
     <!-- Card 1: Data Alat -->
     <div class="card-dashboard" style="background-color: #4b6cb7">
       <h2>Data Alat</h2>
@@ -112,4 +111,21 @@
   color: white;
   transform: scale(0.98);
 }
+
+@media (max-width: 768px) { /* Tampilan berubah pada layar yang lebih kecil dari 768px */
+  .welcome-header {
+    margin-top: 2rem;
+    font-size: 2rem;
+  }
+  
+  .card-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .card-dashboard {
+    width: 100%;
+  }
+}
+
 </style>

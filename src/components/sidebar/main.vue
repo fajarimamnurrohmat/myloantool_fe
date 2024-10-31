@@ -293,9 +293,11 @@ export default {
   .navbar-brand {
     flex-direction: column;
     align-items: flex-start;
+    margin-left: 1.5rem;
   }
   .navbar-nav .nav-item .nav-link {
     margin-right: 0;
+    margin-left: 1.5rem;
     margin-bottom: 10px;
   }
   .navbar-nav {
@@ -303,7 +305,8 @@ export default {
     align-items: flex-start;
   }
   .nav-logout {
-    margin-top: 10px;
+    margin-top: 5px;
+    margin-left: -0.8rem;
   }
   .navbar-collapse {
     text-align: left;

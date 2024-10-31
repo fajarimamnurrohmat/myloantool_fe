@@ -1313,4 +1313,61 @@ export default {
   color: rgb(255, 255, 255); /* Example: Change active color */
   border-bottom: 2px solid rgb(255, 255, 255); /* Example: Active underline */
 }
+
+/* Untuk layar device berukuran kecil (misalnya kurang dari 410px) */
+@media screen and (max-width: 450px) {
+  .header-peminjaman-container {
+    display: block; /* Membuat elemen tersusun vertikal */
+    text-align: left; /* Agar teks dan tombol berada di tengah */
+  }
+
+  .header-peminjaman {
+    margin-bottom: 1rem; /* Menambahkan jarak antara teks dan tombol */
+  }
+
+  .btn-add {
+    width: auto; /* Membuat tombol menyesuaikan dengan konten */
+    margin-bottom: 1rem;
+  }
+
+  .filter-wrapper,
+  .date-inputs,
+  .date-input-wrapper,
+  .date-input-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Agar konten rata kiri */
+    width: 100%; /* Menyesuaikan lebar konten */
+  }
+
+  .date-input-wrapper {
+    width: 100%;
+  }
+
+  .date-filter {
+    width: 100%;
+  }
+
+  .calendar-icon {
+    position: absolute;
+    right: 1rem; /* Sedikit jarak dari tepi kanan */
+    top: 70%;
+    transform: translateY(-50%); /* Menempatkan ikon di tengah secara vertikal */
+    font-size: 1.2rem; /* Sesuaikan ukuran ikon agar proporsional */
+    pointer-events: none;
+  }
+
+  .filter-buttons {
+    display: flex;
+    gap: 0.5rem;
+    align-items: flex-start;
+    margin-left: -11rem;
+  }
+
+  .btn-reset,
+  .btn-export {
+    width: auto;
+    height: 2.7rem;
+  }
+}
 </style>
