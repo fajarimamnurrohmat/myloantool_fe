@@ -221,7 +221,6 @@ export default {
     };
   },
   computed: {
-    // Filter alat berdasarkan query pencarian
     filteredAlatList() {
       return this.alatList.filter((alat) => {
         const ruangBengkel = this.getRuangBengkel(alat.id_bengkel)
@@ -235,22 +234,22 @@ export default {
         );
       });
     },
-    // Paginate daftar alat
     paginatedAlatList() {
       const start = (this.currentPage - 1) * this.rowsPerPage;
       const end = start + this.rowsPerPage;
       return this.filteredAlatList.slice(start, end);
     },
-    // Total halaman berdasarkan jumlah alat
     totalPages() {
       return Math.ceil(this.filteredAlatList.length / this.rowsPerPage);
     },
   },
   methods: {
-    // Mengambil daftar bengkel dari API
     async fetchBengkelList() {
       try {
-        const response = await axios.get("http://localhost:3000/bengkel");
+        const token = localStorage.getItem("accessToken");
+        const response = await axios.get("http://localhost:3000/bengkel", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
         if (response.data.status === "success") {
           this.bengkelList = response.data.data.bengkel.rows;
         } else {
@@ -272,11 +271,12 @@ export default {
         });
       }
     },
-
-    // Mengambil daftar alat dari API
     async fetchAlatList() {
       try {
-        const response = await axios.get("http://localhost:3000/alat");
+        const token = localStorage.getItem("accessToken");
+        const response = await axios.get("http://localhost:3000/alat", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
         if (response.data.status === "success") {
           this.alatList = response.data.data.alat;
         } else {
@@ -298,8 +298,6 @@ export default {
         });
       }
     },
-
-    // Menampilkan modal untuk menambah alat baru
     openAddModal() {
       this.isEditMode = false;
       this.editAlatId = null;
@@ -310,8 +308,6 @@ export default {
       };
       this.showModal = true;
     },
-
-    // Menampilkan modal untuk mengedit alat yang dipilih
     openEditModal(alat) {
       this.isEditMode = true;
       this.editAlatId = alat.id_alat;
@@ -322,28 +318,25 @@ export default {
       };
       this.showModal = true;
     },
-
-    // Menyimpan atau memperbarui data alat
     async saveAlat() {
       if (
         this.newAlat.namaAlat &&
         this.newAlat.id_bengkel &&
         this.newAlat.jumlah > 0
       ) {
+        const token = localStorage.getItem("accessToken");
         const payload = {
           id_bengkel: this.newAlat.id_bengkel,
           nama_alat: this.newAlat.namaAlat,
           jumlah: Number(this.newAlat.jumlah),
         };
-
         try {
           if (this.isEditMode && this.editAlatId) {
-            // Mode Edit
             const response = await axios.put(
               `http://localhost:3000/alat/${this.editAlatId}`,
-              payload
+              payload,
+              { headers: { Authorization: `Bearer ${token}` } }
             );
-
             if (response.data.status === "success") {
               const updatedAlat = response.data.data.alat;
               const index = this.alatList.findIndex(
@@ -369,12 +362,11 @@ export default {
               });
             }
           } else {
-            // Mode Tambah Baru
             const response = await axios.post(
               "http://localhost:3000/alat",
-              payload
+              payload,
+              { headers: { Authorization: `Bearer ${token}` } }
             );
-
             if (response.data.status === "success") {
               this.fetchAlatList();
               this.closeModal();
@@ -412,8 +404,6 @@ export default {
         });
       }
     },
-
-    // Menghapus alat berdasarkan ID
     async deleteAlat(alatId) {
       const result = await Swal.fire({
         title: "Anda yakin?",
@@ -424,13 +414,13 @@ export default {
         cancelButtonColor: "#d33",
         confirmButtonText: "Ya, hapus!",
       });
-
       if (result.isConfirmed) {
+        const token = localStorage.getItem("accessToken");
         try {
           const response = await axios.delete(
-            `http://localhost:3000/alat/${alatId}`
+            `http://localhost:3000/alat/${alatId}`,
+            { headers: { Authorization: `Bearer ${token}` } }
           );
-
           if (response.data.status === "success") {
             const index = this.alatList.findIndex(
               (alat) => alat.id_alat === alatId
@@ -464,14 +454,10 @@ export default {
         }
       }
     },
-
-    // Menutup modal dan mereset form
     closeModal() {
       this.showModal = false;
       this.resetForm();
     },
-
-    // Mereset form input alat
     resetForm() {
       this.newAlat = {
         namaAlat: "",
@@ -481,41 +467,31 @@ export default {
       this.editAlatId = null;
       this.isEditMode = false;
     },
-
-    // Mengontrol dropdown aksi per baris
     toggleDropdown(index) {
       this.dropdownIndex = this.dropdownIndex === index ? null : index;
     },
-
-    // Mengatur ulang filter pencarian dan pagination
     resetFilter() {
       this.searchQuery = "";
       this.rowsPerPage = 5;
       this.currentPage = 1;
     },
-
-    // Navigasi halaman sebelumnya
     prevPage() {
       if (this.currentPage > 1) {
         this.currentPage--;
         this.dropdownIndex = null;
       }
     },
-
-    // Navigasi halaman berikutnya
     nextPage() {
       if (this.currentPage < this.totalPages) {
         this.currentPage++;
         this.dropdownIndex = null;
       }
     },
-
-    // Mendapatkan nama ruang bengkel berdasarkan ID
-    getRuangBengkel(id_bengkel) {
+    getRuangBengkel(bengkelId) {
       const bengkel = this.bengkelList.find(
-        (bengkel) => bengkel.id_bengkel === id_bengkel
+        (bengkel) => bengkel.id_bengkel === bengkelId
       );
-      return bengkel ? bengkel.ruang_bengkel : "Tidak Diketahui";
+      return bengkel ? bengkel.nama_ruang : "";
     },
   },
   mounted() {
@@ -524,6 +500,7 @@ export default {
   },
 };
 </script>
+
 
 <style scoped>
 /* Modal Styles */

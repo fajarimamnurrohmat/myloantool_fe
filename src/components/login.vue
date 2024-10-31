@@ -102,7 +102,7 @@ export default {
           this.$router.push('/mainsidebar/dashboard');
 
           // Mulai interval untuk refresh token
-          this.startTokenRefresh();
+          //this.startTokenRefresh();
         } else {
           this.errorMessage = response.data.message || 'Login gagal.';
         }
@@ -116,36 +116,36 @@ export default {
         this.isLoading = false;
       }
     },
-    async refreshAccessToken() {
-      try {
-        console.log('Attempting to refresh access token...'); // Debugging
-        const refreshToken = localStorage.getItem('refreshToken');
-        const response = await axios.put('http://localhost:3000/authentications', {
-          refreshToken: refreshToken,
-        });
+    // async refreshAccessToken() {
+    //   try {
+    //     console.log('Attempting to refresh access token...'); // Debugging
+    //     const refreshToken = localStorage.getItem('refreshToken');
+    //     const response = await axios.put('http://localhost:3000/authentications', {
+    //       refreshToken: refreshToken,
+    //     });
 
-        if (response.data.status === 'success') {
-          const { accessToken } = response.data.data;
-          localStorage.setItem('accessToken', accessToken);
-          console.log('Access token updated:', accessToken); // Debugging
-        } else {
-          console.log('Failed to refresh access token:', response.data.message); // Debugging
-        }
-      } catch (error) {
-        console.log('Error while refreshing access token:', error); // Debugging
-      }
-    },
-    startTokenRefresh() {
-      const tokenAge = 50;
-      const refreshTime = tokenAge - 10; //jadinya setiap 40 detik ada udate accessToken
+    //     if (response.data.status === 'success') {
+    //       const { accessToken } = response.data.data;
+    //       localStorage.setItem('accessToken', accessToken);
+    //       console.log('Access token updated:', accessToken); // Debugging
+    //     } else {
+    //       console.log('Failed to refresh access token:', response.data.message); // Debugging
+    //     }
+    //   } catch (error) {
+    //     console.log('Error while refreshing access token:', error); // Debugging
+    //   }
+    // },
+    // startTokenRefresh() {
+    //   const tokenAge = 50;
+    //   const refreshTime = tokenAge - 10; //jadinya setiap 40 detik ada udate accessToken
 
-      console.log('Starting token refresh interval...'); // Debugging
+    //   console.log('Starting token refresh interval...'); // Debugging
 
-      this.refreshInterval = setInterval(() => {
-        console.log('Refreshing token...'); // Debugging
-        this.refreshAccessToken();
-      }, refreshTime * 1000); // Menggunakan milidetik
-    },
+    //   this.refreshInterval = setInterval(() => {
+    //     console.log('Refreshing token...'); // Debugging
+    //     this.refreshAccessToken();
+    //   }, refreshTime * 1000); // Menggunakan milidetik
+    // },
   },
 };
 </script>
