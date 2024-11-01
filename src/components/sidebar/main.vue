@@ -12,7 +12,7 @@
         </a>
         <!-- Toggle button -->
         <button @click="toggleNavbar" class="navbar-toggler" type="button]">
-          <i class="fas fa-bars"></i>
+          <i class="fas fa-bars" style="color: white;"></i>
         </button>
         <!-- Navbar links -->
         <div class="collapse navbar-collapse" :class="{ show: navbarOpen }">
