@@ -1,185 +1,228 @@
 <template>
-    <!-- Header dan Tombol Tambah Siswa -->
-    <div class="header-siswa-container">
-      <h3 class="header-siswa">Halaman Data Siswa</h3>
-      <button @click="showModal = true" class="btn_add_siswa">
-        <i class="fas fa-plus"></i> Inputkan Data
-      </button>
-    </div>
+  <!-- Header dan Tombol Tambah Siswa -->
+  <div class="header-siswa-container">
+    <h3 class="header-siswa">Halaman Data Siswa</h3>
+    <button @click="showModal = true" class="btn_add_siswa">
+      <i class="fas fa-plus"></i> Inputkan Data
+    </button>
+  </div>
 
-    <!-- Modal Input/Edit Siswa -->
-    <div v-if="showModal" class="modal-overlay" @click.self="closeModal">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h4>{{ isEditMode ? 'Edit Data Siswa' : 'Input Data Siswa' }}</h4>
-          <span class="close-modal" @click="closeModal" style="color: red;">&times;</span>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label for="nomorInduk">Nomor Induk</label>
-            <p>Masukkan nomor induk</p>
-            <input type="text" id="nomorInduk" class="form-control" v-model="newSiswa.nomorInduk" :disabled="isEditMode" />
-          </div>
-          <div class="form-group">
-            <label for="namaSiswa">Nama Siswa</label>
-            <p>Masukkan nama siswa</p>
-            <input type="text" id="namaSiswa" class="form-control" v-model="newSiswa.nama" />
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label for="jenisKelamin">Jenis Kelamin</label>
-            <p>Pilih jenis kelamin</p>
-            <select id="jenisKelamin" class="form-control" v-model="newSiswa.jenisKelamin">
-              <option value="">Pilih jenis kelamin</option>
-              <option value="Laki-laki">Laki-laki</option>
-              <option value="Perempuan">Perempuan</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="jurusan">Jurusan</label>
-            <p>Masukkan Jurusan</p>
-            <input type="text" id="jurusan" class="form-control" v-model="newSiswa.jurusan" />
-          </div>
-        </div>
-
-        <div style="margin-top: 10px; text-align: left">
-          <button @click="isEditMode ? editSiswa() : addSiswa()" class="btn_add_siswa">
-            {{ isEditMode ? 'Update Data' : 'Simpan Data' }}
-          </button>
-        </div>
+  <!-- Modal Input/Edit Siswa -->
+  <div v-if="showModal" class="modal-overlay" @click.self="closeModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4>{{ isEditMode ? "Edit Data Siswa" : "Input Data Siswa" }}</h4>
+        <span class="close-modal" @click="closeModal" style="color: red"
+          >&times;</span
+        >
       </div>
-    </div>
-   
-    <!-- Tabel Siswa -->
-    <div style="margin-top: 30px">
-      <!-- End of Search and Import Wrapper -->
-      <div class="import-search-wrapper">
-        <!-- Import Button and File Input -->
-        <div class="import-data">
-          <button class="btn-import" type="button" @click="importData" style="
-            color: #4b6cb7; 
-            background-color: white;
-            justify-content: space-between;
-            text-align: left; 
-            width: 7.5rem;">
-            <i class="fa-solid fa-arrow-up-from-bracket" 
-              style="
-              margin-right: 0.4rem;
-              color: #4b6cb7; ">
-            </i>
-          Import
-          </button>
-          <input 
-            type="file" 
-            id="importFile" 
-            class="file-input" 
-            accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-            @change="fileChange($event)" 
-            style="display: none;"
+      <div class="form-row">
+        <div class="form-group">
+          <label for="nomorInduk">Nomor Induk</label>
+          <p>Masukkan nomor induk</p>
+          <input
+            type="text"
+            id="nomorInduk"
+            class="form-control"
+            v-model="newSiswa.nomorInduk"
+            :disabled="isEditMode"
           />
         </div>
-        <!-- End of Import Button and File Input -->
-        <!-- Search Bar -->
-        <div class="search-bar-container">
-          <i class="fas fa-search search-icon"></i>
+        <div class="form-group">
+          <label for="namaSiswa">Nama Siswa</label>
+          <p>Masukkan nama siswa</p>
           <input
+            type="text"
+            id="namaSiswa"
+            class="form-control"
+            v-model="newSiswa.nama"
+          />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="jenisKelamin">Jenis Kelamin</label>
+          <p>Pilih jenis kelamin</p>
+          <select
+            id="jenisKelamin"
+            class="form-control"
+            v-model="newSiswa.jenisKelamin"
+          >
+            <option value="">Pilih jenis kelamin</option>
+            <option value="Laki-laki">Laki-laki</option>
+            <option value="Perempuan">Perempuan</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="jurusan">Jurusan</label>
+          <p>Masukkan Jurusan</p>
+          <input
+            type="text"
+            id="jurusan"
+            class="form-control"
+            v-model="newSiswa.jurusan"
+          />
+        </div>
+      </div>
+
+      <div style="margin-top: 10px; text-align: left">
+        <button
+          @click="isEditMode ? editSiswa() : addSiswa()"
+          class="btn_add_siswa"
+        >
+          {{ isEditMode ? "Update Data" : "Simpan Data" }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabel Siswa -->
+  <div style="margin-top: 30px">
+    <!-- End of Search and Import Wrapper -->
+    <div class="import-search-wrapper">
+      <!-- Import Button and File Input -->
+      <div class="import-data">
+        <button
+          class="btn-import"
+          type="button"
+          @click="importData"
+          style="
+            color: #4b6cb7;
+            background-color: white;
+            justify-content: space-between;
+            text-align: left;
+            width: 7.5rem;
+          "
+        >
+          <i
+            class="fa-solid fa-arrow-up-from-bracket"
+            style="margin-right: 0.4rem; color: #4b6cb7"
+          >
+          </i>
+          Import
+        </button>
+        <input
+          type="file"
+          id="importFile"
+          class="file-input"
+          accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+          @change="fileChange($event)"
+          style="display: none"
+        />
+      </div>
+      <!-- End of Import Button and File Input -->
+      <!-- Search Bar -->
+      <div class="search-bar-container">
+        <i class="fas fa-search search-icon"></i>
+        <input
           type="text"
           v-model="searchQuery"
           class="search-input"
           placeholder="Cari data..."
-          />
-        </div>
-        <!-- End of Search Bar -->
+        />
       </div>
-      <!-- End of Search and Import Wrapper -->
-      <!-- tabel wrapper -->
-      <div class="table-wrapper">
-        <div class="tampil-baris" style="text-align: left;">
-          Tampilkan:
-          <select v-model="rowsPerPage" class="select-rows">
-            <option value="5">5</option>
-            <option value="10">10</option>
-            <option value="20">20</option>
-            <option value="100">100</option>
-          </select>
-          baris
-        </div>
-        <!-- End Section Filter dan Pencarian -->
-        <table class="data-table">
-          <thead>
-            <tr>
-              <th>No</th>
-              <th>Nomor Induk</th>
-              <th>Nama Siswa</th>
-              <th>Jenis Kelamin</th>
-              <th>Jurusan</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(siswa, index) in paginatedSiswaList" :key="index">
-              <td>{{ index + 1 + (currentPage - 1) * rowsPerPage }}</td>
-              <td>{{ siswa.nomorInduk }}</td>
-              <td>{{ siswa.nama }}</td>
-              <td>{{ siswa.jenisKelamin }}</td>
-              <td>{{ siswa.jurusan }}</td>
-              <td>
-                <!-- dropdown set -->
-                <div class="dropdown d-inline-block">
-                  <button
-                    class="btn btn-sm"
-                    type="button"
-                    @click="toggleDropdown(index)"
-                    :aria-expanded="dropdownIndex === index"
-                  >
-                    <i class="fas fa-ellipsis-h"></i>
-                  </button>
-                  <div
-                    class="dropdown-menu-act"
-                    :class="{ show: dropdownIndex === index }"
-                  >
-                  <button class="dropdown-item" @click="prepareEditSiswa(siswa)" style="color: #274278">Edit</button>
-                  <button class="dropdown-item" @click="deleteSiswa(siswa.nomorInduk)" style="color: red">Hapus</button>
-                  </div>
-                </div>
-                <!-- dropdown set -->
-              </td>
-            </tr>
-            <tr v-if="paginatedSiswaList.length === 0">
-              <td colspan="6" style="text-align: center">Tidak ada data</td>
-            </tr>
-          </tbody>
-        </table>
-        <!-- pagination -->
-        <div v-if="totalPages > 1" class="pagination-container">
-            <button
-              @click="currentPage--"
-              :disabled="currentPage === 1"
-              class="pagination-button"
-            >
-              Previous
-            </button>
-            <span class="pagination-info">
-              Page {{ currentPage }} of {{ totalPages }}
-            </span>
-            <button
-              @click="currentPage++"
-              :disabled="currentPage === totalPages"
-              class="pagination-button"
-            >
-              Next
-            </button>
-        </div>
-        <!-- pagination -->
-      </div>
-      <!-- tabel wrapper -->
+      <!-- End of Search Bar -->
     </div>
-    <!-- Tabel Siswa -->
+    <!-- End of Search and Import Wrapper -->
+    <!-- tabel wrapper -->
+    <div class="table-wrapper">
+      <div class="tampil-baris" style="text-align: left">
+        Tampilkan:
+        <select v-model="rowsPerPage" class="select-rows">
+          <option value="5">5</option>
+          <option value="10">10</option>
+          <option value="20">20</option>
+          <option value="100">100</option>
+        </select>
+        baris
+      </div>
+      <!-- End Section Filter dan Pencarian -->
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>Nomor Induk</th>
+            <th>Nama Siswa</th>
+            <th>Jenis Kelamin</th>
+            <th>Jurusan</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(siswa, index) in paginatedSiswaList" :key="index">
+            <td>{{ index + 1 + (currentPage - 1) * rowsPerPage }}</td>
+            <td>{{ siswa.nomorInduk }}</td>
+            <td>{{ siswa.nama }}</td>
+            <td>{{ siswa.jenisKelamin }}</td>
+            <td>{{ siswa.jurusan }}</td>
+            <td>
+              <!-- dropdown set -->
+              <div class="dropdown d-inline-block">
+                <button
+                  class="btn btn-sm"
+                  type="button"
+                  @click="toggleDropdown(index)"
+                  :aria-expanded="dropdownIndex === index"
+                >
+                  <i class="fas fa-ellipsis-h"></i>
+                </button>
+                <div
+                  class="dropdown-menu-act"
+                  :class="{ show: dropdownIndex === index }"
+                >
+                  <button
+                    class="dropdown-item"
+                    @click="prepareEditSiswa(siswa)"
+                    style="color: #274278"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    class="dropdown-item"
+                    @click="deleteSiswa(siswa.nomorInduk)"
+                    style="color: red"
+                  >
+                    Hapus
+                  </button>
+                </div>
+              </div>
+              <!-- dropdown set -->
+            </td>
+          </tr>
+          <tr v-if="paginatedSiswaList.length === 0">
+            <td colspan="6" style="text-align: center">Tidak ada data</td>
+          </tr>
+        </tbody>
+      </table>
+      <!-- pagination -->
+      <div v-if="totalPages > 1" class="pagination-container">
+        <button
+          @click="currentPage--"
+          :disabled="currentPage === 1"
+          class="pagination-button"
+        >
+          Previous
+        </button>
+        <span class="pagination-info">
+          Page {{ currentPage }} of {{ totalPages }}
+        </span>
+        <button
+          @click="currentPage++"
+          :disabled="currentPage === totalPages"
+          class="pagination-button"
+        >
+          Next
+        </button>
+      </div>
+      <!-- pagination -->
+    </div>
+    <!-- tabel wrapper -->
+  </div>
+  <!-- Tabel Siswa -->
 </template>
 
 <script>
-import Swal from 'sweetalert2';
+import Swal from "sweetalert2";
 
 export default {
   data() {
@@ -191,44 +234,49 @@ export default {
         jenisKelamin: "",
         jurusan: "",
       },
-      siswaList: [], // Daftar siswa yang diambil dari API
+      siswaList: [],
       rowsPerPage: 5,
       currentPage: 1,
       searchQuery: "",
-      editNomorInduk: null, // Menyimpan nomor induk siswa yang sedang diedit
-      dropdownIndex: null, // Indeks dropdown yang terbuka
+      editNomorInduk: null,
+      dropdownIndex: null,
     };
   },
   computed: {
     isEditMode() {
       return this.editNomorInduk !== null;
     },
-    // Filter siswa berdasarkan query pencarian
     filteredSiswaList() {
       return this.siswaList.filter(
         (siswa) =>
-          siswa.nomorInduk.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+          siswa.nomorInduk
+            .toLowerCase()
+            .includes(this.searchQuery.toLowerCase()) ||
           siswa.nama.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-          siswa.jenisKelamin.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+          siswa.jenisKelamin
+            .toLowerCase()
+            .includes(this.searchQuery.toLowerCase()) ||
           siswa.jurusan.toLowerCase().includes(this.searchQuery.toLowerCase())
       );
     },
-    // Paginate daftar siswa
     paginatedSiswaList() {
       const start = (this.currentPage - 1) * this.rowsPerPage;
       const end = start + this.rowsPerPage;
       return this.filteredSiswaList.slice(start, end);
     },
-    // Total halaman berdasarkan jumlah siswa
     totalPages() {
       return Math.ceil(this.filteredSiswaList.length / this.rowsPerPage);
     },
   },
   methods: {
-    // Mengambil data siswa dari API
     async fetchSiswaData() {
       try {
-        const response = await fetch('http://localhost:3000/siswa');
+        const token = localStorage.getItem("accessToken");
+        const response = await fetch("http://localhost:3000/siswa", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         const data = await response.json();
         if (data.status === "success") {
           this.siswaList = data.data.siswa.map((item) => ({
@@ -244,14 +292,20 @@ export default {
         console.error("Error fetching data:", error);
       }
     },
-    // Menambahkan siswa
     async addSiswa() {
-      if (this.newSiswa.nomorInduk && this.newSiswa.nama && this.newSiswa.jenisKelamin && this.newSiswa.jurusan) {
+      if (
+        this.newSiswa.nomorInduk &&
+        this.newSiswa.nama &&
+        this.newSiswa.jenisKelamin &&
+        this.newSiswa.jurusan
+      ) {
         try {
-          const response = await fetch('http://localhost:3000/siswa', {
-            method: 'POST',
+          const token = localStorage.getItem("accessToken");
+          const response = await fetch("http://localhost:3000/siswa", {
+            method: "POST",
             headers: {
-              'Content-Type': 'application/json',
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify({
               nis: this.newSiswa.nomorInduk,
@@ -262,14 +316,14 @@ export default {
           });
           const data = await response.json();
           if (data.status === "success") {
-            this.fetchSiswaData(); // Refresh data
+            this.fetchSiswaData();
             this.closeModal();
             this.resetForm();
             Swal.fire({
               title: "Sukses!",
               text: "Data siswa berhasil disimpan.",
               icon: "success",
-              confirmButtonText: "OK"
+              confirmButtonText: "OK",
             });
           } else {
             console.error("Gagal menambah siswa:", data);
@@ -277,7 +331,7 @@ export default {
               title: "Error!",
               text: "Gagal menambah siswa. NIS sudah terdaftar.",
               icon: "error",
-              confirmButtonText: "OK"
+              confirmButtonText: "OK",
             });
           }
         } catch (error) {
@@ -286,66 +340,55 @@ export default {
             title: "Error!",
             text: "Terjadi kesalahan saat menambah siswa.",
             icon: "error",
-            confirmButtonText: "OK"
+            confirmButtonText: "OK",
           });
         }
-      }
-      else {
+      } else {
         Swal.fire({
           title: "Peringatan!",
           text: "Lengkapi data siswa.",
           icon: "warning",
-          confirmButtonText: "OK"
+          confirmButtonText: "OK",
         });
       }
     },
-    // Mengedit siswa
     async editSiswa() {
       try {
-        // Log data yang akan dikirim dan URL
-        console.log('Mengirim data ke URL:', `http://localhost:3000/siswa/${this.editNomorInduk}`);
-        console.log('Data yang dikirim untuk update:', {
-          nis: this.newSiswa.nomorInduk, // Pastikan field ini disertakan
-          nama_siswa: this.newSiswa.nama,
-          jenis_kelamin: this.newSiswa.jenisKelamin,
-          jurusan: this.newSiswa.jurusan,
-        });
-
-        const response = await fetch(`http://localhost:3000/siswa/${this.editNomorInduk}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            nis: this.newSiswa.nomorInduk, // Tambahkan nis di sini
-            nama_siswa: this.newSiswa.nama,
-            jenis_kelamin: this.newSiswa.jenisKelamin,
-            jurusan: this.newSiswa.jurusan,
-          }),
-        });
-
-        // Log response status dan data
-        console.log('Response status:', response.status);
+        const token = localStorage.getItem("accessToken");
+        const response = await fetch(
+          `http://localhost:3000/siswa/${this.editNomorInduk}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+              nis: this.newSiswa.nomorInduk,
+              nama_siswa: this.newSiswa.nama,
+              jenis_kelamin: this.newSiswa.jenisKelamin,
+              jurusan: this.newSiswa.jurusan,
+            }),
+          }
+        );
         const data = await response.json();
-        console.log('Data dari server:', data);
-
         if (data.status === "success") {
-          this.fetchSiswaData(); // Refresh data
+          this.fetchSiswaData();
           this.closeModal();
           this.resetForm();
           Swal.fire({
-              title: "Sukses!",
-              text: "Data siswa berhasil disimpan.",
-              icon: "success",
-              confirmButtonText: "OK"
+            title: "Sukses!",
+            text: "Data siswa berhasil diperbarui.",
+            icon: "success",
+            confirmButtonText: "OK",
           });
         } else {
           console.error("Gagal mengedit siswa:", data);
           Swal.fire({
             title: "Error!",
-            text: data.message || "Terjadi kesalahan saat mengedit siswa.", // Menyertakan pesan spesifik jika ada
+            text: data.message || "Terjadi kesalahan saat mengedit siswa.",
             icon: "error",
-            confirmButtonText: "OK"
+            confirmButtonText: "OK",
           });
         }
       } catch (error) {
@@ -354,69 +397,73 @@ export default {
           title: "Error!",
           text: "Terjadi kesalahan saat mengedit siswa.",
           icon: "error",
-          confirmButtonText: "OK"
+          confirmButtonText: "OK",
         });
       }
     },
+
     // Mempersiapkan data untuk edit
     prepareEditSiswa(siswa) {
       this.newSiswa = { ...siswa };
       this.editNomorInduk = siswa.nomorInduk;
       this.showModal = true;
     },
-    // Menghapus siswa
+
     async deleteSiswa(nomorInduk) {
-      const result = await
-      Swal.fire({
-        title: 'Anda yakin?',
+      const result = await Swal.fire({
+        title: "Anda yakin?",
         text: "Data siswa ini akan dihapus!",
-        icon: 'warning',
+        icon: "warning",
         showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Ya, hapus!',
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Ya, hapus!",
       });
 
       if (result.isConfirmed) {
         try {
-          const response = await fetch(`http://localhost:3000/siswa/${nomorInduk}`, {
-            method: 'DELETE',
-          });
+          const token = localStorage.getItem("accessToken");
+          const response = await fetch(
+            `http://localhost:3000/siswa/${nomorInduk}`,
+            {
+              method: "DELETE",
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
           const data = await response.json();
-
           if (data.status === "success") {
             this.fetchSiswaData();
             Swal.fire({
-              title: 'Terhapus!',
-              text: 'Data siswa berhasil dihapus.',
-              icon: 'success',
+              title: "Terhapus!",
+              text: "Data siswa berhasil dihapus.",
+              icon: "success",
             });
           } else {
             console.error("Gagal menghapus siswa:", data);
             Swal.fire({
-              title: 'Error!',
-              text: 'Gagal menghapus data siswa.',
-              icon: 'error',
-              confirmButtonText: 'OK',
+              title: "Error!",
+              text: "Gagal menghapus data siswa.",
+              icon: "error",
+              confirmButtonText: "OK",
             });
           }
         } catch (error) {
           console.error("Error deleting siswa:", error);
           Swal.fire({
-            title: 'Error!',
-            text: 'Gagal menghapus data siswa.',
-            icon: 'error',
-            confirmButtonText: 'OK',
+            title: "Error!",
+            text: "Gagal menghapus data siswa.",
+            icon: "error",
+            confirmButtonText: "OK",
           });
         }
       }
     },
-    // Menutup modal
     closeModal() {
       this.showModal = false;
       this.resetForm();
     },
-    // Mereset form input siswa
     resetForm() {
       this.newSiswa = {
         nomorInduk: "",
@@ -481,10 +528,10 @@ export default {
 
 .date-inputs {
   display: flex;
-  justify-content: space-between; 
-  align-items: center; 
+  justify-content: space-between;
+  align-items: center;
 }
-  
+
 .import-search-wrapper {
   display: flex;
   justify-content: space-between; /* Menyebarkan elemen di kiri dan kanan */
@@ -508,11 +555,11 @@ export default {
 }
 
 .search-icon {
-  color: #888; 
+  color: #888;
 }
 
 .search-bar-container:focus-within {
-  border-color: #636364; 
+  border-color: #636364;
 }
 
 .filters2 {
@@ -558,8 +605,8 @@ export default {
 
 .header-siswa-container {
   display: flex;
-  justify-content: space-between; 
-  align-items: center; 
+  justify-content: space-between;
+  align-items: center;
   margin-top: 3rem;
 }
 
@@ -647,16 +694,18 @@ export default {
 .data-table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 600px; 
+  min-width: 600px;
 }
 
-.data-table th, .data-table td {
+.data-table th,
+.data-table td {
   border: 1px solid #ddd;
   padding: 8px;
   text-align: left;
 }
 
-.data-table th:last-child, .data-table td:last-child {
+.data-table th:last-child,
+.data-table td:last-child {
   text-align: center; /* Kolom action tetap di tengah */
 }
 
@@ -669,7 +718,8 @@ export default {
 }
 
 @media (max-width: 768px) {
-  .data-table th, .data-table td {
+  .data-table th,
+  .data-table td {
     font-size: 0.875rem; /* Ukuran font lebih kecil di layar kecil */
     padding: 6px;
   }
@@ -682,7 +732,6 @@ export default {
     font-size: 1.5rem;
   }
 }
-
 
 @keyframes fadeIn {
   from {
@@ -714,28 +763,28 @@ export default {
 }
 
 .pagination-button {
-  background-color: #007bff; 
+  background-color: #007bff;
   color: white;
   border: none;
   border-radius: 5px;
   padding: 5px 10px;
   margin: 0 5px;
-  font-size: 0.9rem; 
+  font-size: 0.9rem;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
 
 .pagination-button:hover {
-  background-color: #0056b3; 
+  background-color: #0056b3;
 }
 
 .pagination-button:disabled {
-  background-color: #cccccc; 
+  background-color: #cccccc;
   cursor: not-allowed;
 }
 
 .pagination-info {
-  font-size: 0.9rem; 
+  font-size: 0.9rem;
   color: #555;
 }
 </style>

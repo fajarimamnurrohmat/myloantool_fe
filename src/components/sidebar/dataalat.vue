@@ -12,7 +12,7 @@
     <div v-if="showModal" class="modal-overlay" @click.self="closeModal">
       <div class="modal-content">
         <div class="modal-header">
-          <h4>{{ isEditMode ? 'Edit Data Alat' : 'Input Data Alat' }}</h4>
+          <h4>{{ isEditMode ? "Edit Data Alat" : "Input Data Alat" }}</h4>
           <span class="close-modal" @click="closeModal">&times;</span>
         </div>
         <div class="form-row">
@@ -64,49 +64,55 @@
         </div>
         <div style="margin-top: 10px; text-align: left">
           <button @click="saveAlat" class="btn_add_alat">
-            {{ isEditMode ? 'Update Data' : 'Simpan Data' }}
+            {{ isEditMode ? "Update Data" : "Simpan Data" }}
           </button>
         </div>
       </div>
     </div>
 
     <!-- Import Button and File Input -->
-    <div class="import-search-wrapper"> 
+    <div class="import-search-wrapper">
       <div class="import-data">
-        <button class="btn-import" type="button" @click="importData" style="
-            color: #4b6cb7; 
+        <button
+          class="btn-import"
+          type="button"
+          @click="importData"
+          style="
+            color: #4b6cb7;
             background-color: white;
             justify-content: space-between;
-            text-align: left; 
-            width: 7.5rem;">
-            <i class="fa-solid fa-arrow-up-from-bracket" 
-              style="
-              margin-right: 0.4rem;
-              color: #4b6cb7; ">
-            </i>
+            text-align: left;
+            width: 7.5rem;
+          "
+        >
+          <i
+            class="fa-solid fa-arrow-up-from-bracket"
+            style="margin-right: 0.4rem; color: #4b6cb7"
+          >
+          </i>
           Import
-          </button>
-          <input 
-            type="file" 
-            id="importFile" 
-            class="file-input" 
-            accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-            @change="fileChange($event)" 
-            style="display: none;"
-          />
-        </div>
-      
-        <!-- Search Bar -->
-        <div class="search-bar-container">
-          <i class="fas fa-search search-icon"></i>
-          <input
+        </button>
+        <input
+          type="file"
+          id="importFile"
+          class="file-input"
+          accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+          @change="fileChange($event)"
+          style="display: none"
+        />
+      </div>
+
+      <!-- Search Bar -->
+      <div class="search-bar-container">
+        <i class="fas fa-search search-icon"></i>
+        <input
           type="text"
           v-model="searchQuery"
           class="search-input"
           placeholder="Cari data..."
-          />
-        </div>
-        <!-- End of Search Bar -->
+        />
+      </div>
+      <!-- End of Search Bar -->
     </div>
     <!-- End of Import Button and File Input -->
     <div class="table-wrapper">
@@ -181,15 +187,17 @@
           @click="prevPage"
           :disabled="currentPage === 1"
           class="pagination-button"
-          >
+        >
           Previous
         </button>
-        <span class="pagination-info"> Page {{ currentPage }} of {{ totalPages }}</span>
+        <span class="pagination-info">
+          Page {{ currentPage }} of {{ totalPages }}</span
+        >
         <button
           @click="nextPage"
           :disabled="currentPage === totalPages"
           class="pagination-button"
-          >
+        >
           Next
         </button>
       </div>
@@ -223,8 +231,9 @@ export default {
   computed: {
     filteredAlatList() {
       return this.alatList.filter((alat) => {
-        const ruangBengkel = this.getRuangBengkel(alat.id_bengkel)
-          .toLowerCase();
+        const ruangBengkel = this.getRuangBengkel(
+          alat.id_bengkel
+        ).toLowerCase();
         return (
           alat.nama_alat
             .toLowerCase()
@@ -309,15 +318,23 @@ export default {
       this.showModal = true;
     },
     openEditModal(alat) {
-      this.isEditMode = true;
-      this.editAlatId = alat.id_alat;
-      this.newAlat = {
-        namaAlat: alat.nama_alat,
-        jumlah: alat.jumlah,
-        id_bengkel: alat.id_bengkel,
-      };
-      this.showModal = true;
-    },
+  this.isEditMode = true;
+  this.editAlatId = alat.id_alat;
+  // Temukan bengkel yang sesuai dengan ruang_bengkel dari alat
+  const bengkel = this.bengkelList.find(
+    (bengkel) => bengkel.ruang_bengkel === alat.ruang_bengkel
+  );
+
+  // Ambil id_bengkel dari bengkel yang ditemukan, atau gunakan null jika tidak ditemukan
+  this.newAlat = {
+    namaAlat: alat.nama_alat,
+    jumlah: alat.jumlah,
+    id_bengkel: bengkel ? bengkel.id_bengkel : null,
+  };
+
+  this.showModal = true;
+}
+,
     async saveAlat() {
       if (
         this.newAlat.namaAlat &&
@@ -337,27 +354,28 @@ export default {
               payload,
               { headers: { Authorization: `Bearer ${token}` } }
             );
+            console.log(response.data); // Tambahkan ini untuk debugging
+
+            // Cek apakah response.data mengandung alat atau hanya pesan
             if (response.data.status === "success") {
-              const updatedAlat = response.data.data.alat;
-              const index = this.alatList.findIndex(
-                (alat) => alat.id_alat === this.editAlatId
-              );
-              if (index !== -1) {
-                this.$set(this.alatList, index, updatedAlat);
+              if (response.data.data && response.data.data.alat) {
+                // Update alat jika respons berisi data alat
+                const updatedAlat = response.data.data.alat;
+                const index = this.alatList.findIndex(
+                  (alat) => alat.id_alat === this.editAlatId
+                );
+                if (index !== -1) {
+                  this.$set(this.alatList, index, updatedAlat);
+                }
+              } else {
+                // Jika tidak ada data alat, cukup tampilkan notifikasi sukses
+                this.fetchAlatList(); // Perbarui daftar alat dari server
               }
               this.closeModal();
               Swal.fire({
                 title: "Sukses!",
                 text: "Data alat berhasil diperbarui.",
                 icon: "success",
-                confirmButtonText: "OK",
-              });
-            } else {
-              console.error("Gagal memperbarui alat:", response.data);
-              Swal.fire({
-                title: "Error!",
-                text: response.data.message || "Gagal memperbarui data alat.",
-                icon: "error",
                 confirmButtonText: "OK",
               });
             }
@@ -367,6 +385,7 @@ export default {
               payload,
               { headers: { Authorization: `Bearer ${token}` } }
             );
+            console.log(response.data); // Tambahkan ini untuk debugging
             if (response.data.status === "success") {
               this.fetchAlatList();
               this.closeModal();
@@ -374,14 +393,6 @@ export default {
                 title: "Sukses!",
                 text: "Data alat berhasil disimpan.",
                 icon: "success",
-                confirmButtonText: "OK",
-              });
-            } else {
-              console.error("Gagal menambah alat:", response.data);
-              Swal.fire({
-                title: "Error!",
-                text: response.data.message || "Gagal menambah data alat.",
-                icon: "error",
                 confirmButtonText: "OK",
               });
             }
@@ -500,7 +511,6 @@ export default {
   },
 };
 </script>
-
 
 <style scoped>
 /* Modal Styles */
@@ -679,28 +689,28 @@ export default {
 }
 
 .pagination-button {
-  background-color: #007bff; 
+  background-color: #007bff;
   color: white;
   border: none;
   border-radius: 5px;
   padding: 5px 10px;
   margin: 0 5px;
-  font-size: 0.9rem; 
+  font-size: 0.9rem;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
 
 .pagination-button:hover {
-  background-color: #0056b3; 
+  background-color: #0056b3;
 }
 
 .pagination-button:disabled {
-  background-color: #cccccc; 
+  background-color: #cccccc;
   cursor: not-allowed;
 }
 
 .pagination-info {
-  font-size: 0.9rem; 
+  font-size: 0.9rem;
   color: #555;
 }
 
