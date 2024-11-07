@@ -1,8 +1,10 @@
 <template>
-  <div class="col d-flex align-items-center justify-content-center">
+  <div class="login-background">
+    <div class="background-animation">
+      <div class="col d-flex align-items-center justify-content-center">
     <div class="form-container">
       <div class="text-center mb-4 mt-2">
-        <div class="name_brand">TeknoLend</div>
+        <div class="name_brand">MyLoanTool</div>
         <div class="name_desc">Peminjaman Alat Bengkel</div>
       </div>
       <!-- form -->
@@ -53,6 +55,8 @@
       <div v-if="errorMessage" class="alert alert-danger mt-3">
         {{ errorMessage }}
       </div>
+    </div>
+  </div>
     </div>
   </div>
 </template>
@@ -157,7 +161,7 @@ input {
 }
 
 .form-container {
-  box-shadow: -10px 0 15px rgba(41, 41, 41, 0.151), 10px 0 15px rgba(0, 0, 0, 0.1); 
+  box-shadow: -10px 0 15px rgba(41, 41, 41, 0.151), 10px 0 15px rgba(0, 0, 0, 0.1);
   border: none;
   padding: 40px;
   width: 400px;
@@ -165,7 +169,6 @@ input {
   background: linear-gradient(135deg, #4b6cb7, #182848);
   color: white;
 }
-
 
 .input-group {
   position: relative;
@@ -175,12 +178,15 @@ input {
 }
 
 .input-group-text {
-  border-right: none;
+    background-color: #f0f0f0; /* Warna latar belakang untuk ikon */
+    color: #182848; /* Warna ikon */
+    border-right: none;
 }
 
 .form-control {
   border-left: none;
   border-radius: 0;
+  border-radius: 0 30px 30px 0;
 }
 
 .input-group .form-control:focus {
@@ -189,7 +195,7 @@ input {
 
 .input-group-text,
 .form-control {
-  background-color: transparent;
+  background-color: white;
   border: none;
   color: rgb(5, 5, 5);
   padding: 15px 20px;
@@ -201,10 +207,6 @@ input {
   color: rgb(255, 255, 255);
   margin-top: 20px;
   font-size: 0.9rem;
-}
-
-.form-control {
-  border-radius: 0 30px 30px 0;
 }
 
 .toggle-password {
