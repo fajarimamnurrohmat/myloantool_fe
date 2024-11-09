@@ -10,83 +10,107 @@
     <!-- filter wrapper -->
     <div class="filter-wrapper">
       <!-- Date Filter Section -->
-     
-        <div class="date-inputs">
-          <div class="date-input-wrapper">
-            <label for="startDate" class="date-sort">Sort Date From:</label>
-            <input
-              type="date"
-              id="startDate"
-              v-model="startDate"
-              class="date-filter"
-            />
-            <i class="fas fa-calendar-alt calendar-icon"></i>
-          </div>
-          <div class="date-input-wrapper">
-            <label for="endDate" class="date-sort">To:</label>
-            <input 
-              type="date" 
-              id="endDate" 
-              v-model="endDate" 
-              class="date-filter" 
-            />
-            <i class="fas fa-calendar-alt calendar-icon"></i>
-          </div>
-          <!-- filter button section -->
-          <div class="filter-buttons">
-            <button @click="resetFilters" 
-              class="btn-reset" 
-              style="height: 2.7rem; width: 3rem;">
-              <i class="fa fa-sync" aria-hidden="true"></i>
+      <div class="date-inputs">
+        <div class="date-input-wrapper">
+          <label for="startDate" class="date-sort">Sort Date From:</label>
+          <input
+            type="date"
+            id="startDate"
+            v-model="startDate"
+            class="date-filter"
+          />
+          <i class="fas fa-calendar-alt calendar-icon"></i>
+        </div>
+        <div class="date-input-wrapper">
+          <label for="endDate" class="date-sort">To:</label>
+          <input
+            type="date"
+            id="endDate"
+            v-model="endDate"
+            class="date-filter"
+          />
+          <i class="fas fa-calendar-alt calendar-icon"></i>
+        </div>
+        <!-- filter button section -->
+        <div class="filter-buttons">
+          <button
+            @click="resetFilters"
+            class="btn-reset"
+            style="height: 2.7rem; width: 3rem"
+          >
+            <i class="fa fa-sync" aria-hidden="true"></i>
+          </button>
+          <div class="dropdown d-inline-block">
+            <button
+              class="btn-export"
+              type="button"
+              @click="toggleDropdown"
+              :aria-expanded="dropdownOpen"
+              style="
+                color: #4b6cb7;
+                background-color: white;
+                width: 6.5rem;
+                height: 2.72rem;
+              "
+            >
+              <i
+                class="fa-solid fa-arrow-up-from-bracket"
+                style="
+                  margin-left: 0.7rem;
+                  margin-right: 0.4rem;
+                  color: #4b6cb7;
+                "
+              >
+              </i>
+              Export
             </button>
-            <div class="dropdown d-inline-block">
-              <button
-                class="btn-export"
-                type="button"
-                @click="toggleDropdown"
-                :aria-expanded="dropdownOpen"
-                style="color: #4b6cb7; background-color: white; width: 6.5rem; height: 2.72rem;">
-                <i class="fa-solid fa-arrow-up-from-bracket" 
-                  style="margin-left: 0.7rem; margin-right: 0.4rem; color: #4b6cb7;">
-                </i> Export
-              </button>
-              <div
-                v-if="dropdownOpen"
-                class="dropdown-menu-export">
-                <a
-                  class="dropdown-item-export"
-                  @click="exportData('pdf')"
-                  style="color: #4b6cb7;">
-                  <i class="fa fa-file-pdf" aria-hidden="true" style="margin-left: 0.5rem; margin-right: 0.1rem;"></i> .pdf
-                </a>
-                <a
-                  class="dropdown-item-export"
-                  @click="exportData('csv')"
-                  style="color: #4b6cb7;">
-                  <i class="fa-solid fa-file-csv" aria-hidden="true" style="margin-left: 0.5rem; margin-right: 0.1rem;"></i> .csv
-                </a>
-              </div>
+            <div v-if="dropdownOpen" class="dropdown-menu-export">
+              <a
+                class="dropdown-item-export"
+                @click="exportData('pdf')"
+                style="color: #4b6cb7"
+              >
+                <i
+                  class="fa fa-file-pdf"
+                  aria-hidden="true"
+                  style="margin-left: 0.5rem; margin-right: 0.1rem"
+                ></i>
+                .pdf
+              </a>
+              <a
+                class="dropdown-item-export"
+                @click="exportData('csv')"
+                style="color: #4b6cb7"
+              >
+                <i
+                  class="fa-solid fa-file-csv"
+                  aria-hidden="true"
+                  style="margin-left: 0.5rem; margin-right: 0.1rem"
+                ></i>
+                .csv
+              </a>
             </div>
           </div>
-          <!-- search -->
-          <div class="search-bar-container">
-            <i class="fas fa-search search-icon"></i>
-            <input
-              type="text"
-              v-model="searchQuery"
-              class="search-input"
-              style="padding-right: 30px; width: 10rem;"
-              placeholder="Cari data..."
-            />
-          </div>
-          <!-- search -->
         </div>
+        <!-- search -->
+        <div class="search-bar-container">
+          <i class="fas fa-search search-icon"></i>
+          <input
+            type="text"
+            v-model="searchQuery"
+            class="search-input"
+            style="padding-right: 30px; width: 10rem"
+            placeholder="Cari data..."
+          />
+        </div>
+        <!-- search -->
+      </div>
       <!-- End of Date Filter Section -->
     </div>
     <!-- End of filter wrapper -->
 
     <div class="table-wrapper">
-      <div class="tampil-baris" style="text-align: left; margin-bottom: 1rem;">
+      <div class="tampil-baris" style="text-align: left; margin-bottom: 1rem">
         Tampilkan:
         <select v-model="rowsPerPage" class="select-rows" style="width: 3rem">
           <option value="5">5</option>
@@ -95,7 +119,7 @@
           <option value="100">100</option>
         </select>
         baris
-      </div> 
+      </div>
 
       <!-- Tabel Data -->
       <table>
@@ -111,15 +135,15 @@
         </thead>
         <tbody>
           <tr v-if="filteredLoans.length === 0">
-            <td colspan="6" style="text-align: center;">Tidak ada data</td>
+            <td colspan="6" style="text-align: center">Tidak ada data</td>
           </tr>
           <tr v-for="(record, index) in filteredLoans" :key="index">
-            <td>{{ record.namaPeminjam }}</td>
-            <td>{{ record.alat }}</td>
-            <td>{{ record.bengkel }}</td>
-            <td>{{ record.jumlahAlat }}</td>
-            <td>{{ record.tanggalPinjam }}</td>
-            <td>{{ record.tanggalKembali }}</td>
+            <td>{{ record.nama_siswa }}</td>
+            <td>{{ record.nama_alat }}</td>
+            <td>{{ record.ruang_bengkel }}</td>
+            <td>{{ record.jumlah }}</td>
+            <td>{{ formatDate(record.tanggal_pinjam) }}</td>
+            <td>{{ formatDate(record.tgl_kembali) }}</td>
           </tr>
         </tbody>
       </table>
@@ -128,58 +152,59 @@
 </template>
 
 <script>
-import { jsPDF } from "jspdf";
-import "jspdf-autotable";
-import { saveAs } from "file-saver";
-import * as XLSX from "xlsx";
+import axios from "axios";
+import jsPDF from "jspdf"; // Import jsPDF
+import "jspdf-autotable"; // Import jsPDF autotable for table export
+import * as XLSX from "xlsx"; // Import XLSX
 
 export default {
   name: "DataPengembalianPinjaman",
   data() {
     return {
-      returnedLoans: [], // Pastikan data diisi dari API
+      returnedLoans: [], // Data pengembalian
       rowsPerPage: 5,
       startDate: "",
       endDate: "",
       searchQuery: "",
-      dropdownOpen: false,
+      dropdownOpen: false, // Dropdown state
     };
   },
   computed: {
     filteredLoans() {
       let filtered = this.returnedLoans;
-
       // Filter berdasarkan tanggal
       if (this.startDate || this.endDate) {
         filtered = filtered.filter((record) => {
-          const kembaliDate = new Date(record.tanggalKembali);
+          const kembaliDate = new Date(record.tgl_kembali);
           return (
             (!this.startDate || kembaliDate >= new Date(this.startDate)) &&
             (!this.endDate || kembaliDate <= new Date(this.endDate))
           );
         });
       }
-
-      // Filter berdasarkan pencarian
+      // Filter pencarian
       if (this.searchQuery) {
         const query = this.searchQuery.toLowerCase();
         filtered = filtered.filter((record) => {
           return (
-            record.namaPeminjam.toLowerCase().includes(query) ||
-            record.alat.toLowerCase().includes(query) ||
-            record.bengkel.toLowerCase().includes(query)
+            record.nama_siswa.toLowerCase().includes(query) ||
+            record.nama_alat.toLowerCase().includes(query) ||
+            record.ruang_bengkel.toLowerCase().includes(query)
           );
         });
       }
-
-      // Ambil data sesuai dengan rowsPerPage
+      // Ambil data sesuai rowsPerPage
       return filtered.slice(0, this.rowsPerPage);
     },
   },
   methods: {
+    formatDate(dateString) {
+      const date = new Date(dateString);
+      const options = { year: "numeric", month: "2-digit", day: "2-digit" };
+      return date.toLocaleDateString("id-ID", options);
+    },
     exportData(type) {
       const exportData = this.filteredLoans;
-
       if (type === "csv") {
         const ws = XLSX.utils.json_to_sheet(exportData);
         const wb = XLSX.utils.book_new();
@@ -199,12 +224,12 @@ export default {
             ],
           ],
           body: exportData.map((record) => [
-            record.namaPeminjam,
-            record.alat,
-            record.bengkel,
-            record.jumlahAlat,
-            record.tanggalPinjam,
-            record.tanggalKembali,
+            record.nama_siswa,
+            record.nama_alat,
+            record.ruang_bengkel,
+            record.jumlah,
+            this.formatDate(record.tanggal_pinjam),
+            this.formatDate(record.tgl_kembali),
           ]),
         });
         doc.save("data_pengembalian.pdf");
@@ -218,6 +243,29 @@ export default {
       this.endDate = "";
       this.searchQuery = "";
     },
+    fetchReturnedLoans() {
+      const accessToken = localStorage.getItem("accessToken");
+      const config = {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      };
+      axios
+        .get("http://localhost:3000/pengembalian", config)
+        .then((response) => {
+          if (response.data.status === "success") {
+            this.returnedLoans = response.data.data.pengembalian;
+          } else {
+            console.error("Data tidak ditemukan");
+          }
+        })
+        .catch((error) => {
+          console.error("Terjadi kesalahan saat memuat data:", error);
+        });
+    },
+  },
+  created() {
+    this.fetchReturnedLoans();
   },
 };
 </script>
@@ -263,8 +311,8 @@ export default {
   position: relative;
   display: inline-block;
   border: 1px solid #d3d2d2; /* Same as the date-filter border */
-  border-radius: 5px;         /* Optional, to match the rounded corners */
-  padding: 0.25rem 0.9rem;     /* Similar padding to the date-filter */
+  border-radius: 5px; /* Optional, to match the rounded corners */
+  padding: 0.25rem 0.9rem; /* Similar padding to the date-filter */
   background-color: white;
 }
 

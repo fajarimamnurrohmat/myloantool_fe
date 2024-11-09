@@ -1,119 +1,108 @@
 <template>
   <div>
-    <div style="text-align: left; margin-bottom: 1rem" class="header-dataPinjaman-container">
+    <div
+      style="text-align: left; margin-bottom: 1rem"
+      class="header-dataPinjaman-container"
+    >
       <h3 class="header-DataPinjaman">Data Pinjaman Bermasalah</h3>
       <p>
-        Data pada halaman ini merupakan data alat yang dikembalikan dalam kondisi bermasalah.
+        Data pada halaman ini merupakan data alat yang dikembalikan dalam
+        kondisi bermasalah.
       </p>
     </div>
-    
+
     <!-- filter wrapper -->
     <div class="filter-wrapper">
       <!-- Date Filter Section -->
-        <div class="date-inputs">
-          <div class="date-input-wrapper">
-            <label for="startDate" class="date-sort">Sort Date From:</label>
-            <input
-              type="date"
-              id="startDate"
-              v-model="startDate"
-              class="date-filter"
-            />
-            <i class="fas fa-calendar-alt calendar-icon"></i>
-          </div>
-          <div class="date-input-wrapper">
-            <label for="endDate" class="date-sort">To:</label>
-            <input 
-              type="date" 
-              id="endDate" 
-              v-model="endDate" 
-              class="date-filter" 
-            />
-            <i class="fas fa-calendar-alt calendar-icon"></i>
-          </div>
-          <!-- filter button section -->
-          <div class="filter-buttons">
-            <button @click="resetFilter" 
-              class="btn-reset" 
-              style="
-                height: 2.7rem; 
-                width: 3rem;"
-              >
-              <i class="fa fa-sync" aria-hidden="true"></i>
+      <div class="date-inputs">
+        <div class="date-input-wrapper">
+          <label for="startDate" class="date-sort">Sort Date From:</label>
+          <input
+            type="date"
+            id="startDate"
+            v-model="startDate"
+            class="date-filter"
+          />
+          <i class="fas fa-calendar-alt calendar-icon"></i>
+        </div>
+        <div class="date-input-wrapper">
+          <label for="endDate" class="date-sort">To:</label>
+          <input
+            type="date"
+            id="endDate"
+            v-model="endDate"
+            class="date-filter"
+          />
+          <i class="fas fa-calendar-alt calendar-icon"></i>
+        </div>
+        <div class="filter-buttons">
+          <button
+            @click="resetFilters"
+            class="btn-reset"
+            style="height: 2.7rem; width: 3rem"
+          >
+            <i class="fa fa-sync" aria-hidden="true"></i>
+          </button>
+          <div class="dropdown d-inline-block">
+            <button
+              class="btn-export"
+              type="button"
+              @click="toggleDropdown(index)"
+              :aria-expanded="dropdownIndex === index"
+              style="color: #4b6cb7; background-color: white; width: 6.5rem; height: 2.72rem;"
+            >
+              <i
+                class="fa-solid fa-arrow-up-from-bracket"
+                style="margin-left: 0.7rem; margin-right: 0.4rem; color: #4b6cb7;"
+              ></i>
+              Export
             </button>
-            <div class="dropdown d-inline-block">
-              <button
-                class="btn-export"
-                type="button"
-                @click="toggleDropdown(index)"
-                :aria-expanded="dropdownIndex === index"
-                style="
-                  color: #4b6cb7; 
-                  background-color: white; 
-                  width: 6.5rem;
-                  height: 2.72rem;"
-              > 
-                <i class="fa-solid fa-arrow-up-from-bracket" 
-                  style="
-                    margin-left: 0.7rem;
-                    margin-right: 0.4rem;
-                    color: #4b6cb7; ">
-                </i>
-                Export
-              </button>
-              <div
-                class="dropdown-menu-exports"
-                :class="{ show: dropdownIndex === index }"
+            <div
+              class="dropdown-menu-exports"
+              :class="{ show: dropdownIndex === index }"
+            >
+              <a
+                class="dropdown-item-export"
+                @click="exportData('pdf')"
+                style="color: #4b6cb7"
               >
-                <a
-                  class="dropdown-item-export"
-                  @click="exportData('pdf')"
-                  style="color: #4b6cb7;"
-                  ><i class="fa fa-file-pdf" 
-                      aria-hidden="true"
-                      style="
-                          margin-left: 0.5rem;
-                          margin-right: 0.1rem;">
-                  </i>
-                  .pdf
-                </a>
-                <a
-                  class="dropdown-item-export"
-                  @click="exportData('csv')"
-                  style="color: #4b6cb7;"
-                  ><i class="fa-solid fa-file-csv" 
-                      aria-hidden="true"
-                      style="
-                          margin-left: 0.5rem;
-                          margin-right: 0.1rem;
-                          margin-top: 0.5rem;">
-                  </i>
-                  .csv
-                </a>
-              </div>
+                <i
+                  class="fa fa-file-pdf"
+                  aria-hidden="true"
+                  style="margin-left: 0.5rem; margin-right: 0.1rem"
+                ></i>
+                .pdf
+              </a>
+              <a
+                class="dropdown-item-export"
+                @click="exportData('csv')"
+                style="color: #4b6cb7"
+              >
+                <i
+                  class="fa-solid fa-file-csv"
+                  aria-hidden="true"
+                  style="margin-left: 0.5rem; margin-right: 0.1rem"
+                ></i>
+                .csv
+              </a>
             </div>
           </div>
-          <!-- filter button section -->
-          <!-- search -->
-          <div class="search-bar-container">
-            <i class="fas fa-search search-icon"></i>
-            <input
-              type="text"
-              v-model="searchQuery"
-              class="search-input"
-              style="padding-right: 30px;
-                    width: 13rem;"
-              placeholder="Cari data..."
-            />
-          </div>
-          <!-- search -->
         </div>
-      <!-- End of Date Filter Section -->
+        <div class="search-bar-container">
+          <i class="fas fa-search search-icon"></i>
+          <input
+            type="text"
+            v-model="searchQuery"
+            class="search-input"
+            style="padding-right: 30px; width: 13rem"
+            placeholder="Cari data..."
+          />
+        </div>
+      </div>
     </div>
-    <!-- End of filter wrapper -->
 
     <div class="table-wrapper">
-      <div class="tampil-baris" style="text-align: left; margin-bottom: 1rem;">
+      <div class="tampil-baris" style="text-align: left; margin-bottom: 1rem">
         Tampilkan:
         <select v-model="rowsPerPage" class="select-rows" style="width: 3rem">
           <option value="5">5</option>
@@ -122,8 +111,7 @@
           <option value="100">100</option>
         </select>
         baris
-      </div> 
-      <!-- Tabel Data -->
+      </div>
       <table>
         <thead>
           <tr>
@@ -138,13 +126,16 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(record, index) in displayedData" :key="index">
-            <td>{{ record.namaPeminjam }}</td>
-            <td>{{ record.alat }}</td>
-            <td>{{ record.bengkel }}</td>
+          <tr
+            v-for="(record, index) in displayedData"
+            :key="record.id_alat_bermasalah"
+          >
+            <td>{{ record.nama_siswa }}</td>
+            <td>{{ record.nama_alat }}</td>
+            <td>{{ record.ruang_bengkel }}</td>
             <td>{{ record.jumlah }}</td>
-            <td>{{ record.tanggalPinjam }}</td>
-            <td>{{ record.tanggalPermasalahan }}</td>
+            <td>{{ formatDate(record.tanggal_pinjam) }}</td>
+            <td>{{ formatDate(record.tgl_permasalahan) }}</td>
             <td>{{ record.kondisi }}</td>
             <td>
               <div class="dropdown d-inline-block">
@@ -154,9 +145,7 @@
                   @click="toggleDropdown(index)"
                   :aria-expanded="dropdownIndex === index"
                 >
-                <span class="material-symbols-outlined">
-                priority
-                </span>
+                  <span class="material-symbols-outlined">priority</span>
                 </button>
               </div>
             </td>
@@ -171,23 +160,13 @@
 import { jsPDF } from "jspdf";
 import "jspdf-autotable";
 import * as XLSX from "xlsx";
+import axios from "axios";
 
 export default {
-  name: "DataPengembalianPinjaman",
+  name: "DataPinjamanBermasalah",
   data() {
     return {
-      returnedLoans: [
-        {
-          namaPeminjam: "John Doe",
-          alat: "Hammer",
-          bengkel: "Bengkel Mesin",
-          jumlah: 2,
-          tanggalPinjam: "2024-08-01",
-          tanggalPermasalahan: "2024-08-10",
-          kondisi: "hilang",
-        },
-        // Tambahkan data lainnya di sini
-      ],
+      alatBermasalah: [],
       displayedData: [],
       rowsPerPage: 5,
       startDate: "",
@@ -197,16 +176,49 @@ export default {
     };
   },
   mounted() {
-    this.updateDisplayedData();
+    this.fetchData();
   },
   methods: {
-    updateDisplayedData() {
-      let filteredData = this.returnedLoans;
+    formatDate(dateString) {
+      const date = new Date(dateString);
+      const day = String(date.getDate()).padStart(2, "0");
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const year = date.getFullYear();
+      return `${day}/${month}/${year}`;
+    },
 
-      // Filter berdasarkan tanggal
+    async fetchData() {
+      try {
+        const accessToken = localStorage.getItem("accessToken");
+
+        if (!accessToken) {
+          console.error("Access token not found.");
+          return;
+        }
+
+        const response = await axios.get(
+          "http://localhost:3000/alat-bermasalah",
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+
+        this.alatBermasalah = response.data.data.alatBermasalah;
+        this.updateDisplayedData();
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    },
+
+    updateDisplayedData() {
+      let filteredData = this.alatBermasalah;
+
+      // Date Filter
       if (this.startDate || this.endDate) {
         filteredData = filteredData.filter((record) => {
-          const permasalahanDate = new Date(record.tanggalPermasalahan);
+          const permasalahanDate = new Date(record.tgl_permasalahan);
           return (
             (!this.startDate || permasalahanDate >= new Date(this.startDate)) &&
             (!this.endDate || permasalahanDate <= new Date(this.endDate))
@@ -214,32 +226,40 @@ export default {
         });
       }
 
-      // Filter berdasarkan pencarian
+      // Search Filter
       if (this.searchQuery) {
         const query = this.searchQuery.toLowerCase();
-        filteredData = filteredData.filter((record) => {
-          return (
-            record.namaPeminjam.toLowerCase().includes(query) ||
-            record.alat.toLowerCase().includes(query) ||
-            record.bengkel.toLowerCase().includes(query)
-          );
-        });
+        filteredData = filteredData.filter(
+          (record) =>
+            record.nama_siswa.toLowerCase().includes(query) ||
+            record.nama_alat.toLowerCase().includes(query) ||
+            record.ruang_bengkel.toLowerCase().includes(query)
+        );
       }
 
-      // Ambil data sesuai dengan rowsPerPage
+      // Paginate
       this.displayedData = filteredData.slice(0, this.rowsPerPage);
     },
-    filterData() {
+
+    resetFilters() {
+      this.startDate = "";
+      this.endDate = "";
+      this.searchQuery = "";
       this.updateDisplayedData();
     },
+
     exportData(type) {
-      const exportData = this.displayedData;
+      const exportData = this.displayedData.map((record) => ({
+        ...record,
+        tanggal_pinjam: this.formatDate(record.tanggal_pinjam),
+        tgl_permasalahan: this.formatDate(record.tgl_permasalahan),
+      }));
 
       if (type === "csv") {
         const ws = XLSX.utils.json_to_sheet(exportData);
         const wb = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, "DataPengembalian");
-        XLSX.writeFile(wb, "data_pengembalian.csv");
+        XLSX.utils.book_append_sheet(wb, ws, "DataPinjamanBermasalah");
+        XLSX.writeFile(wb, "DataPinjamanBermasalah.csv");
       } else if (type === "pdf") {
         const doc = new jsPDF();
         doc.autoTable({
@@ -249,32 +269,41 @@ export default {
               "Alat",
               "Bengkel",
               "Jumlah",
-              "Tanggal Pinjam",
-              "Tanggal Permasalahan",
-              "Kondisi"
+              "Tgl Pinjam",
+              "Tgl Permasalahan",
+              "Kondisi",
             ],
           ],
-          body: exportData.map((record) => [
-            record.namaPeminjam,
-            record.alat,
-            record.bengkel,
-            record.jumlah,
-            record.tanggalPinjam,
-            record.tanggalPermasalahan,
-            record.kondisi,
+          body: exportData.map((row) => [
+            row.nama_siswa,
+            row.nama_alat,
+            row.ruang_bengkel,
+            row.jumlah,
+            row.tanggal_pinjam,
+            row.tgl_permasalahan,
+            row.kondisi,
           ]),
         });
-        doc.save("data_pengembalian.pdf");
+        doc.save("DataPinjamanBermasalah.pdf");
       }
     },
-    resetFilters() {
-      this.startDate = "";
-      this.endDate = "";
-      this.searchQuery = "";
-      this.updateDisplayedData();
-    },
+
     toggleDropdown(index) {
       this.dropdownIndex = this.dropdownIndex === index ? null : index;
+    },
+  },
+  watch: {
+    rowsPerPage() {
+      this.updateDisplayedData();
+    },
+    startDate() {
+      this.updateDisplayedData();
+    },
+    endDate() {
+      this.updateDisplayedData();
+    },
+    searchQuery() {
+      this.updateDisplayedData();
     },
   },
 };
@@ -309,11 +338,7 @@ export default {
 }
 
 .material-symbols-outlined {
-  font-variation-settings:
-  'FILL' 0,
-  'wght' 100,
-  'GRAD' 0,
-  'opsz' 24
+  font-variation-settings: "FILL" 0, "wght" 100, "GRAD" 0, "opsz" 24;
 }
 
 .filters label {

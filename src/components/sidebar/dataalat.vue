@@ -24,7 +24,6 @@
               id="namaAlat"
               class="form-control"
               v-model="newAlat.namaAlat"
-              :disabled="isEditMode"
               placeholder="Masukkan nama alat"
             />
           </div>
@@ -318,23 +317,22 @@ export default {
       this.showModal = true;
     },
     openEditModal(alat) {
-  this.isEditMode = true;
-  this.editAlatId = alat.id_alat;
-  // Temukan bengkel yang sesuai dengan ruang_bengkel dari alat
-  const bengkel = this.bengkelList.find(
-    (bengkel) => bengkel.ruang_bengkel === alat.ruang_bengkel
-  );
+      this.isEditMode = true;
+      this.editAlatId = alat.id_alat;
+      // Temukan bengkel yang sesuai dengan ruang_bengkel dari alat
+      const bengkel = this.bengkelList.find(
+        (bengkel) => bengkel.ruang_bengkel === alat.ruang_bengkel
+      );
 
-  // Ambil id_bengkel dari bengkel yang ditemukan, atau gunakan null jika tidak ditemukan
-  this.newAlat = {
-    namaAlat: alat.nama_alat,
-    jumlah: alat.jumlah,
-    id_bengkel: bengkel ? bengkel.id_bengkel : null,
-  };
+      // Ambil id_bengkel dari bengkel yang ditemukan, atau gunakan null jika tidak ditemukan
+      this.newAlat = {
+        namaAlat: alat.nama_alat,
+        jumlah: alat.jumlah,
+        id_bengkel: bengkel ? bengkel.id_bengkel : null,
+      };
 
-  this.showModal = true;
-}
-,
+      this.showModal = true;
+    },
     async saveAlat() {
       if (
         this.newAlat.namaAlat &&
