@@ -442,4 +442,81 @@ td {
 th {
   background-color: #f4f4f4;
 }
+
+/* Untuk layar device berukuran kecil (misalnya kurang dari 410px) */
+@media screen and (max-width: 450px) {
+    .filter-wrapper,
+    .date-inputs,
+    .date-input-wrapper,
+    .date-input-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        /* Agar konten rata kiri */
+        width: 100%;
+        /* Menyesuaikan lebar konten */
+    }
+
+    .date-input-wrapper {
+        width: 100%;
+    }
+
+    .date-filter {
+        width: 100%;
+    }
+
+    .date-filter-modal {
+        padding: 0.5rem 0.9rem;
+        width: 90%;
+        border: 1px solid #d3d2d2 !important;
+        border-radius: 5px;
+        background-color: white;
+        color: #7b8291;
+    }
+
+    .calendar-icon {
+        position: absolute;
+        right: 1rem;
+        /* Sedikit jarak dari tepi kanan */
+        top: 70%;
+        transform: translateY(-50%);
+        /* Menempatkan ikon di tengah secara vertikal */
+        font-size: 1.2rem;
+        /* Sesuaikan ukuran ikon agar proporsional */
+        pointer-events: none;
+    }
+
+    .calendar-icon-i {
+        position: absolute;
+        right: 3rem;
+        /* Sedikit jarak dari tepi kanan */
+        top: 50%;
+        transform: translateY(-50%);
+        /* Menempatkan ikon di tengah secara vertikal */
+        font-size: 1.2rem;
+        /* Sesuaikan ukuran ikon agar proporsional */
+        color: #7b8291;
+        /* Warna ikon sesuai dengan kebutuhan */
+        pointer-events: none;
+        /* Agar klik tetap pada input */
+    }
+
+    .filter-buttons {
+        display: flex;
+        gap: 0.5rem;
+        align-items: flex-start;
+        margin-left: 0rem;
+    }
+
+    .btn-reset,
+    .btn-export {
+        width: auto;
+        height: 2.7rem;
+    }
+
+    .search-bar-container {
+      margin-left: 0rem;
+      text-align: left;
+    }
+}
 </style>
