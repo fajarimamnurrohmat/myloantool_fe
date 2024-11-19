@@ -151,6 +151,20 @@ export default {
 </script>
 
 <style>
+/* Menyelaraskan gaya merek */
+.name_brand {
+  font-family: "Poppins", sans-serif;
+  font-size: 1.35rem;
+  font-weight: bold;
+  color: #f8c291;
+}
+
+.name_desc {
+  font-family: "Poppins", sans-serif;
+  font-size: 0.8rem;
+  color: #f0efef;
+}
+
 input {
   outline: none !important;
   border: none !important;
