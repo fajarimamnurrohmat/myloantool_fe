@@ -148,11 +148,24 @@
         <thead>
             <tr>
                 <th>No</th>
-                <th>Nama Peminjam</th>
-                <th>Alat</th>
-                <th>Bengkel</th>
-                <th>Tanggal Pinjam</th>
-                <th>Jumlah</th>
+                <th>
+                    Nama Peminjam
+                    <span class="material-symbols-outlined swap-sort" @click="toggleSort('nama_siswa')">
+                        swap_vert
+                    </span>
+                </th>
+                <th>Alat <span class="material-symbols-outlined swap-sort" @click="toggleSort('nama_alat')">
+                        swap_vert
+                    </span></th>
+                <th>Bengkel <span class="material-symbols-outlined swap-sort" @click="toggleSort('ruang_bengkel')">
+                        swap_vert
+                    </span></th>
+                <th>Tanggal Pinjam<span class="material-symbols-outlined swap-sort" @click="toggleSort('tanggal_pinjam')">
+                        swap_vert
+                    </span></th>
+                <th>Jumlah <span class="material-symbols-outlined swap-sort" @click="toggleSort('jumlah')">
+                        swap_vert
+                    </span></th>
                 <th>Action</th>
             </tr>
         </thead>
@@ -376,19 +389,16 @@
         </div>
     </div>
     <!-- End of Modal Section -->
-
-    <div class="search-bar">
-        <div v-if="totalPages > 1" class="pagination-container">
-            <button @click="currentPage--" :disabled="currentPage === 1" class="pagination-button">
-                Previous
-            </button>
-            <span class="pagination-info">
-                Page {{ currentPage }} of {{ totalPages }}
-            </span>
-            <button @click="currentPage++" :disabled="currentPage === totalPages" class="pagination-button">
-                Next
-            </button>
-        </div>
+    <div v-if="totalPages > 1" class="pagination-container">
+        <button @click="currentPage--" :disabled="currentPage === 1" class="pagination-button">
+            Previous
+        </button>
+        <span class="pagination-info">
+            Page {{ currentPage }} of {{ totalPages }}
+        </span>
+        <button @click="currentPage++" :disabled="currentPage === totalPages" class="pagination-button">
+            Next
+        </button>
     </div>
 </div>
 </template>
@@ -407,6 +417,8 @@ export default {
             tampilModal: false,
             selectedOption: "baik",
             isClosing: false,
+            sortBy: "nama_siswa", // Kolom yang sedang diurutkan
+            sortDirection: "asc", // Arah sortir: "asc" atau "desc"
             newPeminjaman: {
                 nisPeminjam: "",
                 id_alat: "",
@@ -441,7 +453,6 @@ export default {
                 console.error("Gagal mengambil data alat:", error);
             }
         },
-
         async fetchDataSiswa() {
             try {
                 const response = await axios.get("http://localhost:3000/siswa");
@@ -472,7 +483,6 @@ export default {
         //     });
         //   }
         // },
-
         async fetchDataPeminjaman() {
             try {
                 const response = await axios.get("http://localhost:3000/peminjaman");
@@ -542,7 +552,6 @@ export default {
                 });
             }
         },
-
         savePeminjaman() {
             if (
                 this.newPeminjaman.namaPeminjam &&
@@ -693,7 +702,6 @@ export default {
                 }
             });
         },
-
         // Fungsi untuk menghapus peminjaman
         async deletePeminjaman(index, peminjamanId) {
             console.log("ID Peminjaman untuk dihapus:", peminjamanId); // Debugging ID peminjaman
@@ -718,7 +726,6 @@ export default {
                 });
             }
         },
-
         openPengembalianModal(peminjaman) {
             this.newPeminjaman = {
                 ...peminjaman,
@@ -743,7 +750,6 @@ export default {
                 bengkel: "",
                 tanggalPinjam: "",
                 jumlahAlat: "",
-                tanggalPengembalian: "",
             };
             this.newPengembalian = {
                 tanggalPengembalian: "",
@@ -821,6 +827,16 @@ export default {
             link.click();
             document.body.removeChild(link);
         },
+        toggleSort(column) {
+            if (this.sortBy === column) {
+                // Jika kolom yang sama, ubah arah sortir
+                this.sortDirection = this.sortDirection === "asc" ? "desc" : "asc";
+            } else {
+                // Jika kolom berbeda, set kolom baru dan arah default (ascending)
+                this.sortBy = column;
+                this.sortDirection = "asc";
+            }
+        },
     },
     computed: {
         filteredPeminjamanList() {
@@ -828,30 +844,39 @@ export default {
 
             // Filter by search query
             if (this.searchQuery) {
-                filteredList = filteredList.filter(
-                    (peminjaman) =>
-                    peminjaman.namaPeminjam
-                    .toLowerCase()
-                    .includes(this.searchQuery.toLowerCase()) ||
-                    peminjaman.alat
-                    .toLowerCase()
-                    .includes(this.searchQuery.toLowerCase()) ||
-                    peminjaman.bengkel
-                    .toLowerCase()
-                    .includes(this.searchQuery.toLowerCase())
-                );
+                const query = this.searchQuery.toLowerCase();
+                filteredList = filteredList.filter((peminjaman) => {
+                    return (
+                        peminjaman.nama_siswa.toLowerCase().includes(query) ||
+                        peminjaman.nama_alat.toLowerCase().includes(query) ||
+                        peminjaman.ruang_bengkel.toLowerCase().includes(query) ||
+                        peminjaman.tanggal_pinjam.toLowerCase().includes(query)
+                    );
+                });
             }
 
             // Filter by date range
             if (this.startDate && this.endDate) {
                 filteredList = filteredList.filter((peminjaman) => {
-                    const tanggalPinjam = new Date(peminjaman.tanggalPinjam);
+                    const tanggalPinjam = new Date(peminjaman.tanggal_pinjam); // Perbaikan properti tanggal
                     return (
                         tanggalPinjam >= new Date(this.startDate) &&
                         tanggalPinjam <= new Date(this.endDate)
                     );
                 });
             }
+
+            // Sort by selected column and direction
+            filteredList.sort((a, b) => {
+                const valA = a[this.sortBy].toString().toLowerCase();
+                const valB = b[this.sortBy].toString().toLowerCase();
+
+                if (this.sortDirection === "asc") {
+                    return valA > valB ? 1 : valA < valB ? -1 : 0;
+                } else {
+                    return valA < valB ? 1 : valA > valB ? -1 : 0;
+                }
+            });
 
             return filteredList;
         },
@@ -985,7 +1010,7 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: -3.5 rem;
+    margin-top: 2rem;
 }
 
 .modal-header .close-modal {
@@ -1152,7 +1177,6 @@ export default {
 .nav-text span.active {
     text-decoration: underline;
     color: #f30202;
-    /* Highlight the active option */
 }
 
 .header-peminjaman {
@@ -1180,27 +1204,13 @@ export default {
     transform: scale(1.05);
 }
 
-.search-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 1rem;
-}
-
-.search-bar-container {
-    position: relative;
-    display: inline-block;
-}
-
 .search-icon {
     position: absolute;
     right: 10px;
     top: 50%;
     transform: translateY(-50%);
     color: #7b8291;
-    /* Change the color of the icon if needed */
     pointer-events: none;
-    /* Make sure the icon doesn't interfere with input interactions */
 }
 
 .search-input,
@@ -1231,6 +1241,22 @@ export default {
 
 .data-table tbody tr:nth-child(odd) {
     background-color: none;
+}
+
+.swap-sort {
+    cursor: pointer;
+    /* Kursor hanya aktif pada ikon */
+    font-size: 1rem;
+    /* Sesuaikan ukuran ikon */
+    color: gray;
+    /* Warna default ikon */
+    transition: color 0.2s;
+    /* Animasi saat hover */
+}
+
+.swap-sort:hover {
+    color: black;
+    /* Warna ikon saat hover */
 }
 
 .data-table tbody tr:hover {
@@ -1318,9 +1344,7 @@ export default {
     align-items: center;
     justify-content: center;
     gap: 1rem;
-    /* Decrease the gap for better button spacing */
     cursor: pointer;
-    /* Add pointer cursor for better UX */
 }
 
 .date-inputs {
@@ -1365,15 +1389,12 @@ export default {
 .filter-buttons button {
     border-radius: 5px;
     height: 2rem;
-    /* reduce the height */
     width: 2.5rem;
     padding: 0.2rem;
-    /* add some padding */
 }
 
 .filter-buttons button i {
     font-size: 1rem;
-    /* increase the font size of the icon */
 }
 
 .btn-reset {
@@ -1405,43 +1426,32 @@ export default {
     justify-content: center;
     align-items: center;
     gap: 15px;
-    /* Add space between the buttons and text */
 }
 
 .nav-text {
     margin-bottom: 1rem;
     display: flex;
     justify-content: space-between;
-    /* Space between the two texts */
     align-items: center;
-    /* Vertically centers the text */
     padding: 0 1rem;
-    /* Optional: adds padding inside */
     text-align: center;
-    /* Center the text inside their flex containers */
 }
 
 .nav-text span {
     flex: 1;
-    /* Make the text span evenly across */
     text-align: center;
-    /* Center the text within the span */
     cursor: pointer;
-    /* Indicates the text is clickable */
     color: rgb(199, 199, 199);
-    /* Default color for inactive text */
     font-weight: 400;
 }
 
 .nav-text span:first-child {
     text-align: center;
-    /* Align "Baik" to the left */
     margin-left: -1rem;
 }
 
 .nav-text span:last-child {
     text-align: center;
-    /* Align "Buruk" to the right */
     margin-left: -2rem;
 }
 
@@ -1449,9 +1459,7 @@ export default {
 .nav-text span.active {
     font-weight: bold;
     color: rgb(255, 255, 255);
-    /* Example: Change active color */
     border-bottom: 2px solid rgb(255, 255, 255);
-    /* Example: Active underline */
 }
 
 .calendar-icon {
@@ -1460,9 +1468,7 @@ export default {
     right: 10px;
     transform: translateY(-50%);
     color: #7b8291;
-    /* Warna ikon sesuai dengan kebutuhan */
     pointer-events: none;
-    /* Agar klik tetap pada input */
 }
 
 /* Untuk layar device berukuran kecil (misalnya kurang dari 410px) */
@@ -1473,19 +1479,15 @@ export default {
 
     .header-peminjaman-container {
         display: block;
-        /* Membuat elemen tersusun vertikal */
         text-align: left;
-        /* Agar teks dan tombol berada di tengah */
     }
 
     .header-peminjaman {
         margin-bottom: 1rem;
-        /* Menambahkan jarak antara teks dan tombol */
     }
 
     .btn-add {
         width: auto;
-        /* Membuat tombol menyesuaikan dengan konten */
         margin-bottom: 1rem;
     }
 
@@ -1496,9 +1498,7 @@ export default {
         display: flex;
         flex-direction: column;
         align-items: flex-start;
-        /* Agar konten rata kiri */
         width: 100%;
-        /* Menyesuaikan lebar konten */
     }
 
     .date-input-wrapper {
@@ -1521,28 +1521,20 @@ export default {
     .calendar-icon {
         position: absolute;
         right: 1rem;
-        /* Sedikit jarak dari tepi kanan */
         top: 70%;
         transform: translateY(-50%);
-        /* Menempatkan ikon di tengah secara vertikal */
         font-size: 1.2rem;
-        /* Sesuaikan ukuran ikon agar proporsional */
         pointer-events: none;
     }
 
     .calendar-icon-i {
         position: absolute;
         right: 3rem;
-        /* Sedikit jarak dari tepi kanan */
         top: 50%;
         transform: translateY(-50%);
-        /* Menempatkan ikon di tengah secara vertikal */
         font-size: 1.2rem;
-        /* Sesuaikan ukuran ikon agar proporsional */
         color: #7b8291;
-        /* Warna ikon sesuai dengan kebutuhan */
         pointer-events: none;
-        /* Agar klik tetap pada input */
     }
 
     .filter-buttons {

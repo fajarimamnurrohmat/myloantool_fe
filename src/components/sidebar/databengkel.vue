@@ -74,7 +74,12 @@
         <thead>
             <tr>
                 <th>No</th>
-                <th>Nama Ruang Bengkel</th>
+                <th>
+                    Ruang Bengkel
+                    <span class="material-symbols-outlined swap-sort" @click="toggleSort('ruang_bengkel')">
+                        swap_vert
+                    </span>
+                </th>
                 <th>Action</th>
             </tr>
         </thead>
@@ -133,6 +138,8 @@ export default {
             },
             bengkelList: [],
             rowsPerPage: 5,
+            sortBy: "ruang_bengkel",
+            sortDirection: "asc",
             currentPage: 1,
             searchQuery: "",
             editIndex: null,
@@ -141,11 +148,25 @@ export default {
     },
     computed: {
         filteredBengkelList() {
-            return this.bengkelList.filter((bengkel) =>
+            const filteredList = this.bengkelList.filter((bengkel) =>
                 bengkel.ruang_bengkel
                 .toLowerCase()
                 .includes(this.searchQuery.toLowerCase())
             );
+
+            // Sorting
+            filteredList.sort((a, b) => {
+                const valA = a[this.sortBy].toString().toLowerCase();
+                const valB = b[this.sortBy].toString().toLowerCase();
+
+                if (this.sortDirection === "asc") {
+                    return valA > valB ? 1 : valA < valB ? -1 : 0;
+                } else {
+                    return valA < valB ? 1 : valA > valB ? -1 : 0;
+                }
+            });
+
+            return filteredList;
         },
         paginatedBengkelList() {
             const start = (this.currentPage - 1) * this.rowsPerPage;
@@ -157,6 +178,16 @@ export default {
         },
     },
     methods: {
+        toggleSort(column) {
+            if (this.sortBy === column) {
+                // Jika kolom yang sama, ubah arah sortir
+                this.sortDirection = this.sortDirection === "asc" ? "desc" : "asc";
+            } else {
+                // Jika kolom berbeda, set kolom baru dan arah default (ascending)
+                this.sortBy = column;
+                this.sortDirection = "asc";
+            }
+        },
         async fetchBengkelList() {
             try {
                 const token = localStorage.getItem("accessToken"); // Ambil token dari localStorage
@@ -692,18 +723,24 @@ export default {
         gap: 0.5rem;
     }
 
-      .data-table th, .data-table td {
-        font-size: 12px; /* Sesuaikan ukuran font agar lebih kecil */
+    .data-table th,
+    .data-table td {
+        font-size: 12px;
+        /* Sesuaikan ukuran font agar lebih kecil */
         padding: 6px;
     }
 
-    .data-table th:nth-child(1), .data-table td:nth-child(1) {
-        width: 20px; /* Lebih kecil pada layar sempit */
+    .data-table th:nth-child(1),
+    .data-table td:nth-child(1) {
+        width: 20px;
+        /* Lebih kecil pada layar sempit */
     }
 
-    .data-table th:nth-child(3), .data-table td:nth-child(3) {
+    .data-table th:nth-child(3),
+    .data-table td:nth-child(3) {
         width: 60px;
     }
 }
+
 /* end of responsive */
 </style>

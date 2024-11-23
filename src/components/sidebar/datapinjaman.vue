@@ -38,10 +38,10 @@
                 height: 2.72rem;
               ">
                         <i class="fa-solid fa-arrow-up-from-bracket" style="
-                  margin-left: 0.7rem;
-                  margin-right: 0.4rem;
-                  color: #4b6cb7;
-                ">
+                          margin-left: 0.7rem;
+                          margin-right: 0.4rem;
+                          color: #4b6cb7;
+                        ">
                         </i>
                         Export
                     </button>
@@ -84,12 +84,25 @@
         <table>
             <thead>
                 <tr>
-                    <th>Nama Peminjam</th>
-                    <th>Alat</th>
-                    <th>Bengkel</th>
-                    <th>Jumlah</th>
-                    <th>Tanggal Pinjam</th>
-                    <th>Tanggal Kembali</th>
+                    <th>Nama Peminjam <span class="material-symbols-outlined swap-sort" @click="toggleSort('nama_siswa')">
+                            swap_vert
+                        </span>
+                    </th>
+                    <th>Alat <span class="material-symbols-outlined swap-sort" @click="toggleSort('nama_alat')">
+                            swap_vert
+                        </span></th>
+                    <th>Bengkel <span class="material-symbols-outlined swap-sort" @click="toggleSort('ruang_bengkel')">
+                            swap_vert
+                        </span></th>
+                    <th>Jumlah <span class="material-symbols-outlined swap-sort" @click="toggleSort('jumlah')">
+                            swap_vert
+                        </span></th>
+                    <th>Tanggal Pinjam<span class="material-symbols-outlined swap-sort" @click="toggleSort('tanggal_pinjam')">
+                            swap_vert
+                        </span></th>
+                    <th>Tanggal Kembali<span class="material-symbols-outlined swap-sort" @click="toggleSort('tgl_kembali')">
+                            swap_vert
+                        </span></th>
                 </tr>
             </thead>
             <tbody>
@@ -120,8 +133,8 @@ import {
 } from "bootstrap";
 
 export default {
-    name: "DataPengembalianPinjaman",
-    name: 'TooltipExample',
+  name: "DataPengembalianPinjaman",
+    name: "TooltipExample",
     data() {
         return {
             returnedLoans: [], // Data pengembalian
@@ -129,13 +142,14 @@ export default {
             startDate: "",
             endDate: "",
             searchQuery: "",
+            sortBy: "nama_siswa",
+            sortDirection: "asc",
             dropdownOpen: false, // Dropdown state
         };
     },
     computed: {
         filteredLoans() {
             let filtered = this.returnedLoans;
-            // Filter berdasarkan tanggal
             if (this.startDate || this.endDate) {
                 filtered = filtered.filter((record) => {
                     const kembaliDate = new Date(record.tgl_kembali);
@@ -145,7 +159,6 @@ export default {
                     );
                 });
             }
-            // Filter pencarian
             if (this.searchQuery) {
                 const query = this.searchQuery.toLowerCase();
                 filtered = filtered.filter((record) => {
@@ -156,19 +169,24 @@ export default {
                     );
                 });
             }
-            // Ambil data sesuai rowsPerPage
+            filtered.sort((a, b) => {
+                const valA = a[this.sortBy]?.toString().toLowerCase() || "";
+                const valB = b[this.sortBy]?.toString().toLowerCase() || "";
+                return this.sortDirection === "asc"
+                    ? valA.localeCompare(valB)
+                    : valB.localeCompare(valA);
+            });
             return filtered.slice(0, this.rowsPerPage);
         },
     },
     methods: {
         formatDate(dateString) {
             const date = new Date(dateString);
-            const options = {
+            return date.toLocaleDateString("id-ID", {
                 year: "numeric",
                 month: "2-digit",
-                day: "2-digit"
-            };
-            return date.toLocaleDateString("id-ID", options);
+                day: "2-digit",
+            });
         },
         exportData(type) {
             const exportData = this.filteredLoans;
@@ -180,16 +198,7 @@ export default {
             } else if (type === "pdf") {
                 const doc = new jsPDF();
                 doc.autoTable({
-                    head: [
-                        [
-                            "Nama Peminjam",
-                            "Alat",
-                            "Bengkel",
-                            "Jumlah",
-                            "Tanggal Pinjam",
-                            "Tanggal Kembali",
-                        ],
-                    ],
+                    head: [["Nama Peminjam", "Alat", "Bengkel", "Jumlah", "Tanggal Pinjam", "Tanggal Kembali"]],
                     body: exportData.map((record) => [
                         record.nama_siswa,
                         record.nama_alat,
@@ -212,13 +221,10 @@ export default {
         },
         fetchReturnedLoans() {
             const accessToken = localStorage.getItem("accessToken");
-            const config = {
-                headers: {
-                    Authorization: `Bearer ${accessToken}`,
-                },
-            };
             axios
-                .get("http://localhost:3000/pengembalian", config)
+                .get("http://localhost:3000/pengembalian", {
+                    headers: { Authorization: `Bearer ${accessToken}` },
+                })
                 .then((response) => {
                     if (response.data.status === "success") {
                         this.returnedLoans = response.data.data.pengembalian;
@@ -230,12 +236,14 @@ export default {
                     console.error("Terjadi kesalahan saat memuat data:", error);
                 });
         },
-    },
-    mounted() {
-        const tooltipElements = document.querySelectorAll('[data-toggle="tooltip"]');
-        tooltipElements.forEach((tooltipEl) => {
-            new Tooltip(tooltipEl);
-        });
+        toggleSort(column) {
+            if (this.sortBy === column) {
+                this.sortDirection = this.sortDirection === "asc" ? "desc" : "asc";
+            } else {
+                this.sortBy = column;
+                this.sortDirection = "asc";
+            }
+        },
     },
     created() {
         this.fetchReturnedLoans();
@@ -245,26 +253,26 @@ export default {
 
 <style scoped>
 .header-tooltip {
-  text-align: left;
-  margin-bottom: 1rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+    text-align: left;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
 .header-DataPinjaman {
-  font-weight: bold;
-  color: #274278;
-  font-size: 1.7rem;
-  margin: 0;
+    font-weight: bold;
+    color: #274278;
+    font-size: 1.7rem;
+    margin: 0;
 }
 
 .header-tooltip button {
-  background: none;
-  border: none;
-  margin-top: 0.5rem;
-  padding: 0;
-  cursor: pointer;
+    background: none;
+    border: none;
+    margin-top: 0.5rem;
+    padding: 0;
+    cursor: pointer;
 }
 
 .filter-wrapper {

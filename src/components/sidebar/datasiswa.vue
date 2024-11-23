@@ -18,7 +18,8 @@
             <div class="form-group">
                 <label for="nomorInduk">Nomor Induk</label>
                 <p>Masukkan nomor induk</p>
-                <input type="text" id="nomorInduk" class="form-control" v-model="newSiswa.nomorInduk" :disabled="isEditMode" />
+                <input type="text" id="nomorInduk" class="form-control" v-model="newSiswa.nomorInduk" @input="validateNumberInput" :disabled="isEditMode" />
+                <small v-if="errorNomorInduk" style="color: red">{{ errorNomorInduk }}</small>
             </div>
             <div class="form-group">
                 <label for="namaSiswa">Nama Siswa</label>
@@ -96,10 +97,30 @@
             <thead>
                 <tr>
                     <th>No</th>
-                    <th>Nomor Induk</th>
-                    <th>Nama Siswa</th>
-                    <th>Jenis Kelamin</th>
-                    <th>Jurusan</th>
+                    <th>
+                        Nomor Induk
+                        <span class="material-symbols-outlined swap-sort" @click="toggleSort('nomorInduk')">
+                            swap_vert
+                        </span>
+                    </th>
+                    <th>
+                        Nama Siswa
+                        <span class="material-symbols-outlined swap-sort" @click="toggleSort('nama')">
+                            swap_vert
+                        </span>
+                    </th>
+                    <th>
+                        Jenis Kelamin
+                        <span class="material-symbols-outlined swap-sort" @click="toggleSort('jenisKelamin')">
+                            swap_vert
+                        </span>
+                    </th>
+                    <th>
+                        Jurusan
+                        <span class="material-symbols-outlined swap-sort" @click="toggleSort('jurusan')">
+                            swap_vert
+                        </span>
+                    </th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -113,10 +134,10 @@
                     <td>
                         <div class="action-set">
                             <button class="dropdown-item" @click="prepareEditSiswa(siswa)" style="color: #274278">
-                              <i class="fa-solid fa-pen"></i>
+                                <i class="fa-solid fa-pen"></i>
                             </button>
                             <button class="dropdown-item" @click="deleteSiswa(siswa.nomorInduk)" style="color: red">
-                              <i class="fa-solid fa-trash"></i>
+                                <i class="fa-solid fa-trash"></i>
                             </button>
                         </div>
                     </td>
@@ -158,8 +179,11 @@ export default {
                 jenisKelamin: "",
                 jurusan: "",
             },
+            errorNomorInduk: "",
             siswaList: [],
             rowsPerPage: 5,
+            sortBy: "nama",
+            sortDirection: "asc",
             currentPage: 1,
             searchQuery: "",
             editNomorInduk: null,
@@ -171,17 +195,26 @@ export default {
             return this.editNomorInduk !== null;
         },
         filteredSiswaList() {
-            return this.siswaList.filter(
-                (siswa) =>
-                siswa.nomorInduk
-                .toLowerCase()
-                .includes(this.searchQuery.toLowerCase()) ||
+            const filteredList = this.siswaList.filter((siswa) =>
+                siswa.nomorInduk.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
                 siswa.nama.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-                siswa.jenisKelamin
-                .toLowerCase()
-                .includes(this.searchQuery.toLowerCase()) ||
+                siswa.jenisKelamin.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
                 siswa.jurusan.toLowerCase().includes(this.searchQuery.toLowerCase())
             );
+
+            // Sorting
+            filteredList.sort((a, b) => {
+                const valA = a[this.sortBy].toString().toLowerCase();
+                const valB = b[this.sortBy].toString().toLowerCase();
+
+                if (this.sortDirection === "asc") {
+                    return valA > valB ? 1 : valA < valB ? -1 : 0;
+                } else {
+                    return valA < valB ? 1 : valA > valB ? -1 : 0;
+                }
+            });
+
+            return filteredList;
         },
         paginatedSiswaList() {
             const start = (this.currentPage - 1) * this.rowsPerPage;
@@ -193,6 +226,25 @@ export default {
         },
     },
     methods: {
+        validateNumberInput() {
+            const nomorInduk = this.newSiswa.nomorInduk;
+            if (!/^\d*$/.test(nomorInduk)) {
+                this.errorNomorInduk = "Nomor Induk hanya boleh berupa angka!";
+                this.newSiswa.nomorInduk = nomorInduk.replace(/\D/g, ""); // Hapus karakter non-angka
+            } else {
+                this.errorNomorInduk = "";
+            }
+        },
+        toggleSort(column) {
+            if (this.sortBy === column) {
+                // Jika kolom yang sama, ubah arah sortir
+                this.sortDirection = this.sortDirection === "asc" ? "desc" : "asc";
+            } else {
+                // Jika kolom berbeda, set kolom baru dan arah default (ascending)
+                this.sortBy = column;
+                this.sortDirection = "asc";
+            }
+        },
         async fetchSiswaData() {
             try {
                 const token = localStorage.getItem("accessToken");
@@ -215,6 +267,25 @@ export default {
             } catch (error) {
                 console.error("Error fetching data:", error);
             }
+        },
+        validateSiswaForm() {
+            const {
+                nomorInduk,
+                nama,
+                jenisKelamin,
+                jurusan
+            } = this.newSiswa;
+
+            if (!nomorInduk || !nama || !jenisKelamin || !jurusan) {
+                Swal.fire({
+                    title: "Peringatan!",
+                    text: "Semua kolom harus diisi.",
+                    icon: "warning",
+                    confirmButtonText: "OK",
+                });
+                return false;
+            }
+            return true;
         },
         async addSiswa() {
             if (
@@ -274,6 +345,10 @@ export default {
                     icon: "warning",
                     confirmButtonText: "OK",
                 });
+            }
+            if (this.errorNomorInduk) {
+                alert("Periksa kembali inputan Anda!");
+                return;
             }
         },
         async editSiswa() {
@@ -645,11 +720,12 @@ export default {
 }
 
 .action-set {
-  display: flex;
-  justify-content: space-between;
+    display: flex;
+    justify-content: space-between;
 }
 
 @media (max-width: 768px) {
+
     .data-table th,
     .data-table td {
         font-size: 0.875rem;

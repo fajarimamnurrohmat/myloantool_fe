@@ -67,12 +67,24 @@
         <table>
             <thead>
                 <tr>
-                    <th>Nama Peminjam</th>
-                    <th>Alat</th>
-                    <th>Bengkel</th>
-                    <th>Jumlah</th>
-                    <th>Tgl Pinjam</th>
-                    <th>Tgl Permasalahan</th>
+                    <th>Nama Peminjam <span class="material-symbols-outlined swap-sort" @click="toggleSort('nama_siswa')">
+                            swap_vert
+                        </span></th>
+                    <th>Alat <span class="material-symbols-outlined swap-sort" @click="toggleSort('nama_alat')">
+                            swap_vert
+                        </span></th>
+                    <th>Bengkel <span class="material-symbols-outlined swap-sort" @click="toggleSort('ruang_bengkel')">
+                            swap_vert
+                        </span></th>
+                    <th>Jumlah <span class="material-symbols-outlined swap-sort" @click="toggleSort('jumlah')">
+                            swap_vert
+                        </span></th>
+                    <th>Tanggal Pinjam<span class="material-symbols-outlined swap-sort" @click="toggleSort('tanggal_pinjam')">
+                            swap_vert
+                        </span></th>
+                    <th>Tanggal Permasalahan<span class="material-symbols-outlined swap-sort" @click="toggleSort('tgl_permasalahan')">
+                            swap_vert
+                        </span></th>
                     <th>Kondisi</th>
                     <th>Action</th>
                 </tr>
@@ -213,6 +225,8 @@ export default {
             rowsPerPage: 5,
             startDate: "",
             endDate: "",
+            sortBy: "nama_siswa",
+            sortDirection: "asc",
             searchQuery: "",
             editIndex: null,
             showModal: false,
@@ -262,28 +276,53 @@ export default {
 
             // Date Filter
             if (this.startDate || this.endDate) {
+                const start = this.startDate ? new Date(this.startDate) : null;
+                const end = this.endDate ? new Date(this.endDate) : null;
+
                 filteredData = filteredData.filter((record) => {
-                    const permasalahanDate = new Date(record.tgl_permasalahan);
-                    return (
-                        (!this.startDate || permasalahanDate >= new Date(this.startDate)) &&
-                        (!this.endDate || permasalahanDate <= new Date(this.endDate))
-                    );
+                    const recordDate = new Date(record.tanggal_pinjam); // Adjust field as needed
+                    if (start && end) {
+                        return recordDate >= start && recordDate <= end;
+                    } else if (start) {
+                        return recordDate >= start;
+                    } else if (end) {
+                        return recordDate <= end;
+                    }
+                    return true;
                 });
             }
 
             // Search Filter
             if (this.searchQuery) {
                 const query = this.searchQuery.toLowerCase();
-                filteredData = filteredData.filter(
-                    (record) =>
-                    record.nama_siswa.toLowerCase().includes(query) ||
-                    record.nama_alat.toLowerCase().includes(query) ||
-                    record.ruang_bengkel.toLowerCase().includes(query)
+                filteredData = filteredData.filter((record) =>
+                    Object.values(record).some((value) =>
+                        String(value).toLowerCase().includes(query)
+                    )
                 );
             }
 
-            // Paginate
-            this.displayedData = filteredData.slice(0, this.rowsPerPage);
+            // Sorting
+            filteredData.sort((a, b) => {
+                const fieldA = a[this.sortBy]?.toString().toLowerCase() || "";
+                const fieldB = b[this.sortBy]?.toString().toLowerCase() || "";
+                if (fieldA < fieldB) return this.sortDirection === "asc" ? -1 : 1;
+                if (fieldA > fieldB) return this.sortDirection === "asc" ? 1 : -1;
+                return 0;
+            });
+
+            // Pagination
+            const startIndex = 0;
+            const endIndex = this.rowsPerPage;
+            this.displayedData = filteredData.slice(startIndex, endIndex);
+        },
+        toggleSort(column) {
+            if (this.sortBy === column) {
+                this.sortDirection = this.sortDirection === "asc" ? "desc" : "asc";
+            } else {
+                this.sortBy = column;
+                this.sortDirection = "asc";
+            }
         },
         resetFilters() {
             this.startDate = "";
@@ -540,12 +579,12 @@ th {
 
 /* Untuk layar device berukuran kecil (misalnya kurang dari 410px) */
 @media screen and (max-width: 450px) {
-  .header-dataBermasalah {
-    font-weight: bold;
-    color: #274278;
-    font-size: 1.7rem;
-    margin: 0;
-}
+    .header-dataBermasalah {
+        font-weight: bold;
+        color: #274278;
+        font-size: 1.7rem;
+        margin: 0;
+    }
 
     .filter-wrapper,
     .date-inputs,

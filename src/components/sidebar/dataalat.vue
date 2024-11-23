@@ -87,9 +87,24 @@
             <thead>
                 <tr>
                     <th>No</th>
-                    <th>Nama Alat</th>
-                    <th>Jumlah</th>
-                    <th>Ruang Bengkel</th>
+                    <th>
+                        Nama Alat
+                        <span class="material-symbols-outlined swap-sort" @click="toggleSort('nama_alat')">
+                            swap_vert
+                        </span>
+                    </th>
+                    <th>
+                        Jumlah Alat
+                        <span class="material-symbols-outlined swap-sort" @click="toggleSort('jumlah')">
+                            swap_vert
+                        </span>
+                    </th>
+                    <th>
+                        Ruang Bengkel
+                        <span class="material-symbols-outlined swap-sort" @click="toggleSort('ruang_bengkel')">
+                            swap_vert
+                        </span>
+                    </th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -146,6 +161,8 @@ export default {
             alatList: [],
             bengkelList: [],
             rowsPerPage: 5,
+            sortBy: "nama_alat",
+            sortDirection: "asc",
             currentPage: 1,
             searchQuery: "",
             editAlatId: null, // Menyimpan ID alat yang akan diedit
@@ -155,18 +172,28 @@ export default {
     },
     computed: {
         filteredAlatList() {
-            return this.alatList.filter((alat) => {
-                const ruangBengkel = this.getRuangBengkel(
-                    alat.id_bengkel
-                ).toLowerCase();
+            const filteredList = this.alatList.filter((alat) => {
+                const ruangBengkel = this.getRuangBengkel(alat.id_bengkel).toLowerCase();
                 return (
-                    alat.nama_alat
-                    .toLowerCase()
-                    .includes(this.searchQuery.toLowerCase()) ||
+                    alat.nama_alat.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
                     alat.jumlah.toString().includes(this.searchQuery) ||
                     ruangBengkel.includes(this.searchQuery.toLowerCase())
                 );
             });
+
+            // Sorting
+            filteredList.sort((a, b) => {
+                const valA = a[this.sortBy].toString().toLowerCase();
+                const valB = b[this.sortBy].toString().toLowerCase();
+
+                if (this.sortDirection === "asc") {
+                    return valA > valB ? 1 : valA < valB ? -1 : 0;
+                } else {
+                    return valA < valB ? 1 : valA > valB ? -1 : 0;
+                }
+            });
+
+            return filteredList;
         },
         paginatedAlatList() {
             const start = (this.currentPage - 1) * this.rowsPerPage;
@@ -178,6 +205,16 @@ export default {
         },
     },
     methods: {
+        toggleSort(column) {
+            if (this.sortBy === column) {
+                // Jika kolom yang sama, ubah arah sortir
+                this.sortDirection = this.sortDirection === "asc" ? "desc" : "asc";
+            } else {
+                // Jika kolom berbeda, set kolom baru dan arah default (ascending)
+                this.sortBy = column;
+                this.sortDirection = "asc";
+            }
+        },
         async fetchBengkelList() {
             try {
                 const token = localStorage.getItem("accessToken");
@@ -723,6 +760,7 @@ export default {
 
 /* Responsivitas */
 @media (max-width: 768px) {
+
     .data-table th,
     .data-table td {
         font-size: 0.875rem;
