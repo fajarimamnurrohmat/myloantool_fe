@@ -291,6 +291,8 @@ export default {
                 (bengkel) => bengkel.ruang_bengkel === alat.ruang_bengkel
             );
 
+            console.log("Siswa ditemukan:", bengkel);
+
             // Ambil id_bengkel dari bengkel yang ditemukan, atau gunakan null jika tidak ditemukan
             this.newAlat = {
                 namaAlat: alat.nama_alat,
