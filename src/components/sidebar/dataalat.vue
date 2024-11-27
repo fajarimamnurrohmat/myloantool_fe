@@ -659,7 +659,7 @@ export default {
 
 .pagination-container {
     display: flex;
-    justify-content: flex-end;
+    justify-content: center;
     padding: 10px 0;
     margin-bottom: -1rem;
 }
