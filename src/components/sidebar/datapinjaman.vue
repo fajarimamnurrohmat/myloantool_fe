@@ -94,15 +94,15 @@
                     <th>Bengkel <span class="material-symbols-outlined swap-sort" @click="toggleSort('ruang_bengkel')">
                             swap_vert
                         </span></th>
-                    <th>Jumlah <span class="material-symbols-outlined swap-sort" @click="toggleSort('jumlah')">
+                    <th>Jumlah kembali<span class="material-symbols-outlined swap-sort" @click="toggleSort('jumlah')">
                             swap_vert
                         </span></th>
                     <th>Tanggal Pinjam<span class="material-symbols-outlined swap-sort" @click="toggleSort('tanggal_pinjam')">
                             swap_vert
                         </span></th>
-                    <th>Jumlah Pengembalian <span class="material-symbols-outlined swap-sort" @click="toggleSort('jumlah_pengembalian')">
+                    <!-- <th>Jumlah Pengembalian <span class="material-symbols-outlined swap-sort" @click="toggleSort('jumlah_pengembalian')">
                             swap_vert
-                        </span></th>
+                        </span></th> -->
                     <th>Tanggal Kembali<span class="material-symbols-outlined swap-sort" @click="toggleSort('tgl_kembali')">
                             swap_vert
                         </span></th>
@@ -118,7 +118,7 @@
                     <td>{{ record.ruang_bengkel }}</td>
                     <td>{{ record.jumlah }}</td>
                     <td>{{ formatDate(record.tanggal_pinjam) }}</td>
-                    <td>{{ record.jumlah_pengembalian }}</td>
+                    <!-- <td>{{ record.jumlah_pengembalian }}</td> -->
                     <td>{{ formatDate(record.tgl_kembali) }}</td>
                 </tr>
             </tbody>
@@ -202,14 +202,13 @@ export default {
             } else if (type === "pdf") {
                 const doc = new jsPDF();
                 doc.autoTable({
-                    head: [["Nama Peminjam", "Alat", "Bengkel", "Jumlah", "Tanggal Pinjam", "Jumlah Pengembalian", "Tanggal Kembali"]],
+                    head: [["Nama Peminjam", "Alat", "Bengkel", "Jumlah dikembalikan", "Tanggal Pinjam", "Tanggal Kembali"]],
                     body: exportData.map((record) => [
                         record.nama_siswa,
                         record.nama_alat,
                         record.ruang_bengkel,
                         record.jumlah,
                       this.formatDate(record.tanggal_pinjam),
-                        record.jumlah_pengembalian,
                         this.formatDate(record.tgl_kembali),
                     ]),
                 });

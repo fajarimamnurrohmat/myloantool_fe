@@ -316,7 +316,7 @@
                             type="number"
                             id="jumlahAlat"
                             class="form-control-jumlah"
-                            v-model="newPengembalian.jumlahAlatRusak"
+                            v-model="newPengembalian.jumlahAlatDikembalikan"
                             />
                         </div>
                         <!-- jumlah -->
@@ -391,7 +391,7 @@
                             <label for="tanggalPengembalian">Tanggal Pengembalian</label>
                             <p>Masukkan tanggal pengembalian alat</p>
                             <div class="date-input-wrapper">
-                                <input type="date" id="tanggalPengembalian" v-model="newPengembalian.tanggalPengembalian" class="date-filter" style="width: 15.7rem" />
+                                <input type="date" id="tanggalPengembalian" v-model="newPengembalianBermasalah.tanggalPermasalahan" class="date-filter" style="width: 15.7rem" />
                                 <i class="fas fa-calendar-alt calendar-icon"></i>
                             </div>
                         </div>
@@ -400,10 +400,10 @@
                         <div class="form-group kondisi-alat">
                             <label for="kondisiAlat">Kondisi Alat</label>
                             <p>Pilih Kondisi Alat</p>
-                            <select v-model="showCondi" class="select-condi">
+                            <select v-model="newPengembalianBermasalah.kondisi" class="select-condi">
                                 <option disabled value="">Pilih Kondisi</option>
-                                <option value="Rusak">Rusak</option>
-                                <option value="Hilang">Hilang</option>
+                                <option value="rusak">Rusak</option>
+                                <option value="hilang">Hilang</option>
                             </select>
                         </div>
                         <!-- kondisi alat -->
@@ -414,7 +414,7 @@
                             <input type="number"
                             id="jumlahAlatRusak"
                             class="form-control"
-                            v-model="newPengembalian.jumlahAlatRusak" />
+                            v-model="newPengembalianBermasalah.jumlahAlatBermasalah" />
                         </div>
                         <!-- jml alat rusak -->
                     </div>
@@ -458,6 +458,7 @@ export default {
             sortBy: "nama_siswa", // Kolom yang sedang diurutkan
             sortDirection: "asc", // Arah sortir: "asc" atau "desc"
             newPeminjaman: {
+                id_peminjaman: "",
                 nisPeminjam: "",
                 id_alat: "",
                 jumlahAlat: "",
@@ -466,7 +467,11 @@ export default {
             newPengembalian: {
                 tanggalPengembalian: "",
                 jumlahAlatDikembalikan: "",
-                jumlahAlatRusak: "",
+            },
+            newPengembalianBermasalah: {
+                tanggalPermasalahan: "",
+                kondisi: "",
+                jumlahAlatBermasalah: "",
             },
             peminjamanList: [],
             alatList: [],
@@ -635,27 +640,54 @@ export default {
                 });
             }
         },
-        savePeminjaman() {
+        async addPengembalian() {
+          console.log(JSON.stringify(this.newPengembalian));
             if (
-                this.newPeminjaman.namaPeminjam &&
-                this.newPeminjaman.alat &&
-                this.newPeminjaman.bengkel &&
-                this.newPeminjaman.tanggalPinjam &&
-                this.newPeminjaman.jumlahAlat
+                this.newPeminjaman.id_peminjaman &&
+                this.newPengembalian.tanggalPengembalian &&
+                this.newPengembalian.jumlahAlatDikembalikan
             ) {
-                // Push data peminjaman ke array
-                this.peminjamanList.push({
-                    ...this.newPeminjaman,
-                });
-                // Bersihkan form setelah simpan
-                this.resetForm();
-                // Navigasi ke halaman data peminjaman setelah simpan
-                this.$router.push({
-                    name: "datapinjaman",
-                    params: {
-                        peminjamanList: this.peminjamanList,
-                    },
-                });
+                try {
+                    const dataToSend = {
+                        id_peminjaman: this.newPeminjaman.id_peminjaman,
+                        tgl_kembali: this.newPengembalian.tanggalPengembalian,
+                        jumlah: this.newPengembalian.jumlahAlatDikembalikan
+                    };
+
+                    const response = await axios.post(
+                        "http://localhost:3000/pengembalian",
+                        dataToSend
+                    );
+
+                    if (
+                        (response.status === 200 || response.status === 201) &&
+                        response.data.status === "success"
+                    ) {
+                        // Update list langsung tanpa reload
+                        //this.peminjamanList.push(response.data.data);
+                        // Jika ada fetch data, bisa dipanggil lagi untuk memastikan list diperbarui
+                        await this.fetchDataPeminjaman();
+
+                        this.resetForm();
+                        this.closeModal();
+
+                        Swal.fire({
+                            title: "Sukses!",
+                            text: "Data pengembalian berhasil disimpan.",
+                            icon: "success",
+                            confirmButtonText: "OK",
+                        });
+                    } else {
+                        throw new Error("Terjadi kesalahan saat menyimpan data.");
+                    }
+                } catch (error) {
+                    Swal.fire({
+                        title: "Error!",
+                        text: `Gagal menyimpan data: ${error.message}`,
+                        icon: "error",
+                        confirmButtonText: "OK",
+                    });
+                }
             } else {
                 Swal.fire({
                     title: "Error!",
@@ -665,89 +697,61 @@ export default {
                 });
             }
         },
-        async addPengembalian() {
-            // Pastikan semua data yang diperlukan terisi
+        async addPengembalianBermasalah(){
+          console.log(JSON.stringify(this.newPengembalianBermasalah));
             if (
-                this.newPengembalian.tanggalPengembalian &&
-                this.newPeminjaman.namaPeminjam &&
-                this.newPeminjaman.tanggalPinjam &&
-                this.newPeminjaman.jumlahAlat &&
-                this.newPeminjaman.alat &&
-                this.newPeminjaman.bengkel
+                this.newPeminjaman.id_peminjaman &&
+                this.newPengembalianBermasalah.tanggalPermasalahan &&
+                this.newPengembalianBermasalah.kondisi &&
+                this.newPengembalianBermasalah.jumlahAlatBermasalah
             ) {
-                // Menyiapkan data yang akan dikirim
-                const data = {
-                    tanggalPengembalian: this.newPengembalian.tanggalPengembalian,
-                    peminjaman: this.newPeminjaman, // Sertakan data peminjaman terkait
-                };
+                try {
+                    const dataToSend = {
+                        id_peminjaman: this.newPeminjaman.id_peminjaman,
+                        tgl_permasalahan: this.newPengembalianBermasalah.tanggalPermasalahan,
+                        kondisi: this.newPengembalianBermasalah.kondisi,
+                        jumlah : this.newPengembalianBermasalah.jumlahAlatBermasalah
+                    };
 
-                axios
-                    .post("http://localhost:3000/pengembalian", data)
-                    .then((response) => {
-                        if (response.data.success) {
-                            Swal.fire({
-                                title: "Sukses!",
-                                text: "Data pengembalian berhasil disimpan.",
-                                icon: "success",
-                                confirmButtonText: "OK",
-                            });
-                            // Reset form dan tutup modal
-                            this.resetForm();
-                            this.closeModal();
-                        } else {
-                            Swal.fire({
-                                title: "Error!",
-                                text: "Gagal menyimpan data pengembalian.",
-                                icon: "error",
-                                confirmButtonText: "OK",
-                            });
-                        }
-                    })
-                    .catch((error) => {
-                        console.error("Error saving data:", error);
+                    const response = await axios.post(
+                        "http://localhost:3000/alat-bermasalah",
+                        dataToSend
+                    );
+
+                    if (
+                        (response.status === 200 || response.status === 201) &&
+                        response.data.status === "success"
+                    ) {
+                        // Jika ada fetch data, bisa dipanggil lagi untuk memastikan list diperbarui
+                        await this.fetchDataPeminjaman();
+
+                        this.resetForm();
+                        this.closeModal();
+
                         Swal.fire({
-                            title: "Error!",
-                            text: "Terjadi masalah saat menyimpan data. Silakan coba lagi.",
-                            icon: "error",
+                            title: "Sukses!",
+                            text: "Data bermasalah berhasil disimpan.",
+                            icon: "success",
                             confirmButtonText: "OK",
                         });
-                    });
-            } else {
-                Swal.fire({
-                    title: "Peringatan!",
-                    text: "Mohon isi semua data.",
-                    icon: "warning",
-                    confirmButtonText: "OK",
-                });
-            }
-        },
-        async addPengembalianBermasalah() {
-            try {
-                // Kirim data ke endpoint API untuk pengembalian bermasalah
-                const response = await axios.post(
-                    "http://localhost:3000/alat-bermasalah", {
-                        ...this.newPeminjaman,
-                        tanggalPengembalian: this.newPengembalian.tanggalPengembalian,
-                        jumlahAlatRusak: this.newPengembalian.jumlahAlatRusak,
-                        kondisiAlat: this.showCondi,
+                    } else {
+                        throw new Error("Terjadi kesalahan saat menyimpan data.");
                     }
-                );
-
-                if (response.status === 200) {
-                    Swal.fire(
-                        "Sukses!",
-                        "Data pengembalian bermasalah berhasil disimpan.",
-                        "success"
-                    );
-                    this.closeModal();
-                    this.resetForm();
-                    this.$router.push({
-                        name: "databermasalah",
+                } catch (error) {
+                    Swal.fire({
+                        title: "Error!",
+                        text: `Gagal menyimpan data: ${error.message}`,
+                        icon: "error",
+                        confirmButtonText: "OK",
                     });
                 }
-            } catch (error) {
-                console.error("Gagal menyimpan data pengembalian bermasalah:", error);
-                Swal.fire("Error!", "Gagal menyimpan data.", "error");
+            } else {
+                Swal.fire({
+                    title: "Error!",
+                    text: "Mohon isi semua data!",
+                    icon: "error",
+                    confirmButtonText: "OK",
+                });
             }
         },
         resetPengembalianForm() {
