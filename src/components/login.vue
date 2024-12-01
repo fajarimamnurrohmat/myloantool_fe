@@ -47,7 +47,6 @@
           <span v-if="isLoading">Logging in...</span>
           <span v-else>Login</span>
         </button>
-        <a href="#" class="forgot-password">Lupa password?</a>
       </form>
       <!-- form end -->
       <div v-if="errorMessage" class="alert alert-danger mt-3">

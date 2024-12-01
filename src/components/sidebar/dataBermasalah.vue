@@ -431,6 +431,7 @@ export default {
 .header-tooltip {
     text-align: left;
     margin-bottom: 1rem;
+    margin-top: 3rem;
     display: flex;
     align-items: center;
     gap: 0.5rem;

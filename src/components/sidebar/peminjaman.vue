@@ -101,25 +101,21 @@
             </button>
             <div class="dropdown d-inline-block">
                 <button class="btn-export" type="button" @click="toggleDropdown(index)" :aria-expanded="dropdownIndex === index" style="
-              color: #4b6cb7;
-              background-color: white;
-              width: 6.5rem;
-              height: 2.72rem;
-            ">
-                    <i class="fa-solid fa-arrow-up-from-bracket" style="margin-left: 0.7rem; margin-right: 0.4rem; color: #4b6cb7">
-                    </i>
+                  color: #4b6cb7;
+                  background-color: white;
+                  width: 6.5rem;
+                  height: 2.72rem;
+                ">
+                  <i class="fa-solid fa-arrow-up-from-bracket" style="margin-left: 0.7rem; margin-right: 0.4rem; color: #4b6cb7"></i>
                     Export
                 </button>
                 <div class="dropdown-menu-exports" :class="{ show: dropdownIndex === index }">
-                    <a class="dropdown-item-export" @click="exportData('pdf')" style="color: #4b6cb7"><i class="fa fa-file-pdf" aria-hidden="true" style="margin-left: 0.5rem; margin-right: 0.1rem">
-                        </i>
+                    <a class="dropdown-item-export" @click="exportData('pdf')" style="color: #4b6cb7">
+                      <i class="fa fa-file-pdf" aria-hidden="true" style="margin-left: 0.5rem; margin-right: 0.1rem"></i>
                         .pdf
                     </a>
-                    <a class="dropdown-item-export" @click="exportData('csv')" style="color: #4b6cb7"><i class="fa-solid fa-file-csv" aria-hidden="true" style="
-                  margin-left: 0.5rem;
-                  margin-right: 0.1rem;
-                  margin-top: 0.5rem;
-                ">
+                    <a class="dropdown-item-export" @click="exportData('csv')" style="color: #4b6cb7">
+                      <i class="fa-solid fa-file-csv" aria-hidden="true" style="margin-left: 0.5rem; margin-right: 0.1rem; margin-top: 0.5rem;">
                         </i>
                         .csv
                     </a>
@@ -312,12 +308,7 @@
                         <div class="form-group-jumlah">
                             <label for="jumlahAlat">Jumlah Pengembalian</label>
                             <p>Masukkan jumlah alat yang dikembalikan</p>
-                            <input
-                            type="number"
-                            id="jumlahAlat"
-                            class="form-control-jumlah"
-                            v-model="newPengembalian.jumlahAlatDikembalikan"
-                            />
+                            <input type="number" id="jumlahAlat" class="form-control-jumlah" v-model="newPengembalian.jumlahAlatDikembalikan" />
                         </div>
                         <!-- jumlah -->
                     </div>
@@ -396,7 +387,7 @@
                             </div>
                         </div>
                         <!-- tgl pinjam -->
-                         <!-- kondisi alat -->
+                        <!-- kondisi alat -->
                         <div class="form-group kondisi-alat">
                             <label for="kondisiAlat">Kondisi Alat</label>
                             <p>Pilih Kondisi Alat</p>
@@ -411,10 +402,7 @@
                         <div class="form-group alat-rusak">
                             <label for="jumlahAlatRusak">Jumlah Kerusakan</label>
                             <p>Jumlah Kerusakan Alat</p>
-                            <input type="number"
-                            id="jumlahAlatRusak"
-                            class="form-control"
-                            v-model="newPengembalianBermasalah.jumlahAlatBermasalah" />
+                            <input type="number" id="jumlahAlatRusak" class="form-control" v-model="newPengembalianBermasalah.jumlahAlatBermasalah" />
                         </div>
                         <!-- jml alat rusak -->
                     </div>
@@ -641,7 +629,7 @@ export default {
             }
         },
         async addPengembalian() {
-          console.log(JSON.stringify(this.newPengembalian));
+            console.log(JSON.stringify(this.newPengembalian));
             if (
                 this.newPeminjaman.id_peminjaman &&
                 this.newPengembalian.tanggalPengembalian &&
@@ -697,8 +685,8 @@ export default {
                 });
             }
         },
-        async addPengembalianBermasalah(){
-          console.log(JSON.stringify(this.newPengembalianBermasalah));
+        async addPengembalianBermasalah() {
+            console.log(JSON.stringify(this.newPengembalianBermasalah));
             if (
                 this.newPeminjaman.id_peminjaman &&
                 this.newPengembalianBermasalah.tanggalPermasalahan &&
@@ -710,7 +698,7 @@ export default {
                         id_peminjaman: this.newPeminjaman.id_peminjaman,
                         tgl_permasalahan: this.newPengembalianBermasalah.tanggalPermasalahan,
                         kondisi: this.newPengembalianBermasalah.kondisi,
-                        jumlah : this.newPengembalianBermasalah.jumlahAlatBermasalah
+                        jumlah: this.newPengembalianBermasalah.jumlahAlatBermasalah
                     };
 
                     const response = await axios.post(
