@@ -889,6 +889,11 @@ export default {
                 tanggalPengembalian: "",
                 jumlahAlatRusak: "",
             };
+            this.newPengembalianBermasalah = {
+                tanggalPermasalahan: "",
+                kondisi: "",
+                jumlahAlatBermasalah:"",
+            };
             this.showCondi = "";
             this.editIndex = null;
         },
