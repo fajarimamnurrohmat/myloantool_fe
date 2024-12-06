@@ -83,7 +83,7 @@
     <!-- tabel wrapper -->
     <div class="table-wrapper">
       <div class="info-page">
-          <div class="tampil-baris" style="text-align: left; margin-bottom: 1rem">
+          <div class="tampil-baris" style="text-align: left;">
               Tampilkan:
               <select v-model="rowsPerPage" class="select-rows" style="width: 3rem">
                   <option value="5">5</option>
