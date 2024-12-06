@@ -73,15 +73,20 @@
     </div>
     <!-- End of Import Button and File Input -->
     <div class="table-wrapper">
-        <div class="tampil-baris">
-            Tampilkan:
-            <select v-model.number="rowsPerPage" class="select-rows">
-                <option value="5">5</option>
-                <option value="10">10</option>
-                <option value="20">20</option>
-                <option value="100">100</option>
-            </select>
-            baris
+      <div class="info-page">
+          <div class="tampil-baris" style="text-align: left; margin-bottom: 1rem">
+              Tampilkan:
+              <select v-model="rowsPerPage" class="select-rows" style="width: 3rem">
+                  <option value="5">5</option>
+                  <option value="10">10</option>
+                  <option value="20">20</option>
+                  <option value="100">100</option>
+              </select>
+              baris
+          </div>
+          <div>
+            <p class="page-info">{{ pageInfo }}</p>
+          </div>
         </div>
         <table class="data-table">
             <thead>
@@ -170,7 +175,16 @@ export default {
             isEditMode: false, // Menandakan apakah modal dalam mode edit
         };
     },
-    computed: {
+  computed: {
+    pageInfo() {
+      const totalData = this.alatList.length;
+      const startIndex = (this.currentPage - 1) * this.rowsPerPage + 1;
+      const endIndex = Math.min(
+        startIndex + this.rowsPerPage - 1,
+        totalData
+      );
+      return `Menampilkan ${startIndex} sampai ${endIndex} dari ${totalData} data`;
+    },
         filteredAlatList() {
             const filteredList = this.alatList.filter((alat) => {
                 const ruangBengkel = this.getRuangBengkel(alat.id_bengkel).toLowerCase();
@@ -623,6 +637,26 @@ export default {
 .search-icon {
     color: #888;
     margin-right: 5px;
+}
+
+.info-page {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* Memastikan elemen sejajar vertikal */
+    margin-bottom: 1rem;
+}
+
+.select-rows {
+    padding: 0.25rem; /* Konsisten padding */
+    font-size: 1rem;
+    line-height: 1.5; /* Sama dengan elemen teks lainnya */
+}
+
+.page-info {
+    font-size: 0.9rem; /* Ukuran font serupa dengan teks lainnya */
+    line-height: 1.5; /* Konsistensi line-height */
+    color: #555;
+    margin: 0; /* Hilangkan margin tambahan */
 }
 
 .table-wrapper {

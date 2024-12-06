@@ -54,15 +54,20 @@
     </div>
 
     <div class="table-wrapper">
-        <div class="tampil-baris" style="text-align: left; margin-bottom: 1rem">
-            Tampilkan:
-            <select v-model="rowsPerPage" class="select-rows" style="width: 3rem">
-                <option value="5">5</option>
-                <option value="10">10</option>
-                <option value="20">20</option>
-                <option value="100">100</option>
-            </select>
-            baris
+      <div class="info-page">
+          <div class="tampil-baris" style="text-align: left; margin-bottom: 1rem">
+              Tampilkan:
+              <select v-model="rowsPerPage" class="select-rows" style="width: 3rem">
+                  <option value="5">5</option>
+                  <option value="10">10</option>
+                  <option value="20">20</option>
+                  <option value="100">100</option>
+              </select>
+              baris
+          </div>
+          <div>
+            <p class="page-info">{{ pageInfo }}</p>
+          </div>
         </div>
         <table>
             <thead>
@@ -200,6 +205,17 @@
             </div>
         </div>
         <!-- End of Modal Section -->
+        <div v-if="totalPages > 1" class="pagination-container">
+            <button @click="currentPage--" :disabled="currentPage === 1" class="pagination-button">
+                Previous
+            </button>
+            <span class="pagination-info">
+                Page {{ currentPage }} of {{ totalPages }}
+            </span>
+            <button @click="currentPage++" :disabled="currentPage === totalPages" class="pagination-button">
+                Next
+            </button>
+        </div>
     </div>
 </div>
 </template>
@@ -223,6 +239,7 @@ export default {
             alatBermasalah: [],
             displayedData: [],
             rowsPerPage: 5,
+            currentPage: 1,
             startDate: "",
             endDate: "",
             sortBy: "nama_siswa",
@@ -409,7 +426,26 @@ export default {
             this.showCondi = "";
             this.editIndex = null;
         },
+  },
+  computed: {
+    pageInfo() {
+      const totalData = this.alatBermasalah.length;
+      const startIndex = (this.currentPage - 1) * this.rowsPerPage + 1;
+      const endIndex = Math.min(
+        startIndex + this.rowsPerPage - 1,
+        totalData
+      );
+      return `Menampilkan ${startIndex} sampai ${endIndex} dari ${totalData} data`;
     },
+    displayedData() {
+        const start = (this.currentPage - 1) * this.rowsPerPage;
+        const end = start + this.rowsPerPage;
+        return this.alatBermasalah.slice(start, end);
+    },
+    totalPages() {
+      return Math.ceil(this.alatBermasalah.length / this.rowsPerPage);
+    }
+  },
     watch: {
         rowsPerPage() {
             this.updateDisplayedData();
@@ -560,6 +596,26 @@ export default {
     align-items: center;
     gap: 15px;
     /* Add space between the buttons and text */
+}
+
+.info-page {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* Memastikan elemen sejajar vertikal */
+    margin-bottom: 1rem;
+}
+
+.select-rows {
+    padding: 0.25rem; /* Konsisten padding */
+    font-size: 1rem;
+    line-height: 1.5; /* Sama dengan elemen teks lainnya */
+}
+
+.page-info {
+    font-size: 0.9rem; /* Ukuran font serupa dengan teks lainnya */
+    line-height: 1.5; /* Konsistensi line-height */
+    color: #555;
+    margin: 0; /* Hilangkan margin tambahan */
 }
 
 table {

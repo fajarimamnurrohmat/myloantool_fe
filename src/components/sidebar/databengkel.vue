@@ -59,16 +59,21 @@
 
 <div class="table-wrapper">
     <!-- Show Row -->
-    <div class="tampil-baris" style="text-align: left">
-        Tampilkan:
-        <select v-model.number="rowsPerPage" class="select-rows">
-            <option value="5">5</option>
-            <option value="10">10</option>
-            <option value="20">20</option>
-            <option value="100">100</option>
-        </select>
-        baris
-    </div>
+    <div class="info-page">
+          <div class="tampil-baris" style="text-align: left; margin-bottom: 1rem">
+              Tampilkan:
+              <select v-model="rowsPerPage" class="select-rows" style="width: 3rem">
+                  <option value="5">5</option>
+                  <option value="10">10</option>
+                  <option value="20">20</option>
+                  <option value="100">100</option>
+              </select>
+              baris
+          </div>
+          <div>
+            <p class="page-info">{{ pageInfo }}</p>
+          </div>
+        </div>
     <!-- End of Show Row -->
     <table class="data-table">
         <thead>
@@ -146,7 +151,16 @@ export default {
             dropdownIndex: null,
         };
     },
-    computed: {
+  computed: {
+    pageInfo() {
+      const totalData = this.bengkelList.length;
+      const startIndex = (this.currentPage - 1) * this.rowsPerPage + 1;
+      const endIndex = Math.min(
+        startIndex + this.rowsPerPage - 1,
+        totalData
+      );
+      return `Menampilkan ${startIndex} sampai ${endIndex} dari ${totalData} data`;
+    },
         filteredBengkelList() {
             const filteredList = this.bengkelList.filter((bengkel) =>
                 bengkel.ruang_bengkel
@@ -574,6 +588,26 @@ export default {
     padding: 5px;
     border-radius: 4px;
     border: 1px solid #ccc;
+}
+
+.info-page {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* Memastikan elemen sejajar vertikal */
+    margin-bottom: 1rem;
+}
+
+.select-rows {
+    padding: 0.25rem; /* Konsisten padding */
+    font-size: 1rem;
+    line-height: 1.5; /* Sama dengan elemen teks lainnya */
+}
+
+.page-info {
+    font-size: 0.9rem; /* Ukuran font serupa dengan teks lainnya */
+    line-height: 1.5; /* Konsistensi line-height */
+    color: #555;
+    margin: 0; /* Hilangkan margin tambahan */
 }
 
 .data-table {

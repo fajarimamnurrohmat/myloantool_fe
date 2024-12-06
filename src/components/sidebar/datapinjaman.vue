@@ -69,7 +69,8 @@
     <!-- End of filter wrapper -->
 
     <div class="table-wrapper">
-        <div class="tampil-baris" style="text-align: left; margin-bottom: 1rem">
+      <div class="info-page">
+        <div style="text-align: left">
             Tampilkan:
             <select v-model="rowsPerPage" class="select-rows" style="width: 3rem">
                 <option value="5">5</option>
@@ -79,7 +80,10 @@
             </select>
             baris
         </div>
-
+        <div>
+          <p class="page-info">{{ pageInfo }}</p>
+        </div>
+      </div>
         <!-- Tabel Data -->
         <table>
             <thead>
@@ -109,20 +113,31 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-if="filteredLoans.length === 0">
-                    <td colspan="6" style="text-align: center">Tidak ada data</td>
-                </tr>
-                <tr v-for="(record, index) in filteredLoans" :key="index">
-                    <td>{{ record.nama_siswa }}</td>
-                    <td>{{ record.nama_alat }}</td>
-                    <td>{{ record.ruang_bengkel }}</td>
-                    <td>{{ record.jumlah }}</td>
-                    <td>{{ formatDate(record.tanggal_pinjam) }}</td>
-                    <!-- <td>{{ record.jumlah_pengembalian }}</td> -->
-                    <td>{{ formatDate(record.tgl_kembali) }}</td>
-                </tr>
+              <tr v-if="displayedData.length === 0">
+                <td colspan="6" style="text-align: center">Tidak ada data</td>
+              </tr>
+              <tr v-for="(record, index) in displayedData" :key="index">
+                <td>{{ record.nama_siswa }}</td>
+                <td>{{ record.nama_alat }}</td>
+                <td>{{ record.ruang_bengkel }}</td>
+                <td>{{ record.jumlah }}</td>
+                <td>{{ formatDate(record.tanggal_pinjam) }}</td>
+                <td>{{ formatDate(record.tgl_kembali) }}</td>
+              </tr>
             </tbody>
         </table>
+
+        <div v-if="totalPages > 1" class="pagination-container">
+            <button @click="currentPage--" :disabled="currentPage === 1" class="pagination-button">
+                Previous
+            </button>
+            <span class="pagination-info">
+                Page {{ currentPage }} of {{ totalPages }}
+            </span>
+            <button @click="currentPage++" :disabled="currentPage === totalPages" class="pagination-button">
+                Next
+            </button>
+        </div>
     </div>
 </div>
 </template>
@@ -132,56 +147,22 @@ import axios from "axios";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import * as XLSX from "xlsx";
-import {
-    Tooltip
-} from "bootstrap";
 
 export default {
-  name: "DataPengembalianPinjaman",
-    name: "TooltipExample",
+    name: "DataPengembalianPinjaman",
     data() {
         return {
             returnedLoans: [], // Data pengembalian
             rowsPerPage: 5,
+            currentPage: 1,
             startDate: "",
             endDate: "",
             searchQuery: "",
             sortBy: "nama_siswa",
             sortDirection: "asc",
             dropdownOpen: false, // Dropdown state
+            displayedData: [],
         };
-    },
-    computed: {
-        filteredLoans() {
-            let filtered = this.returnedLoans;
-            if (this.startDate || this.endDate) {
-                filtered = filtered.filter((record) => {
-                    const kembaliDate = new Date(record.tgl_kembali);
-                    return (
-                        (!this.startDate || kembaliDate >= new Date(this.startDate)) &&
-                        (!this.endDate || kembaliDate <= new Date(this.endDate))
-                    );
-                });
-            }
-            if (this.searchQuery) {
-                const query = this.searchQuery.toLowerCase();
-                filtered = filtered.filter((record) => {
-                    return (
-                        record.nama_siswa.toLowerCase().includes(query) ||
-                        record.nama_alat.toLowerCase().includes(query) ||
-                        record.ruang_bengkel.toLowerCase().includes(query)
-                    );
-                });
-            }
-            filtered.sort((a, b) => {
-                const valA = a[this.sortBy]?.toString().toLowerCase() || "";
-                const valB = b[this.sortBy]?.toString().toLowerCase() || "";
-                return this.sortDirection === "asc"
-                    ? valA.localeCompare(valB)
-                    : valB.localeCompare(valA);
-            });
-            return filtered.slice(0, this.rowsPerPage);
-        },
     },
     methods: {
         formatDate(dateString) {
@@ -202,13 +183,15 @@ export default {
             } else if (type === "pdf") {
                 const doc = new jsPDF();
                 doc.autoTable({
-                    head: [["Nama Peminjam", "Alat", "Bengkel", "Jumlah dikembalikan", "Tanggal Pinjam", "Tanggal Kembali"]],
+                    head: [
+                        ["Nama Peminjam", "Alat", "Bengkel", "Jumlah dikembalikan", "Tanggal Pinjam", "Tanggal Kembali"]
+                    ],
                     body: exportData.map((record) => [
                         record.nama_siswa,
                         record.nama_alat,
                         record.ruang_bengkel,
                         record.jumlah,
-                      this.formatDate(record.tanggal_pinjam),
+                        this.formatDate(record.tanggal_pinjam),
                         this.formatDate(record.tgl_kembali),
                     ]),
                 });
@@ -217,6 +200,15 @@ export default {
         },
         toggleDropdown() {
             this.dropdownOpen = !this.dropdownOpen;
+            if (this.dropdownOpen) {
+                document.addEventListener("click", this.closeDropdownOnOutsideClick);
+            }
+        },
+        closeDropdownOnOutsideClick(event) {
+            if (!this.$el.contains(event.target)) {
+                this.dropdownOpen = false;
+                document.removeEventListener("click", this.closeDropdownOnOutsideClick);
+            }
         },
         resetFilters() {
             this.startDate = "";
@@ -227,7 +219,9 @@ export default {
             const accessToken = localStorage.getItem("accessToken");
             axios
                 .get("http://localhost:3000/pengembalian", {
-                    headers: { Authorization: `Bearer ${accessToken}` },
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`
+                    },
                 })
                 .then((response) => {
                     if (response.data.status === "success") {
@@ -248,9 +242,62 @@ export default {
                 this.sortDirection = "asc";
             }
         },
+        updateDisplayedData() {
+            const startIndex = (this.currentPage - 1) * this.rowsPerPage;
+            const endIndex = startIndex + this.rowsPerPage;
+            this.displayedData = this.filteredLoans.slice(startIndex, endIndex);
+        },
+    },
+  computed: {
+    pageInfo() {
+      const totalData = this.filteredLoans.length;
+      const startIndex = (this.currentPage - 1) * this.rowsPerPage + 1;
+      const endIndex = Math.min(
+        startIndex + this.rowsPerPage - 1,
+        totalData
+      );
+      return `Menampilkan ${startIndex} sampai ${endIndex} dari ${totalData} data`;
+    },
+        filteredLoans() {
+            let filtered = this.returnedLoans;
+            if (this.searchQuery) {
+                const query = this.searchQuery.toLowerCase();
+                filtered = filtered.filter((record) =>
+                    record.nama_siswa.toLowerCase().includes(query)
+                );
+            }
+            filtered.sort((a, b) => {
+                const valA = a[this.sortBy]?.toString().toLowerCase() || "";
+                const valB = b[this.sortBy]?.toString().toLowerCase() || "";
+                return this.sortDirection === "asc" ?
+                    valA.localeCompare(valB) :
+                    valB.localeCompare(valA);
+            });
+            return filtered;
+        },
+        totalPages() {
+            return Math.ceil(this.filteredLoans.length / this.rowsPerPage);
+        },
+        displayedData() {
+            const start = (this.currentPage - 1) * this.rowsPerPage;
+            const end = start + this.rowsPerPage;
+            return this.filteredLoans.slice(start, end);
+        },
+    },
+    watch: {
+        currentPage() {
+            this.updateDisplayedData();
+        },
+        rowsPerPage() {
+            this.updateDisplayedData();
+        },
+        filteredLoans() {
+            this.updateDisplayedData();
+        },
     },
     created() {
         this.fetchReturnedLoans();
+        this.updateDisplayedData(); // Initialize displayed data
     },
 };
 </script>
@@ -433,7 +480,6 @@ export default {
     transform: translateX(-50%);
     text-align: left;
 }
-
 /* end of dropdown style */
 
 .pagination-container {
@@ -442,7 +488,26 @@ export default {
     justify-content: center;
     align-items: center;
     gap: 15px;
-    /* Add space between the buttons and text */
+}
+
+.info-page {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* Memastikan elemen sejajar vertikal */
+    margin-bottom: 1rem;
+}
+
+.select-rows {
+    padding: 0.25rem; /* Konsisten padding */
+    font-size: 1rem;
+    line-height: 1.5; /* Sama dengan elemen teks lainnya */
+}
+
+.page-info {
+    font-size: 0.9rem; /* Ukuran font serupa dengan teks lainnya */
+    line-height: 1.5; /* Konsistensi line-height */
+    color: #555;
+    margin: 0; /* Hilangkan margin tambahan */
 }
 
 table {
@@ -463,9 +528,9 @@ th {
 
 /* Untuk layar device berukuran kecil (misalnya kurang dari 410px) */
 @media screen and (max-width: 450px) {
-  .header-tooltip {
-    margin-top: 3rem;
-  }
+    .header-tooltip {
+        margin-top: 3rem;
+    }
 
     .filter-wrapper,
     .date-inputs,

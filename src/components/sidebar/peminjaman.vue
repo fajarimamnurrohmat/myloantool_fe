@@ -136,6 +136,7 @@
 
 <!-- Table wrapper -->
 <div class="table-wrapper">
+  <div class="info-page">
     <div style="text-align: left">
         Tampilkan:
         <select v-model="rowsPerPage" class="select-rows" style="width: 3rem">
@@ -146,6 +147,10 @@
         </select>
         baris
     </div>
+    <div>
+      <p class="page-info">{{ pageInfo }}</p>
+    </div>
+  </div>
     <!-- table section -->
     <table class="data-table">
         <thead>
@@ -977,7 +982,16 @@ export default {
             }
         },
     },
-    computed: {
+  computed: {
+    pageInfo() {
+      const totalData = this.peminjamanList.length;
+      const startIndex = (this.currentPage - 1) * this.rowsPerPage + 1;
+      const endIndex = Math.min(
+        startIndex + this.rowsPerPage - 1,
+        totalData
+      );
+      return `Menampilkan ${startIndex} sampai ${endIndex} dari ${totalData} data`;
+    },
         filteredPeminjamanList() {
             let filteredList = this.peminjamanList;
 
@@ -1017,7 +1031,7 @@ export default {
                 }
             });
 
-            return filteredList;
+        return filteredList;
         },
         paginatedPeminjamanList() {
             const start = (this.currentPage - 1) * this.rowsPerPage;
@@ -1383,6 +1397,26 @@ export default {
     transform: translateY(-50%);
     color: #7b8291;
     pointer-events: none;
+}
+
+.info-page {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* Memastikan elemen sejajar vertikal */
+    margin-bottom: 1rem;
+}
+
+.select-rows {
+    padding: 0.25rem; /* Konsisten padding */
+    font-size: 1rem;
+    line-height: 1.5; /* Sama dengan elemen teks lainnya */
+}
+
+.page-info {
+    font-size: 0.9rem; /* Ukuran font serupa dengan teks lainnya */
+    line-height: 1.5; /* Konsistensi line-height */
+    color: #555;
+    margin: 0; /* Hilangkan margin tambahan */
 }
 
 .search-input,
