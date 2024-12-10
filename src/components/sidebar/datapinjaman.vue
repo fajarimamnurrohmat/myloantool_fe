@@ -1,5 +1,6 @@
 <template>
 <div>
+  <!-- Header -->
     <div class="header-tooltip">
         <h3 class="header-DataPinjaman">Data Pinjaman Telah Dikembalikan</h3>
         <div>
@@ -10,6 +11,7 @@
             </button>
         </div>
     </div>
+  <!-- End of Header -->
 
     <!-- filter wrapper -->
     <div class="filter-wrapper">
@@ -69,25 +71,26 @@
     <!-- End of filter wrapper -->
 
     <div class="table-wrapper">
-      <div class="info-page">
-        <div style="text-align: left">
-            Tampilkan:
-            <select v-model="rowsPerPage" class="select-rows" style="width: 3rem">
-                <option value="5">5</option>
-                <option value="10">10</option>
-                <option value="20">20</option>
-                <option value="100">100</option>
-            </select>
-            baris
+        <div class="info-page">
+            <div style="text-align: left">
+                Tampilkan:
+                <select v-model="rowsPerPage" class="select-rows" style="width: 3rem">
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                    <option value="100">100</option>
+                </select>
+                baris
+            </div>
+            <div>
+                <p class="page-info">{{ pageInfo }}</p>
+            </div>
         </div>
-        <div>
-          <p class="page-info">{{ pageInfo }}</p>
-        </div>
-      </div>
         <!-- Tabel Data -->
         <table>
             <thead>
                 <tr>
+                    <th>no</th>
                     <th>Nama Peminjam <span class="material-symbols-outlined swap-sort" @click="toggleSort('nama_siswa')">
                             swap_vert
                         </span>
@@ -104,26 +107,24 @@
                     <th>Tanggal Pinjam<span class="material-symbols-outlined swap-sort" @click="toggleSort('tanggal_pinjam')">
                             swap_vert
                         </span></th>
-                    <!-- <th>Jumlah Pengembalian <span class="material-symbols-outlined swap-sort" @click="toggleSort('jumlah_pengembalian')">
-                            swap_vert
-                        </span></th> -->
                     <th>Tanggal Kembali<span class="material-symbols-outlined swap-sort" @click="toggleSort('tgl_kembali')">
                             swap_vert
                         </span></th>
                 </tr>
             </thead>
             <tbody>
-              <tr v-if="displayedData.length === 0">
-                <td colspan="6" style="text-align: center">Tidak ada data</td>
-              </tr>
-              <tr v-for="(record, index) in displayedData" :key="index">
-                <td>{{ record.nama_siswa }}</td>
-                <td>{{ record.nama_alat }}</td>
-                <td>{{ record.ruang_bengkel }}</td>
-                <td>{{ record.jumlah }}</td>
-                <td>{{ formatDate(record.tanggal_pinjam) }}</td>
-                <td>{{ formatDate(record.tgl_kembali) }}</td>
-              </tr>
+                <tr v-if="displayedData.length === 0">
+                    <td colspan="6" style="text-align: center">Tidak ada data</td>
+                </tr>
+                <tr v-for="(record, index) in displayedData" :key="index">
+                    <td>{{ index + 1 + (currentPage - 1) * rowsPerPage }}</td>
+                    <td>{{ record.nama_siswa }}</td>
+                    <td>{{ record.nama_alat }}</td>
+                    <td>{{ record.ruang_bengkel }}</td>
+                    <td>{{ record.jumlah }}</td>
+                    <td>{{ formatDate(record.tanggal_pinjam) }}</td>
+                    <td>{{ formatDate(record.tgl_kembali) }}</td>
+                </tr>
             </tbody>
         </table>
 
@@ -147,6 +148,9 @@ import axios from "axios";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import * as XLSX from "xlsx";
+import {
+    Tooltip
+} from "bootstrap";
 
 export default {
     name: "DataPengembalianPinjaman",
@@ -158,9 +162,9 @@ export default {
             startDate: "",
             endDate: "",
             searchQuery: "",
-            sortBy: "nama_siswa",
+            sortBy: "tgl_kembali", // sortir berdasarkan tanggal pengembalian
             sortDirection: "asc",
-            dropdownOpen: false, // Dropdown state
+            dropdownOpen: false,
             displayedData: [],
         };
     },
@@ -247,32 +251,62 @@ export default {
             const endIndex = startIndex + this.rowsPerPage;
             this.displayedData = this.filteredLoans.slice(startIndex, endIndex);
         },
+        initializeTooltips() {
+            const tooltipElements = document.querySelectorAll('[data-toggle="tooltip"]');
+            tooltipElements.forEach((tooltipEl) => {
+                new bootstrap.Tooltip(tooltipEl);
+            });
+        },
     },
-  computed: {
-    pageInfo() {
-      const totalData = this.filteredLoans.length;
-      const startIndex = (this.currentPage - 1) * this.rowsPerPage + 1;
-      const endIndex = Math.min(
-        startIndex + this.rowsPerPage - 1,
-        totalData
-      );
-      return `Menampilkan ${startIndex} sampai ${endIndex} dari ${totalData} data`;
-    },
+    computed: {
+        pageInfo() {
+            const totalData = this.filteredLoans.length;
+            const startIndex = (this.currentPage - 1) * this.rowsPerPage + 1;
+            const endIndex = Math.min(
+                startIndex + this.rowsPerPage - 1,
+                totalData
+            );
+            return `Menampilkan ${startIndex} sampai ${endIndex} dari ${totalData} data`;
+        },
         filteredLoans() {
             let filtered = this.returnedLoans;
+
+            // Filter berdasarkan query pencarian
             if (this.searchQuery) {
                 const query = this.searchQuery.toLowerCase();
                 filtered = filtered.filter((record) =>
                     record.nama_siswa.toLowerCase().includes(query)
                 );
             }
+
+            // Filter berdasarkan tanggal
+            if (this.startDate) {
+                const start = new Date(this.startDate).getTime();
+                filtered = filtered.filter((record) => {
+                    const recordDate = new Date(record.tanggal_pinjam).getTime();
+                    return recordDate >= start;
+                });
+            }
+
+            if (this.endDate) {
+                const end = new Date(this.endDate).getTime();
+                filtered = filtered.filter((record) => {
+                    const recordDate = new Date(record.tanggal_pinjam).getTime();
+                    return recordDate <= end;
+                });
+            }
+
+            // Sortir data
             filtered.sort((a, b) => {
                 const valA = a[this.sortBy]?.toString().toLowerCase() || "";
                 const valB = b[this.sortBy]?.toString().toLowerCase() || "";
-                return this.sortDirection === "asc" ?
-                    valA.localeCompare(valB) :
-                    valB.localeCompare(valA);
+                if (this.sortDirection === "asc") {
+                    return valA.localeCompare(valB);
+                } else {
+                    return valB.localeCompare(valA);
+                }
             });
+
             return filtered;
         },
         totalPages() {
@@ -285,19 +319,34 @@ export default {
         },
     },
     watch: {
-        currentPage() {
-            this.updateDisplayedData();
-        },
-        rowsPerPage() {
-            this.updateDisplayedData();
-        },
-        filteredLoans() {
-            this.updateDisplayedData();
-        },
+        startDate: "updateDisplayedData",
+        endDate: "updateDisplayedData",
+        searchQuery: "updateDisplayedData",
+        rowsPerPage: "updateDisplayedData",
+        currentPage: "updateDisplayedData",
+        sortBy: "updateDisplayedData",
+        sortDirection: "updateDisplayedData",
+    },
+    mounted() {
+        this.initializeTooltips();
     },
     created() {
         this.fetchReturnedLoans();
         this.updateDisplayedData(); // Initialize displayed data
+    },
+    updated() {
+        // Re-initialize tooltips after updates
+        this.initializeTooltips();
+    },
+    unmounted() {
+        // Destroy Bootstrap tooltips
+        const tooltipElements = document.querySelectorAll('[data-toggle="tooltip"]');
+        tooltipElements.forEach((tooltipEl) => {
+            const tooltipInstance = bootstrap.Tooltip.getInstance(tooltipEl);
+            if (tooltipInstance) {
+                tooltipInstance.dispose();
+            }
+        });
     },
 };
 </script>
@@ -358,11 +407,8 @@ export default {
     position: relative;
     display: inline-block;
     border: 1px solid #d3d2d2;
-    /* Same as the date-filter border */
     border-radius: 5px;
-    /* Optional, to match the rounded corners */
     padding: 0.25rem 0.9rem;
-    /* Similar padding to the date-filter */
     background-color: white;
 }
 
@@ -372,9 +418,7 @@ export default {
     top: 50%;
     transform: translateY(-50%);
     color: #7b8291;
-    /* Change the color of the icon if needed */
     pointer-events: none;
-    /* Make sure the icon doesn't interfere with input interactions */
 }
 
 .search-input,
@@ -422,15 +466,12 @@ export default {
 .filter-buttons button {
     border-radius: 5px;
     height: 2rem;
-    /* reduce the height */
     width: 2.5rem;
     padding: 0.2rem;
-    /* add some padding */
 }
 
 .filter-buttons button i {
     font-size: 1rem;
-    /* increase the font size of the icon */
 }
 
 .search-bar-container {
@@ -493,21 +534,21 @@ export default {
 .info-page {
     display: flex;
     justify-content: space-between;
-    align-items: center; /* Memastikan elemen sejajar vertikal */
+    align-items: center;
     margin-bottom: 1rem;
 }
 
 .select-rows {
-    padding: 0.25rem; /* Konsisten padding */
+    padding: 0.25rem;
     font-size: 1rem;
-    line-height: 1.5; /* Sama dengan elemen teks lainnya */
+    line-height: 1.5;
 }
 
 .page-info {
-    font-size: 0.9rem; /* Ukuran font serupa dengan teks lainnya */
-    line-height: 1.5; /* Konsistensi line-height */
+    font-size: 0.9rem;
+    line-height: 1.5;
     color: #555;
-    margin: 0; /* Hilangkan margin tambahan */
+    margin: 0;
 }
 
 table {
@@ -526,7 +567,6 @@ th {
     background-color: #f4f4f4;
 }
 
-/* Untuk layar device berukuran kecil (misalnya kurang dari 410px) */
 @media screen and (max-width: 450px) {
     .header-tooltip {
         margin-top: 3rem;
@@ -539,9 +579,7 @@ th {
         display: flex;
         flex-direction: column;
         align-items: flex-start;
-        /* Agar konten rata kiri */
         width: 100%;
-        /* Menyesuaikan lebar konten */
     }
 
     .date-input-wrapper {
@@ -564,28 +602,20 @@ th {
     .calendar-icon {
         position: absolute;
         right: 1rem;
-        /* Sedikit jarak dari tepi kanan */
         top: 70%;
         transform: translateY(-50%);
-        /* Menempatkan ikon di tengah secara vertikal */
         font-size: 1.2rem;
-        /* Sesuaikan ukuran ikon agar proporsional */
         pointer-events: none;
     }
 
     .calendar-icon-i {
         position: absolute;
         right: 3rem;
-        /* Sedikit jarak dari tepi kanan */
         top: 50%;
         transform: translateY(-50%);
-        /* Menempatkan ikon di tengah secara vertikal */
         font-size: 1.2rem;
-        /* Sesuaikan ukuran ikon agar proporsional */
         color: #7b8291;
-        /* Warna ikon sesuai dengan kebutuhan */
         pointer-events: none;
-        /* Agar klik tetap pada input */
     }
 
     .filter-buttons {

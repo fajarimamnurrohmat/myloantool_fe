@@ -171,7 +171,7 @@ export default {
             currentPage: 1,
             searchQuery: "",
             editAlatId: null, // Menyimpan ID alat yang akan diedit
-            dropdownIndex: null, // Indeks dropdown yang terbuka
+            dropdownIndex: null,
             isEditMode: false, // Menandakan apakah modal dalam mode edit
         };
     },
@@ -221,10 +221,8 @@ export default {
     methods: {
         toggleSort(column) {
             if (this.sortBy === column) {
-                // Jika kolom yang sama, ubah arah sortir
                 this.sortDirection = this.sortDirection === "asc" ? "desc" : "asc";
             } else {
-                // Jika kolom berbeda, set kolom baru dan arah default (ascending)
                 this.sortBy = column;
                 this.sortDirection = "asc";
             }
@@ -338,9 +336,9 @@ export default {
                                 }
                             }
                         );
-                        console.log(response.data); // Tambahkan ini untuk debugging
+                      console.log(response.data);
 
-                        // Cek apakah response.data mengandung alat atau hanya pesan
+                        // Cek response.data mengandung alat atau hanya pesan
                         if (response.data.status === "success") {
                             if (response.data.data && response.data.data.alat) {
                                 // Update alat jika respons berisi data alat
@@ -372,7 +370,7 @@ export default {
                                 }
                             }
                         );
-                        console.log(response.data); // Tambahkan ini untuk debugging
+                        console.log(response.data);
                         if (response.data.status === "success") {
                             this.fetchAlatList();
                             this.closeModal();
@@ -642,21 +640,21 @@ export default {
 .info-page {
     display: flex;
     justify-content: space-between;
-    align-items: center; /* Memastikan elemen sejajar vertikal */
+    align-items: center;
     margin-bottom: 1rem;
 }
 
 .select-rows {
-    padding: 0.25rem; /* Konsisten padding */
+    padding: 0.25rem;
     font-size: 1rem;
-    line-height: 1.5; /* Sama dengan elemen teks lainnya */
+    line-height: 1.5;
 }
 
 .page-info {
-    font-size: 0.9rem; /* Ukuran font serupa dengan teks lainnya */
-    line-height: 1.5; /* Konsistensi line-height */
+    font-size: 0.9rem;
+    line-height: 1.5;
     color: #555;
-    margin: 0; /* Hilangkan margin tambahan */
+    margin: 0;
 }
 
 .table-wrapper {
@@ -794,7 +792,6 @@ export default {
     }
 }
 
-/* Responsivitas */
 @media (max-width: 768px) {
 
     .data-table th,

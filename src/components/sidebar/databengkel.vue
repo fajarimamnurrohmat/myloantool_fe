@@ -194,10 +194,8 @@ export default {
     methods: {
         toggleSort(column) {
             if (this.sortBy === column) {
-                // Jika kolom yang sama, ubah arah sortir
                 this.sortDirection = this.sortDirection === "asc" ? "desc" : "asc";
             } else {
-                // Jika kolom berbeda, set kolom baru dan arah default (ascending)
                 this.sortBy = column;
                 this.sortDirection = "asc";
             }
@@ -473,7 +471,6 @@ export default {
     margin-top: 0;
 }
 
-/* Other styles remain the same */
 .header-bengkel {
     font-weight: bold;
     color: #274278;
@@ -593,21 +590,21 @@ export default {
 .info-page {
     display: flex;
     justify-content: space-between;
-    align-items: center; /* Memastikan elemen sejajar vertikal */
+    align-items: center;
     margin-bottom: 1rem;
 }
 
 .select-rows {
-    padding: 0.25rem; /* Konsisten padding */
+    padding: 0.25rem;
     font-size: 1rem;
-    line-height: 1.5; /* Sama dengan elemen teks lainnya */
+    line-height: 1.5;
 }
 
 .page-info {
-    font-size: 0.9rem; /* Ukuran font serupa dengan teks lainnya */
-    line-height: 1.5; /* Konsistensi line-height */
+    font-size: 0.9rem;
+    line-height: 1.5;
     color: #555;
-    margin: 0; /* Hilangkan margin tambahan */
+    margin: 0;
 }
 
 .data-table {
@@ -691,7 +688,6 @@ export default {
     }
 }
 
-/* Responsivitas */
 @media (max-width: 768px) {
 
     .data-table th,
@@ -760,14 +756,12 @@ export default {
     .data-table th,
     .data-table td {
         font-size: 12px;
-        /* Sesuaikan ukuran font agar lebih kecil */
         padding: 6px;
     }
 
     .data-table th:nth-child(1),
     .data-table td:nth-child(1) {
         width: 20px;
-        /* Lebih kecil pada layar sempit */
     }
 
     .data-table th:nth-child(3),
@@ -775,6 +769,4 @@ export default {
         width: 60px;
     }
 }
-
-/* end of responsive */
 </style>

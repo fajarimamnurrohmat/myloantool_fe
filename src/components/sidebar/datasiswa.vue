@@ -251,10 +251,8 @@ export default {
         },
         toggleSort(column) {
             if (this.sortBy === column) {
-                // Jika kolom yang sama, ubah arah sortir
                 this.sortDirection = this.sortDirection === "asc" ? "desc" : "asc";
             } else {
-                // Jika kolom berbeda, set kolom baru dan arah default (ascending)
                 this.sortBy = column;
                 this.sortDirection = "asc";
             }
@@ -548,9 +546,7 @@ export default {
 .import-search-wrapper {
     display: flex;
     justify-content: space-between;
-    /* Menyebarkan elemen di kiri dan kanan */
     width: 100%;
-    /* Pastikan elemen mengambil lebar penuh */
     align-items: center;
 }
 
@@ -600,21 +596,21 @@ export default {
 .info-page {
     display: flex;
     justify-content: space-between;
-    align-items: center; /* Memastikan elemen sejajar vertikal */
+    align-items: center;
     margin-bottom: 1rem;
 }
 
 .select-rows {
-    padding: 0.25rem; /* Konsisten padding */
+    padding: 0.25rem;
     font-size: 1rem;
-    line-height: 1.5; /* Sama dengan elemen teks lainnya */
+    line-height: 1.5;
 }
 
 .page-info {
-    font-size: 0.9rem; /* Ukuran font serupa dengan teks lainnya */
-    line-height: 1.5; /* Konsistensi line-height */
+    font-size: 0.9rem;
+    line-height: 1.5;
     color: #555;
-    margin: 0; /* Hilangkan margin tambahan */
+    margin: 0;
 }
 
 .modal-header {
@@ -742,7 +738,6 @@ export default {
 .data-table th:last-child,
 .data-table td:last-child {
     text-align: center;
-    /* Kolom action tetap di tengah */
 }
 
 .data-table tr:nth-child(even) {

@@ -93,7 +93,7 @@ export default {
         if (response.data.status === 'success') {
           const { accessToken, refreshToken } = response.data.data;
 
-          // Simpan token, misalnya di localStorage
+          // Simpan token
           localStorage.setItem('accessToken', accessToken);
           localStorage.setItem('refreshToken', refreshToken);
 
@@ -150,7 +150,6 @@ export default {
 </script>
 
 <style>
-/* Menyelaraskan gaya merek */
 .name_brand {
   font-family: "Poppins", sans-serif;
   font-size: 1.35rem;
@@ -247,7 +246,6 @@ input {
   transform: scale(0.95);
 }
 
-/* Media query for responsiveness */
 @media (max-width: 768px) {
   .form-container {
     width: 90%;
@@ -255,7 +253,6 @@ input {
   }
 }
 
-/* Tambahkan styling untuk alert error */
 .alert {
   padding: 10px;
   border-radius: 5px;

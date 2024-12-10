@@ -54,24 +54,25 @@
     </div>
 
     <div class="table-wrapper">
-      <div class="info-page">
-          <div class="tampil-baris" style="text-align: left;">
-              Tampilkan:
-              <select v-model="rowsPerPage" class="select-rows" style="width: 3rem">
-                  <option value="5">5</option>
-                  <option value="10">10</option>
-                  <option value="20">20</option>
-                  <option value="100">100</option>
-              </select>
-              baris
-          </div>
-          <div>
-            <p class="page-info">{{ pageInfo }}</p>
-          </div>
+        <div class="info-page">
+            <div class="tampil-baris" style="text-align: left;">
+                Tampilkan:
+                <select v-model="rowsPerPage" class="select-rows" style="width: 3rem">
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                    <option value="100">100</option>
+                </select>
+                baris
+            </div>
+            <div>
+                <p class="page-info">{{ pageInfo }}</p>
+            </div>
         </div>
         <table>
             <thead>
                 <tr>
+                    <th>No</th>
                     <th>Nama Peminjam <span class="material-symbols-outlined swap-sort" @click="toggleSort('nama_siswa')">
                             swap_vert
                         </span></th>
@@ -84,10 +85,10 @@
                     <th>Jumlah <span class="material-symbols-outlined swap-sort" @click="toggleSort('jumlah')">
                             swap_vert
                         </span></th>
-                    <th>Tanggal Pinjam<span class="material-symbols-outlined swap-sort" @click="toggleSort('tanggal_pinjam')">
+                    <th>Tgl Pinjam<span class="material-symbols-outlined swap-sort" @click="toggleSort('tanggal_pinjam')">
                             swap_vert
                         </span></th>
-                    <th>Tanggal Permasalahan<span class="material-symbols-outlined swap-sort" @click="toggleSort('tgl_permasalahan')">
+                    <th>Tgl Permasalahan<span class="material-symbols-outlined swap-sort" @click="toggleSort('tgl_permasalahan')">
                             swap_vert
                         </span></th>
                     <th>Kondisi</th>
@@ -96,6 +97,7 @@
             </thead>
             <tbody>
                 <tr v-for="(record, index) in displayedData" :key="record.id_alat_bermasalah">
+                    <td>{{ index + 1 + (currentPage - 1) * rowsPerPage }}</td>
                     <td>{{ record.nama_siswa }}</td>
                     <td>{{ record.nama_alat }}</td>
                     <td>{{ record.ruang_bengkel }}</td>
@@ -233,7 +235,6 @@ import {
 
 export default {
     name: "DataPinjamanBermasalah",
-    name: "TooltipExample",
     data() {
         return {
             alatBermasalah: [],
@@ -242,7 +243,7 @@ export default {
             currentPage: 1,
             startDate: "",
             endDate: "",
-            sortBy: "nama_siswa",
+            sortBy: "tgl_permasalahan",
             sortDirection: "asc",
             searchQuery: "",
             editIndex: null,
@@ -426,27 +427,48 @@ export default {
             this.showCondi = "";
             this.editIndex = null;
         },
-  },
-  computed: {
-    pageInfo() {
-      const totalData = this.alatBermasalah.length;
-      const startIndex = (this.currentPage - 1) * this.rowsPerPage + 1;
-      const endIndex = Math.min(
-        startIndex + this.rowsPerPage - 1,
-        totalData
-      );
-      return `Menampilkan ${startIndex} sampai ${endIndex} dari ${totalData} data`;
     },
-    displayedData() {
-        const start = (this.currentPage - 1) * this.rowsPerPage;
-        const end = start + this.rowsPerPage;
-        return this.alatBermasalah.slice(start, end);
+    computed: {
+        filterData() {
+            const startDate = new Date(this.startDate);
+            const endDate = new Date(this.endDate);
+
+            this.displayedData = this.alatBermasalah.filter((item) => {
+                const tglPermasalahan = new Date(item.tgl_permasalahan);
+                if (this.startDate && tglPermasalahan < startDate) {
+                    return false;
+                }
+                if (this.endDate && tglPermasalahan > endDate) {
+                    return false;
+                }
+                return true;
+            });
+        },
+        pageInfo() {
+            const totalData = this.alatBermasalah.length;
+            const startIndex = (this.currentPage - 1) * this.rowsPerPage + 1;
+            const endIndex = Math.min(
+                startIndex + this.rowsPerPage - 1,
+                totalData
+            );
+            return `Menampilkan ${startIndex} sampai ${endIndex} dari ${totalData} data`;
+        },
+        displayedData() {
+            const start = (this.currentPage - 1) * this.rowsPerPage;
+            const end = start + this.rowsPerPage;
+            return this.alatBermasalah.slice(start, end);
+        },
+        totalPages() {
+            return Math.ceil(this.alatBermasalah.length / this.rowsPerPage);
+        }
     },
-    totalPages() {
-      return Math.ceil(this.alatBermasalah.length / this.rowsPerPage);
-    }
-  },
     watch: {
+        startDate() {
+            this.filterData();
+        },
+        endDate() {
+            this.filterData();
+        },
         rowsPerPage() {
             this.updateDisplayedData();
         },
@@ -519,19 +541,15 @@ export default {
     border-radius: 5px;
     background-color: #fff;
     color: #333;
-    /* Warna teks agar kontras dengan latar belakang */
 }
 
 .filters input[type="date"] {
     background-color: #f9f9f9;
-    /* Warna latar belakang untuk input tanggal */
     color: #7b8291;
-    /* Warna teks untuk input tanggal */
 }
 
 .filters2 input[type="text"] {
     background-color: #fff;
-    /* Warna latar belakang untuk input teks */
 }
 
 .search-bar-container {
@@ -563,7 +581,6 @@ export default {
 .dropdown-menu-exports.show {
     display: block;
 }
-
 /* end of dropdown style */
 
 .btn-reset {
@@ -595,27 +612,26 @@ export default {
     justify-content: center;
     align-items: center;
     gap: 15px;
-    /* Add space between the buttons and text */
 }
 
 .info-page {
     display: flex;
     justify-content: space-between;
-    align-items: center; /* Memastikan elemen sejajar vertikal */
+    align-items: center;
     margin-bottom: 1rem;
 }
 
 .select-rows {
-    padding: 0.25rem; /* Konsisten padding */
+    padding: 0.25rem;
     font-size: 1rem;
-    line-height: 1.5; /* Sama dengan elemen teks lainnya */
+    line-height: 1.5;
 }
 
 .page-info {
-    font-size: 0.9rem; /* Ukuran font serupa dengan teks lainnya */
-    line-height: 1.5; /* Konsistensi line-height */
+    font-size: 0.9rem;
+    line-height: 1.5;
     color: #555;
-    margin: 0; /* Hilangkan margin tambahan */
+    margin: 0;
 }
 
 table {
@@ -634,7 +650,6 @@ th {
     background-color: #f4f4f4;
 }
 
-/* Untuk layar device berukuran kecil (misalnya kurang dari 410px) */
 @media screen and (max-width: 450px) {
     .header-dataBermasalah {
         font-weight: bold;
@@ -650,9 +665,7 @@ th {
         display: flex;
         flex-direction: column;
         align-items: flex-start;
-        /* Agar konten rata kiri */
         width: 100%;
-        /* Menyesuaikan lebar konten */
     }
 
     .date-input-wrapper {
@@ -675,28 +688,20 @@ th {
     .calendar-icon {
         position: absolute;
         right: 1rem;
-        /* Sedikit jarak dari tepi kanan */
         top: 70%;
         transform: translateY(-50%);
-        /* Menempatkan ikon di tengah secara vertikal */
         font-size: 1.2rem;
-        /* Sesuaikan ukuran ikon agar proporsional */
         pointer-events: none;
     }
 
     .calendar-icon-i {
         position: absolute;
         right: 3rem;
-        /* Sedikit jarak dari tepi kanan */
         top: 50%;
         transform: translateY(-50%);
-        /* Menempatkan ikon di tengah secara vertikal */
         font-size: 1.2rem;
-        /* Sesuaikan ukuran ikon agar proporsional */
         color: #7b8291;
-        /* Warna ikon sesuai dengan kebutuhan */
         pointer-events: none;
-        /* Agar klik tetap pada input */
     }
 
     .filter-buttons {

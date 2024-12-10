@@ -173,7 +173,6 @@ export default {
 </script>
 
 <style>
-/* Menggunakan gradasi warna untuk navbar */
 .navbar {
     background: linear-gradient(90deg, #4b6cb7, #182848);
     box-shadow: 0 4px 8px 0 rgba(92, 91, 91, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
@@ -181,7 +180,6 @@ export default {
     width: 100%;
 }
 
-/* Menyelaraskan gaya merek */
 .name_brand {
     font-family: "Poppins", sans-serif;
     font-size: 1.35rem;
@@ -195,7 +193,6 @@ export default {
     color: #f0efef;
 }
 
-/* Styling untuk tautan di navbar */
 .navbar-nav .nav-item .nav-link {
     color: white;
     font-weight: bold;
@@ -206,16 +203,12 @@ export default {
 
 .navbar-nav .nav-item .nav-link.router-link-active {
     color: #f8c291;
-    /* Sama seperti warna saat hover */
     font-weight: bold;
-    /* Misalnya, Anda ingin lebih menonjolkan */
 }
 
 .navbar-nav .dropdown-item.router-link-active {
     background-color: #34495e;
-    /* Gaya aktif */
     color: #f8c291;
-    /* Sama seperti hover */
     font-weight: bold;
 }
 
@@ -223,7 +216,6 @@ export default {
     color: #f8c291;
 }
 
-/* Logout link styling dengan warna berbeda */
 .nav-logout .nav-link {
     color: #e74c3c;
     font-weight: bold;
@@ -235,7 +227,6 @@ export default {
     color: #c0392b;
 }
 
-/* Styling untuk dropdown menu */
 .navbar-nav .dropdown-menu {
     background-color: #2c3e50;
     border: none;
@@ -250,10 +241,11 @@ export default {
 .navbar-nav .dropdown-item:hover {
     background-color: #34495e;
     color: #f8c291;
+    font-weight: 600;
 }
 
 .nav-item.dropdown.active > .nav-link {
-  color: #f8c291; /* Gaya aktif */
+  color: #f8c291;
   font-weight: bold;
 }
 
@@ -261,7 +253,6 @@ export default {
     padding-top: 70px;
 }
 
-/* Responsif untuk layar kecil */
 @media (max-width: 768px) {
     .navbar {
         height: auto;

@@ -19,11 +19,11 @@
 
         <!-- Card 2: Data Pinjaman -->
         <div class="card-dashboard-2">
-            <i class="fa-solid fa-inbox"></i>
-            <h2>Data Pengembalian</h2>
-            <p>Jumlah pengembalian saat ini</p>
-            <h1>50</h1>
-            <router-link to="/mainsidebar/datapinjaman" class="card-link">Lihat data pengembalian</router-link>
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <h2>Data Pengembalian Bermasalah</h2>
+            <p>Jumlah pengembalian bermasalah saat ini</p>
+            <h1>20</h1>
+            <router-link to="/mainsidebar/pinjaman_bermasalah" class="card-link">Lihat data pengembalian bermasalah</router-link>
         </div>
     </div>
 
@@ -31,11 +31,11 @@
     <div class="card-container">
         <!-- Card 1: Data Pengembalian -->
         <div class="card-dashboard-2">
-            <i class="fa-solid fa-triangle-exclamation"></i>
-            <h2>Data Pengembalian Bermasalah</h2>
-            <p>Jumlah pengembalian bermasalah saat ini</p>
-            <h1>20</h1>
-            <router-link to="/mainsidebar/pinjaman_bermasalah" class="card-link">Lihat data pengembalian bermasalah</router-link>
+            <i class="fa-solid fa-inbox"></i>
+            <h2>Data Pengembalian</h2>
+            <p>Jumlah pengembalian saat ini</p>
+            <h1>50</h1>
+            <router-link to="/mainsidebar/datapinjaman" class="card-link">Lihat data pengembalian</router-link>
         </div>
 
         <!-- Card 2: Data Pengembalian Bermasalah -->
