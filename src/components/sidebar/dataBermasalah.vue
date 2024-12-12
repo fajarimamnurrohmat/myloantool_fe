@@ -122,54 +122,7 @@
                     <span class="close-modal" @click="closeModal">&times;</span>
                 </div>
                 <div class="modal-body">
-                    <!-- form row atas -->
-                    <div class="form-row">
-                        <!-- alat -->
-                        <div class="form-group">
-                            <label for="alat">Alat</label>
-                            <p>Masukkan nama alat</p>
-                            <input type="text" id="alat" class="form-control-alat" v-model="newPeminjaman.alat" />
-                        </div>
-                        <!-- alat -->
-                        <!-- peminjam -->
-                        <div class="form-group-nama">
-                            <label for="namaPeminjam">Nama Peminjam</label>
-                            <p>Masukkan nama peminjam</p>
-                            <input type="text" id="namaPeminjam" class="form-control-peminjaman" v-model="newPeminjaman.namaPeminjam" />
-                        </div>
-                        <!-- peminjam -->
-                    </div>
-                    <!-- form row atas -->
-                    <!-- form row bawah -->
-                    <div class="form-row">
-                        <!-- bengkel -->
-                        <div class="form-group">
-                            <label for="bengkel">Bengkel</label>
-                            <p>Masukkan nama bengkel alat</p>
-                            <input type="text" id="bengkel" class="form-control-bengkel" v-model="newPeminjaman.bengkel" />
-                        </div>
-                        <!-- bengkel -->
-                        <!-- tgl pinjam -->
-                        <div class="form-group">
-                            <label for="tanggalPinjam">Tanggal Pinjam</label>
-                            <p>Masukkan tanggal pinjam alat</p>
-                            <div class="date-input-wrapper">
-                                <input type="date" id="tanggalPinjam" v-model="newPeminjaman.tanggalPinjam" class="date-filter-modal" />
-                                <i class="fas fa-calendar-alt calendar-icon-i"></i>
-                            </div>
-                        </div>
-                        <!-- tgl pinjam -->
-                        <!-- jumlah -->
-                        <div class="form-group-jumlah">
-                            <label for="jumlahAlat">Jumlah</label>
-                            <input type="number" id="jumlahAlat" class="form-control-jumlah" v-model="newPeminjaman.jumlahAlat" />
-                        </div>
-                        <!-- jumlah -->
-                    </div>
-                    <!-- form row bawah -->
-                    <!-- form row bawah -->
-                    <hr style="color: white" />
-                    <!-- form row bawah -->
+                    <!-- form row -->
                     <div class="form-row">
                         <!-- tgl pinjam -->
                         <div class="form-group">
@@ -183,24 +136,13 @@
                         <!-- tgl pinjam -->
                         <!-- jml alat rusak -->
                         <div class="form-group" style="margin-left: 0.3rem">
-                            <label for="jumlahAlatRusak" style="font-size: 0.9rem">Jumlah</label>
-                            <label for="jumlahAlatRusak" style="font-size: 0.9rem; margin-top: -0.5rem">Kerusakan</label>
-                            <input type="number" style="margin-top: 0.5rem; height: 2.5rem; width: 6.3rem" id="jumlahAlatRusak" class="form-control" v-model="newPengembalian.jumlahAlatRusak" />
+                            <label for="jumlahPengembalian" style="font-size: 0.9rem">Jumlah Pengembalian</label>
+                            <input type="number" style="margin-top: 0.5rem; height: 2.5rem; width: 6.3rem" id="jumlahPengembalian" class="form-control" v-model="newPengembalian.jumlahAlatRusak" />
                         </div>
                         <!-- jml alat rusak -->
-                        <!-- kondisi alat -->
-                        <div class="form-group" style="margin-left: -8rem">
-                            <label for="kondisiAlat">Kondisi Alat</label>
-                            <select v-model="showCondi" class="select-condi">
-                                <option value=""></option>
-                                <option value="Rusak">Rusak</option>
-                                <option value="Hilang">Hilang</option>
-                            </select>
-                        </div>
-                        <!-- kondisi alat -->
                     </div>
-                    <!-- form row bawah -->
-                    <button @click="addPengembalianBermasalah" class="btn_add_peminjaman">
+                    <!-- form row -->
+                    <button @click="addPengembalianBermasalah" class="btn-pengembalian">
                         Simpan Data
                     </button>
                 </div>
