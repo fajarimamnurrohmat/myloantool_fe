@@ -106,7 +106,7 @@
                     <td>{{ formatDate(record.tgl_permasalahan) }}</td>
                     <td>{{ record.kondisi }}</td>
                     <td>
-                        <button class="btn btn-sm" type="button" @click="editPengembalian(index)">
+                        <button class="btn btn-sm" @click="showModal = true">
                             <span class="material-symbols-outlined">priority</span>
                         </button>
                     </td>
@@ -116,11 +116,15 @@
 
         <!-- Start of Modal Section -->
         <div v-if="showModal" class="modal-overlay" @click.self="closeModal">
+            <!-- Modal Content -->
             <div class="modal-content">
+                <!-- Modal Header -->
                 <div class="modal-header">
                     <h4>Ubah Data Pengembalian</h4>
                     <span class="close-modal" @click="closeModal">&times;</span>
                 </div>
+                <!-- End of Modal Header -->
+                <!-- Modal Body -->
                 <div class="modal-body">
                     <!-- form row -->
                     <div class="form-row">
@@ -129,7 +133,7 @@
                             <label for="tanggalPengembalian">Tanggal Pengembalian</label>
                             <p>Masukkan tanggal pengembalian alat</p>
                             <div class="date-input-wrapper">
-                                <input type="date" id="tanggalPengembalian" v-model="newPengembalian.tanggalPengembalian" class="date-filter" style="width: 15.7rem" />
+                                <input type="date" id="tanggalKembali" v-model="alatBermasalah.tgl_kembali" class="date-filter" style="width: 15.7rem" />
                                 <i class="fas fa-calendar-alt calendar-icon"></i>
                             </div>
                         </div>
@@ -137,12 +141,12 @@
                         <!-- jml alat rusak -->
                         <div class="form-group" style="margin-left: 0.3rem">
                             <label for="jumlahPengembalian" style="font-size: 0.9rem">Jumlah Pengembalian</label>
-                            <input type="number" style="margin-top: 0.5rem; height: 2.5rem; width: 6.3rem" id="jumlahPengembalian" class="form-control" v-model="newPengembalian.jumlahAlatRusak" />
+                            <input type="number" style="margin-top: 0.5rem; height: 2.5rem; width: 6.3rem" id="jumlahPengembalian" class="form-control" v-model="alatBermasalah.jumlah" />
                         </div>
                         <!-- jml alat rusak -->
                     </div>
                     <!-- form row -->
-                    <button @click="addPengembalianBermasalah" class="btn-pengembalian">
+                    <button @click="addPengembalian" class="btn-pengembalian">
                         Simpan Data
                     </button>
                 </div>
@@ -189,8 +193,14 @@ export default {
             sortDirection: "asc",
             searchQuery: "",
             editIndex: null,
+            isClosing: false,
             showModal: false,
             dropdownIndex: null,
+            newPengembalianAlatBermasalah: {
+              id_peminjaman: "",
+              tgl_kembali: "",
+              jumlah: "",
+            },
         };
     },
     mounted() {
@@ -200,7 +210,126 @@ export default {
             new Tooltip(tooltipEl);
         });
     },
-    methods: {
+  methods: {
+    // add pengembalian function
+    async addPengembalian() {
+            console.log(JSON.stringify(this.newPengembalianAlatBermasalah));
+            if (
+                this.newPeminjaman.id_peminjaman &&
+                this.newPengembalianAlatBermasalah.tgl_kembali &&
+                this.newPengembalianAlatBermasalah.jumlah
+            ) {
+                try {
+                    const dataToSend = {
+                        id_peminjaman: this.newPeminjaman.id_peminjaman,
+                        tgl_kembali: this.newPengembalianAlatBermasalah.tgl_kembali,
+                        jumlah: this.newPengembalianAlatBermasalah.jumlah,
+                    };
+
+                    const token = localStorage.getItem("accessToken");
+                    const response = await axios.post(
+                        "http://localhost:3000/pengembalian",
+                        dataToSend, {
+                            headers: {
+                                Authorization: `Bearer ${token}`,
+                            },
+                        }
+                    );
+
+                    if (
+                        (response.status === 200 || response.status === 201) &&
+                        response.data.status === "success"
+                    ) {
+                        await this.fetchDataPeminjaman();
+
+                        this.resetForm();
+                        this.closeModal();
+
+                        Swal.fire({
+                            title: "Sukses!",
+                            text: "Data pengembalian berhasil disimpan.",
+                            icon: "success",
+                            confirmButtonText: "OK",
+                        });
+                    } else {
+                        throw new Error("Terjadi kesalahan saat menyimpan data.");
+                    }
+                } catch (error) {
+                    Swal.fire({
+                        title: "Error!",
+                        text: `Gagal menyimpan data: ${error.message}`,
+                        icon: "error",
+                        confirmButtonText: "OK",
+                    });
+                }
+            } else {
+                Swal.fire({
+                    title: "Error!",
+                    text: "Mohon isi semua data!",
+                    icon: "error",
+                    confirmButtonText: "OK",
+                });
+            }
+    },
+
+        async addPengembalianAlatBermasalah() {
+            console.log(JSON.stringify(this.alatBermasalah));
+            if (
+                this.alatBermasalah.id_peminjaman &&
+                this.alatBermasalah.tgl_kembali &&
+                this.alatBermasalah.jumlah
+            ) {
+                try {
+                    const dataToSend = {
+                        id_peminjaman: this.alatBermasalah.id_peminjaman,
+                        tgl_kembali: this.alatBermasalah.tgl_kembali,
+                        jumlah: this.alatBermasalah.jumlah,
+                    };
+
+                    const token = localStorage.getItem("accessToken");
+                    const response = await axios.post(
+                        "pengembalian-alat-bermasalah/{id_alat_bermasalah}",
+                        dataToSend, {
+                            headers: {
+                                Authorization: `Bearer ${token}`,
+                            },
+                        }
+                    );
+                    if (
+                        (response.status === 200 || response.status === 201) &&
+                        response.data.status === "success"
+                    ) {
+                        await this.fetchDataPeminjaman();
+
+                        this.resetForm();
+                        this.closeModal();
+
+                        Swal.fire({
+                            title: "Sukses!",
+                            text: "Data pengembalian berhasil disimpan.",
+                            icon: "success",
+                            confirmButtonText: "OK",
+                        });
+                    } else {
+                        throw new Error("Terjadi kesalahan saat menyimpan data.");
+                    }
+                } catch (error) {
+                    Swal.fire({
+                        title: "Error!",
+                        text: `Gagal menyimpan data: ${error.message}`,
+                        icon: "error",
+                        confirmButtonText: "OK",
+                    });
+                }
+            } else {
+                Swal.fire({
+                    title: "Error!",
+                    text: "Mohon isi semua data!",
+                    icon: "error",
+                    confirmButtonText: "OK",
+                });
+            }
+        },
         toggleDropdown(index) {
             this.dropdownIndex = this.dropdownIndex === index ? null : index;
         },
@@ -234,21 +363,14 @@ export default {
         updateDisplayedData() {
             let filteredData = this.alatBermasalah;
 
-            // Date Filter
+            // Filter berdasarkan tanggal
             if (this.startDate || this.endDate) {
-                const start = this.startDate ? new Date(this.startDate) : null;
-                const end = this.endDate ? new Date(this.endDate) : null;
-
                 filteredData = filteredData.filter((record) => {
-                    const recordDate = new Date(record.tanggal_pinjam); // Adjust field as needed
-                    if (start && end) {
-                        return recordDate >= start && recordDate <= end;
-                    } else if (start) {
-                        return recordDate >= start;
-                    } else if (end) {
-                        return recordDate <= end;
-                    }
-                    return true;
+                    const permasalahanDate = new Date(record.tanggalPermasalahan);
+                    return (
+                        (!this.startDate || permasalahanDate >= new Date(this.startDate)) &&
+                        (!this.endDate || permasalahanDate <= new Date(this.endDate))
+                    );
                 });
             }
 
@@ -353,20 +475,10 @@ export default {
                 modalContent.classList.remove("closing");
             }, 300);
         },
+        filterByDate() {
+            this.currentPage = 1; // Reset to first page after filtering
+        },
         resetForm() {
-            this.newPeminjaman = {
-                namaPeminjam: "",
-                alat: "",
-                bengkel: "",
-                tanggalPinjam: "",
-                jumlahAlat: "",
-                tanggalPengembalian: "",
-            };
-            this.newPengembalian = {
-                tanggalPengembalian: "",
-                jumlahAlatRusak: "",
-            };
-            this.showCondi = "";
             this.editIndex = null;
         },
     },
@@ -523,6 +635,7 @@ export default {
 .dropdown-menu-exports.show {
     display: block;
 }
+
 /* end of dropdown style */
 
 .btn-reset {
