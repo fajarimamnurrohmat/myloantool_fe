@@ -210,7 +210,7 @@
                 <td>{{ peminjaman.nama_siswa }}</td>
                 <td>{{ peminjaman.nama_alat }}</td>
                 <td>{{ peminjaman.ruang_bengkel }}</td>
-                <td>{{ peminjaman.tanggal_pinjam }}</td>
+                <td>{{ formatDate(peminjaman.tanggal_pinjam) }}</td>
                 <td>{{ peminjaman.jumlah }}</td>
                 <td>
                     <!-- Action Dropdown -->
@@ -272,7 +272,7 @@
                                 <option disabled value="">
                                     Pilih Alat dan Ruang Bengkel
                                 </option>
-                                <option v-for="alat in alatList" :key="alat.id_alat" :value="alat.id_alat">
+                                <option v-for="alat in alatList" :key="alat.id_alat" :value="alat.id_alat" disabled>
                                     {{ alat.nama_alat }} - {{ alat.ruang_bengkel }}
                                 </option>
                             </select>
@@ -284,7 +284,7 @@
                             <p>Pilih Nama Siswa - Jurusan</p>
                             <select id="namaPeminjam" class="form-control-peminjaman" v-model="newPeminjaman.nisPeminjam" :disabled="isEditMode">
                                 <option disabled value="">Pilih Siswa</option>
-                                <option v-for="siswa in siswaList" :key="siswa.nis" :value="siswa.nis">
+                                <option v-for="siswa in siswaList" :key="siswa.nis" :value="siswa.nis" disabled>
                                     {{ siswa.nama_siswa }} - {{ siswa.jurusan }}
                                 </option>
                             </select>
@@ -300,7 +300,7 @@
                             <label for="tanggalPinjam">Tanggal Pinjam</label>
                             <p>Masukkan tanggal pinjam alat</p>
                             <div class="date-input-wrapper">
-                                <input type="date" id="tanggalPinjam" v-model="newPeminjaman.tanggalPinjam" class="date-filter-modal" />
+                                <input type="date" id="tanggalPinjam" v-model="newPeminjaman.tanggalPinjam" class="date-filter-modal" disabled/>
                                 <i class="fas fa-calendar-alt calendar-icon-i"></i>
                             </div>
                         </div>
@@ -309,7 +309,7 @@
                         <div class="form-group-jumlah">
                             <label for="jumlahAlat">Jumlah Pinjaman</label>
                             <p>Masukkan jumlah alat yang dipinjam</p>
-                            <input type="number" id="jumlahAlat" class="form-control-jumlah" v-model="newPeminjaman.jumlahAlat" />
+                            <input type="number" id="jumlahAlat" class="form-control-jumlah" v-model="newPeminjaman.jumlahAlat" disabled />
                         </div>
                         <!-- end of jumlah -->
                     </div>
@@ -356,7 +356,7 @@
                                 <option disabled value="">
                                     Pilih Alat dan Ruang Bengkel
                                 </option>
-                                <option v-for="alat in alatList" :key="alat.id_alat" :value="alat.id_alat">
+                                <option v-for="alat in alatList" :key="alat.id_alat" :value="alat.id_alat" disabled>
                                     {{ alat.nama_alat }} - {{ alat.ruang_bengkel }}
                                 </option>
                             </select>
@@ -368,7 +368,7 @@
                             <p>Pilih Nama Siswa - Jurusan</p>
                             <select id="namaPeminjam" class="form-control-peminjaman" v-model="newPeminjaman.nisPeminjam" :disabled="isEditMode">
                                 <option disabled value="">Pilih Siswa</option>
-                                <option v-for="siswa in siswaList" :key="siswa.nis" :value="siswa.nis">
+                                <option v-for="siswa in siswaList" :key="siswa.nis" :value="siswa.nis" disabled>
                                     {{ siswa.nama_siswa }} - {{ siswa.jurusan }}
                                 </option>
                             </select>
@@ -384,7 +384,7 @@
                             <label for="tanggalPinjam">Tanggal Pinjam</label>
                             <p>Masukkan tanggal pinjam alat</p>
                             <div class="date-input-wrapper">
-                                <input type="date" id="tanggalPinjam" v-model="newPeminjaman.tanggalPinjam" class="date-filter-modal" />
+                                <input type="date" id="tanggalPinjam" v-model="newPeminjaman.tanggalPinjam" class="date-filter-modal" disabled/>
                                 <i class="fas fa-calendar-alt calendar-icon-i"></i>
                             </div>
                         </div>
@@ -393,7 +393,7 @@
                         <div class="form-group-jumlah">
                             <label for="jumlahAlat">Jumlah Pinjaman</label>
                             <p>Masukkan jumlah alat yang dipinjam</p>
-                            <input type="number" id="jumlahAlat" class="form-control-jumlah" v-model="newPeminjaman.jumlahAlat" />
+                            <input type="number" id="jumlahAlat" class="form-control-jumlah" v-model="newPeminjaman.jumlahAlat" disabled/>
                         </div>
                         <!-- end of jumlah -->
                     </div>
@@ -507,6 +507,15 @@ export default {
     },
 
     methods: {
+        //format tanggal
+        formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString("id-ID", {
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit",
+            });
+        },
         // fetching data alat
         async fetchDataAlat() {
             try {
@@ -1004,7 +1013,7 @@ export default {
                     peminjaman.nama_siswa,
                     peminjaman.nama_alat,
                     peminjaman.ruang_bengkel,
-                    peminjaman.tanggal_pinjam,
+                    this.formatDate (peminjaman.tanggal_pinjam),
                     peminjaman.jumlah,
                 ]),
             });
@@ -1024,7 +1033,7 @@ export default {
                     peminjaman.nama_siswa,
                     peminjaman.nama_alat,
                     peminjaman.ruang_bengkel,
-                    peminjaman.tanggal_pinjam,
+                    this.formatDate(peminjaman.tanggal_pinjam),
                     peminjaman.jumlah,
                 ]),
             });
