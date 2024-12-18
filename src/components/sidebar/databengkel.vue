@@ -243,6 +243,12 @@ export default {
                     await this.fetchBengkelList(); // Update table data
                     this.closeModal();
                     this.resetForm();
+                    Swal.fire({
+                title: "Sukses!",
+                text: "Data bengkel berhasil ditambahkan.",
+                icon: "success",
+                confirmButtonText: "OK",
+            });
                 } catch (error) {
                     Swal.fire({
                         title: "Error!",

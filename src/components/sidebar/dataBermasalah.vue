@@ -343,14 +343,13 @@ export default {
       };
       this.showModal = true;
       this.id_alat_bermasalah = record.id_alat_bermasalah;
-      console.log("ID Alat Bermasalah:", this.id_alat_bermasalah);
     },
     async addPengembalianAlatBermasalah(id_alat_bermasalah) {
-      console.log(
-        "ID Alat Bermasalah di addPengembalianAlatBermasalah:",
-        id_alat_bermasalah
-      );
-      console.log(JSON.stringify(this.newPengembalianAlatBermasalah));
+      // console.log(
+      //   "ID Alat Bermasalah di addPengembalianAlatBermasalah:",
+      //   id_alat_bermasalah
+      // );
+      //console.log(JSON.stringify(this.newPengembalianAlatBermasalah));
       if (
         this.newPengembalianAlatBermasalah.id_peminjaman &&
         this.newPengembalianAlatBermasalah.tgl_kembali &&
