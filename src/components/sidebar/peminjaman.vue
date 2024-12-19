@@ -30,7 +30,7 @@
             <div class="form-row">
                 <!-- alat -->
                 <div class="form-group">
-                  <label for="alat" class="label-required">Alat dan Ruang Bengkel</label>
+                  <label for="alat">Alat dan Ruang Bengkel</label>
                     <p>Pilih Nama Alat - Ruang Bengkel</p>
                     <select id="alat" class="form-control-alat" v-model="newPeminjaman.id_alat" :disabled="isEditMode">
                         <option disabled value="">Pilih Alat dan Ruang Bengkel</option>
@@ -42,7 +42,7 @@
                 <!-- end of alat -->
                 <!-- peminjam -->
                 <div class="form-group-nama">
-                    <label for="namaPeminjam" class="label-required">Nama Peminjam</label>
+                    <label for="namaPeminjam">Nama Peminjam</label>
                     <p>Pilih Nama Siswa - Jurusan</p>
                     <select id="namaPeminjam" class="form-control-peminjaman" v-model="newPeminjaman.nisPeminjam" :disabled="isEditMode">
                         <option disabled value="">Pilih Siswa</option>
@@ -59,7 +59,7 @@
             <div class="form-row">
                 <!-- tgl pinjam -->
                 <div class="form-group">
-                    <label for="tanggalPinjam" class="label-required">Tanggal Pinjam</label>
+                    <label for="tanggalPinjam">Tanggal Pinjam</label>
                     <p>Masukkan tanggal pinjam alat</p>
                     <div class="date-input-wrapper">
                         <input type="date" id="tanggalPinjam" v-model="newPeminjaman.tanggalPinjam" class="date-filter-modal" />
@@ -69,7 +69,7 @@
                 <!-- end of tgl pinjam -->
                 <!-- jumlah -->
                 <div class="form-group-jumlah">
-                    <label for="jumlahAlat" class="label-required">Jumlah Pinjaman</label>
+                    <label for="jumlahAlat">Jumlah Pinjaman</label>
                     <p>Masukkan jumlah alat yang dipinjam</p>
                     <input type="number" id="jumlahAlat" class="form-control-jumlah" v-model="newPeminjaman.jumlahAlat" />
                 </div>
@@ -321,8 +321,8 @@
                             <label for="tanggalPengembalian">Tanggal Pengembalian</label>
                             <p>Masukkan tanggal pengembalian alat</p>
                             <div class="date-input-wrapper">
-                                <input type="date" id="tanggalPengembalian" v-model="newPengembalian.tanggalPengembalian" class="date-filter" style="width: 15.7rem" />
-                                <i class="fas fa-calendar-alt calendar-icon"></i>
+                                <input type="date" id="tanggalPengembalian" v-model="newPengembalian.tanggalPengembalian" class="tgl_pengembalian" />
+                                <i class="fas fa-calendar-alt calendar-icon-p"></i>
                             </div>
                         </div>
                         <!-- end of tgl pengembalian -->
@@ -405,29 +405,33 @@
                             <label for="tanggalPengembalian">Tanggal Pengembalian</label>
                             <p>Masukkan tanggal pengembalian alat</p>
                             <div class="date-input-wrapper">
-                                <input type="date" id="tanggalPengembalian" v-model="newPengembalianBermasalah.tanggalPermasalahan" class="date-filter" style="width: 15.7rem" />
-                                <i class="fas fa-calendar-alt calendar-icon"></i>
+                                <input type="date" id="tanggalPengembalian" v-model="newPengembalianBermasalah.tanggalPermasalahan" class="tgl_pengembalian"/>
+                                <i class="fas fa-calendar-alt calendar-icon-p"></i>
                             </div>
                         </div>
                         <!-- end of tgl pengembalian -->
-                        <!-- kondisi alat -->
-                        <div class="form-group kondisi-alat">
-                            <label for="kondisiAlat" class="labe">Kondisi Alat</label>
-                            <p>Pilih Kondisi Alat</p>
-                            <select v-model="newPengembalianBermasalah.kondisi" class="select-condi">
-                                <option disabled value="">Pilih Kondisi</option>
-                                <option value="rusak">Rusak</option>
-                                <option value="hilang">Hilang</option>
-                            </select>
+                        <!-- form group untuk kondisi alat dan jumlah rusak akan dipisahkan dalam kelas khusus untuk responsif -->
+                        <div class="form-row kondisi-dan-jumlah">
+                            <!-- kondisi alat -->
+                            <div class="form-group kondisi-alat">
+                                <label for="kondisiAlat" class="labe">Kondisi Alat</label>
+                                <p>Pilih Kondisi Alat</p>
+                                <select v-model="newPengembalianBermasalah.kondisi" class="select-condi">
+                                    <option disabled value="">Pilih Kondisi</option>
+                                    <option value="rusak">Rusak</option>
+                                    <option value="hilang">Hilang</option>
+                                </select>
+                            </div>
+                            <!-- end of kondisi alat -->
+
+                            <!-- jml alat rusak -->
+                            <div class="form-group alat-rusak">
+                                <label for="jumlahAlatRusak">Jumlah Kerusakan</label>
+                                <p>Jumlah Kerusakan Alat</p>
+                                <input type="number" id="jumlahAlatRusak" class="form-control" v-model="newPengembalianBermasalah.jumlahAlatBermasalah" />
+                            </div>
+                            <!-- end of jml alat rusak -->
                         </div>
-                        <!-- end of kondisi alat -->
-                        <!-- jml alat rusak -->
-                        <div class="form-group alat-rusak">
-                            <label for="jumlahAlatRusak" class="label-required">Jumlah Kerusakan</label>
-                            <p>Jumlah Kerusakan Alat</p>
-                            <input type="number" id="jumlahAlatRusak" class="form-control" v-model="newPengembalianBermasalah.jumlahAlatBermasalah" />
-                        </div>
-                        <!-- end of jml alat rusak -->
                     </div>
                     <!-- form row bawah -->
                     <button @click="addPengembalianBermasalah" class="btn_add_peminjaman">
@@ -1095,7 +1099,7 @@ export default {
 .form-group.kondisi-alat {
     display: flex;
     flex-direction: column;
-    margin-left: 0.4rem;
+    margin-right: 3.3rem;
 }
 
 .form-group.kondisi-alat label {
@@ -1159,16 +1163,9 @@ export default {
     display: inline-block;
 }
 
-.calendar-icon {
-    position: absolute;
-    top: 50%;
-    right: 10px;
-    transform: translateY(-50%);
-    color: #7b8291;
-    pointer-events: none;
-}
-
-.calendar-icon-i {
+.calendar-icon,
+.calendar-icon-i,
+.calendar-icon-p {
     position: absolute;
     top: 50%;
     right: 10px;
@@ -1190,15 +1187,6 @@ export default {
 
 .date-input-wrapper:hover .calendar-icon {
     color: #636468;
-}
-
-.label-required::after {
-    content: "*";
-    color: red;
-    font-size: 1.2em; /* Ukuran bintang */
-    margin-left: 2px;
-    font-weight: bold;
-    vertical-align: middle; /* Agar sejajar dengan teks label */
 }
 
 .modal-content {
@@ -1264,14 +1252,13 @@ export default {
 }
 
 .form-control-peminjaman {
-    width: 100%;
     padding: 8px;
     font-size: 14px;
     border: 1px solid #ccc;
     background-color: white;
     color: #000000;
     border-radius: 4px;
-    width: 16rem;
+    width: 19.4rem;
     height: 2.5rem;
 }
 
@@ -1284,18 +1271,6 @@ export default {
     color: #000000;
     border-radius: 4px;
     width: 16rem;
-    height: 2.5rem;
-}
-
-.form-control-peminjaman {
-    width: 100%;
-    padding: 8px;
-    font-size: 14px;
-    border: 1px solid #ccc;
-    background-color: white;
-    color: #000000;
-    border-radius: 4px;
-    width: 19.4rem;
     height: 2.5rem;
 }
 
@@ -1321,6 +1296,11 @@ export default {
     border-radius: 4px;
     width: 5.58rem;
     height: 2.7rem;
+}
+
+.form-row.kondisi-dan-jumlah {
+    flex-direction: row;
+    justify-content: space-between;
 }
 
 .filter-wrapper {
@@ -1594,6 +1574,15 @@ export default {
     color: #7b8291;
 }
 
+.tgl_pengembalian {
+    padding: 0.5rem 0.9rem;
+    width: 15.7rem;
+    border: 1px solid #d3d2d2 !important;
+    border-radius: 5px;
+    background-color: white;
+    color: #7b8291;
+}
+
 .date-filter-modal {
     padding: 0.5rem 0.9rem;
     width: 16rem;
@@ -1683,14 +1672,6 @@ export default {
     border-bottom: 2px solid rgb(255, 255, 255);
 }
 
-.calendar-icon {
-    position: absolute;
-    top: 50%;
-    right: 10px;
-    transform: translateY(-50%);
-    color: #7b8291;
-    pointer-events: none;
-}
 
 @media screen and (max-width: 450px) {
     .modal-content {
@@ -1713,7 +1694,6 @@ export default {
 
     .filter-wrapper,
     .date-inputs,
-    .date-input-wrapper,
     .date-input-wrapper {
         display: flex;
         flex-direction: column;
@@ -1731,7 +1711,6 @@ export default {
 
     .date-filter-modal {
         padding: 0.5rem 0.9rem;
-        width: 90%;
         border: 1px solid #d3d2d2 !important;
         border-radius: 5px;
         background-color: white;
@@ -1749,7 +1728,17 @@ export default {
 
     .calendar-icon-i {
         position: absolute;
-        right: 3rem;
+        right: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 1.2rem;
+        color: #7b8291;
+        pointer-events: none;
+    }
+
+    .calendar-icon-p {
+        position: absolute;
+        right: 1rem;
         top: 50%;
         transform: translateY(-50%);
         font-size: 1.2rem;
@@ -1799,7 +1788,7 @@ export default {
     }
 
     .form-control-peminjaman {
-        width: 90%;
+        width: 100%;
     }
 
     .form-control-bengkel {
@@ -1815,6 +1804,41 @@ export default {
         width: 100%;
         padding: 10px;
         font-size: 14px;
+    }
+
+    /* Flexbox untuk elemen kondisi alat dan jumlah kerusakan */
+    .form-row.kondisi-dan-jumlah {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    /* Menyesuaikan ukuran input untuk responsif */
+    .form-group select,
+    .form-group input {
+        width: 100%;
+    }
+
+    /* Mengatur label dan input lebih kecil di layar kecil */
+    .form-group label {
+        font-size: 0.9rem;
+    }
+
+    .form-group.alat-rusak input {
+        width: 80%; /* Agar input lebih ramping */
+    }
+
+    .form-group.alat-rusak {
+    margin-top: 0.5rem;
+    }
+
+    .form-group.alat-rusak label {
+        font-size: 0.9rem;
+        font-weight: bold;
+    }
+
+    .form-group.alat-rusak input {
+        height: 2.7rem;
+        width: 10rem;
     }
 }
 </style>

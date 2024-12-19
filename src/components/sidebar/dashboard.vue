@@ -10,20 +10,20 @@
     <div class="card-container">
         <!-- Card 1: Data Alat -->
         <div class="card-dashboard-1">
-            <i class="fa-solid fa-people-robbery"></i>
-            <h2>Data Pinjaman</h2>
-            <p>Jumlah pinjaman saat ini</p>
-            <h1>20</h1>
-            <router-link to="/mainsidebar/peminjaman" class="card-link">Lihat data pinjaman</router-link>
+          <i class="fa-solid fa-triangle-exclamation"></i>
+            <h4>Data Pengembalian Bermasalah</h4>
+            <p>Jumlah pengembalian bermasalah saat ini</p>
+            <h2>20</h2>
+            <router-link to="/mainsidebar/pinjaman_bermasalah" class="card-link">Lihat data pengembalian bermasalah</router-link>
         </div>
 
         <!-- Card 2: Data Pinjaman -->
         <div class="card-dashboard-2">
-            <i class="fa-solid fa-triangle-exclamation"></i>
-            <h2>Data Pengembalian Bermasalah</h2>
-            <p>Jumlah pengembalian bermasalah saat ini</p>
-            <h1>20</h1>
-            <router-link to="/mainsidebar/pinjaman_bermasalah" class="card-link">Lihat data pengembalian bermasalah</router-link>
+          <i class="fa-solid fa-inbox"></i>
+            <h2>Data Pengembalian</h2>
+            <p>Jumlah pengembalian saat ini</p>
+            <h1>50</h1>
+            <router-link to="/mainsidebar/datapinjaman" class="card-link">Lihat data pengembalian</router-link>
         </div>
     </div>
 
@@ -31,19 +31,19 @@
     <div class="card-container">
         <!-- Card 1: Data Pengembalian -->
         <div class="card-dashboard-2">
-            <i class="fa-solid fa-inbox"></i>
-            <h2>Data Pengembalian</h2>
-            <p>Jumlah pengembalian saat ini</p>
-            <h1>50</h1>
-            <router-link to="/mainsidebar/datapinjaman" class="card-link">Lihat data pengembalian</router-link>
+          <i class="fa-solid fa-people-robbery"></i>
+            <h2>Data Pinjaman</h2>
+            <p>Jumlah pinjaman saat ini</p>
+            <h1>20</h1>
+            <router-link to="/mainsidebar/peminjaman" class="card-link">Lihat data pinjaman</router-link>
         </div>
 
         <!-- Card 2: Data Pengembalian Bermasalah -->
         <div class="card-dashboard-1">
             <i class="fa-solid fa-screwdriver-wrench"></i>
-            <h2>Data Alat</h2>
+            <h4>Data Alat</h4>
             <p>Jumlah alat saat ini</p>
-            <h1>50</h1>
+            <h2>50</h2>
             <router-link to="/mainsidebar/alat" class="card-link">Lihat data alat</router-link>
         </div>
     </div>
@@ -96,6 +96,10 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+}
+
+.card-dashboard-1 p {
+  font-size: 15px;
 }
 
 .card-dashboard-1:hover {

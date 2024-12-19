@@ -6,7 +6,7 @@
         <!-- Container wrapper -->
         <div class="container">
             <!-- Brand -->
-            <a class="navbar-brand" href="/">
+            <a class="navbar-brand" href="/mainsidebar/dashboard">
                 <div class="name_brand">MyLoanTool</div>
                 <div class="name_desc">Peminjaman Alat Bengkel</div>
             </a>
@@ -174,7 +174,7 @@ export default {
 
 <style>
 .navbar {
-    background: linear-gradient(90deg, #4b6cb7, #182848);
+    background: linear-gradient(150deg, #4b6cb7, #182848);
     box-shadow: 0 4px 8px 0 rgba(92, 91, 91, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     height: 80px;
     width: 100%;
@@ -279,6 +279,7 @@ export default {
     .nav-logout {
         margin-top: 5px;
         margin-left: -0.8rem;
+        font-weight: 800;
     }
 
     .navbar-collapse {
@@ -289,6 +290,13 @@ export default {
 @media screen and (max-width: 450px) {
     .navbar-nav .dropdown-menu {
         margin-left: 1.3rem;
+    }
+
+    .nav-logout .nav-link {
+      color: #e74c3c;
+      font-weight: 800;
+      margin-left: 20px;
+      transition: color 0.3s ease;
     }
 }
 </style>

@@ -187,7 +187,7 @@
               </span>
             </th>
             <th>Kondisi</th>
-            <th>Action</th>
+            <th style="text-align: center;">Action</th>
           </tr>
         </thead>
         <tbody>
@@ -203,12 +203,14 @@
             <td>{{ formatDate(record.tanggal_pinjam) }}</td>
             <td>{{ formatDate(record.tgl_permasalahan) }}</td>
             <td>{{ record.kondisi }}</td>
-            <td>
+            <td style="text-align: center;">
               <button
                 class="btn btn-sm"
                 @click="preparPostAlatBermasalah(record)"
               >
-                <span class="material-symbols-outlined">priority</span>
+                <span class="material-symbols-outlined">
+                  redo
+                </span>
               </button>
             </td>
           </tr>
@@ -221,12 +223,50 @@
         <div class="modal-content">
           <!-- Modal Header -->
           <div class="modal-header">
-            <h4>Ubah Data Pengembalian</h4>
+            <h4>Ubah Status Pinjaman Bermasalah</h4>
             <span class="close-modal" @click="closeModal">&times;</span>
           </div>
           <!-- End of Modal Header -->
           <!-- Modal Body -->
           <div class="modal-body">
+            <!-- Row atas -->
+            <!-- <div class="form-row"> -->
+              <!-- alat -->
+              <!-- <div class="form-group">
+                <label for="alat">Alat dan Ruang Bengkel</label>
+                <input
+                  type="text"
+                  id="alat"
+                  class="form-control-alat"
+                  v-model="selectedRecord.nama_alat"
+                  :value="`${selectedRecord.nama_alat} - ${selectedRecord.ruang_bengkel}`"
+                  disabled
+                />
+              </div> -->
+              <!-- peminjam -->
+              <!-- <div class="form-group-nama">
+                <label for="namaPeminjam">Nama Peminjam</label>
+                <input
+                  type="text"
+                  id="namaPeminjam"
+                  class="form-control-peminjaman"
+                  v-model="selectedRecord.nama_siswa"
+                  :value="`${selectedRecord.nama_siswa} - ${selectedRecord.jurusan}`"
+                  disabled
+                />
+              </div> -->
+              <!-- tgl pinjam -->
+              <!-- <div class="form-group">
+                <label for="tanggalPinjam">Tanggal Pinjam</label>
+                <input
+                  type="date"
+                  id="tanggalPinjam"
+                  class="date-filter-modal"
+                  v-model="selectedRecord.tanggal_pinjam"
+                  disabled
+                />
+              </div>
+            </div> -->
             <!-- form row -->
             <div class="form-row">
               <!-- tgl pinjam -->
@@ -238,18 +278,16 @@
                     type="date"
                     id="tanggalKembali"
                     v-model="newPengembalianAlatBermasalah.tgl_kembali"
-                    class="date-filter"
-                    style="width: 15.7rem"
+                    class="date-filter-modal"
                   />
-                  <i class="fas fa-calendar-alt calendar-icon"></i>
+                  <i class="fas fa-calendar-alt calendar-icon-i"></i>
                 </div>
               </div>
               <!-- tgl pinjam -->
               <!-- jml alat rusak -->
               <div class="form-group" style="margin-left: 0.3rem">
-                <label for="jumlahPengembalian" style="font-size: 0.9rem"
-                  >Jumlah Pengembalian</label
-                >
+                <label for="jumlahPengembalian">Jumlah Pengembalian</label>
+                <p>Masukkan jumlah pengembalian alat</p>
                 <input
                   type="number"
                   style="margin-top: 0.5rem; height: 2.5rem; width: 6.3rem"
@@ -263,7 +301,7 @@
             <!-- form row -->
             <button
               @click="addPengembalianAlatBermasalah(id_alat_bermasalah)"
-              class="btn-pengembalian"
+              class="btn_add_peminjaman"
             >
               Simpan Data
             </button>
@@ -780,6 +818,24 @@ th {
   background-color: #f4f4f4;
 }
 
+.date-filter-modal {
+    padding: 0.5rem 0.9rem;
+    width: 16rem;
+    border: 1px solid #d3d2d2 !important;
+    border-radius: 5px;
+    background-color: white;
+    color: #7b8291;
+}
+
+.calendar-icon {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    color: #7b8291;
+    pointer-events: none;
+}
+
 @media screen and (max-width: 450px) {
   .header-dataBermasalah {
     font-weight: bold;
@@ -807,12 +863,12 @@ th {
   }
 
   .date-filter-modal {
-    padding: 0.5rem 0.9rem;
-    width: 90%;
-    border: 1px solid #d3d2d2 !important;
-    border-radius: 5px;
-    background-color: white;
-    color: #7b8291;
+        padding: 0.5rem 0.9rem;
+        width: 90%;
+        border: 1px solid #d3d2d2 !important;
+        border-radius: 5px;
+        background-color: white;
+        color: #7b8291;
   }
 
   .calendar-icon {
@@ -851,5 +907,31 @@ th {
     margin-left: 0rem;
     text-align: left;
   }
+
+  .date-input-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        width: 100%;
+    }
+
+    .calendar-icon {
+        position: absolute;
+        right: 1rem;
+        top: 70%;
+        transform: translateY(-50%);
+        font-size: 1.2rem;
+        pointer-events: none;
+    }
+
+    .calendar-icon-i {
+        position: absolute;
+        right: 3rem;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 1.2rem;
+        color: #7b8291;
+        pointer-events: none;
+    }
 }
 </style>
