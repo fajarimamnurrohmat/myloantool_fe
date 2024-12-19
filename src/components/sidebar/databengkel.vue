@@ -33,20 +33,36 @@
 
 <!-- Import Button and File Input -->
 <div class="import-search-wrapper" style="margin-top: 30px">
-    <div class="import-data">
-        <button class="btn-import" type="button" @click="importData" style="
-          color: #4b6cb7;
-          background-color: white;
-          justify-content: space-between;
-          text-align: left;
-          width: 7.5rem;
-        ">
-            <i class="fa-solid fa-arrow-up-from-bracket" style="margin-right: 0.4rem; color: #4b6cb7">
-            </i>
-            Import
-        </button>
-        <input type="file" id="importFile" class="file-input" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" @change="fileChange($event)" style="display: none" />
+  <div class="import-data">
+      <button class="btn-import" type="button" @click="showFileUploadModal" style="
+        color: #4b6cb7;
+        background-color: white;
+        justify-content: space-between;
+        text-align: left;
+        width: 7.5rem;
+      ">
+        <i class="fa-solid fa-arrow-up-from-bracket" style="margin-right: 0.4rem; color: #4b6cb7"></i> Import
+      </button>
     </div>
+
+    <!-- Modal for File Upload -->
+    <div v-if="showFileUpload" class="modal-overlay" @click.self="closeFileUploadModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4>Upload File Excel</h4>
+          <span class="close-modal" @click="closeFileUploadModal" style="color: red; text-align: right">&times;</span>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <input type="file" accept=".xls,.xlsx" @change="handleFileUpload" />
+          </div>
+        </div>
+        <div style="margin-top: 10px; text-align: left">
+          <button @click="submitExcelData" class="btn-add-bengkel">Submit</button>
+        </div>
+      </div>
+    </div>
+    <!-- End of File Upload Modal -->
 
     <!-- Search Bar -->
     <div class="search-bar-container">
@@ -60,20 +76,20 @@
 <div class="table-wrapper">
     <!-- Show Row -->
     <div class="info-page">
-          <div class="tampil-baris" style="text-align: left;">
-              Tampilkan:
-              <select v-model="rowsPerPage" class="select-rows" style="width: 3rem">
-                  <option value="5">5</option>
-                  <option value="10">10</option>
-                  <option value="20">20</option>
-                  <option value="100">100</option>
-              </select>
-              baris
-          </div>
-          <div>
-            <p class="page-info">{{ pageInfo }}</p>
-          </div>
+        <div class="tampil-baris" style="text-align: left;">
+            Tampilkan:
+            <select v-model="rowsPerPage" class="select-rows" style="width: 3rem">
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="20">20</option>
+                <option value="100">100</option>
+            </select>
+            baris
         </div>
+        <div>
+            <p class="page-info">{{ pageInfo }}</p>
+        </div>
+    </div>
     <!-- End of Show Row -->
     <table class="data-table">
         <thead>
@@ -126,13 +142,7 @@
 <script>
 import Swal from "sweetalert2";
 import axios from "axios";
-// import "@mescius/spread-sheets/styles/gc.spread.sheets.excel2016colorful.css";//
-
-// // SpreadJS imports
-// import GC from "@mescius/spread-sheets";
-// import "@mescius/spread-sheets-vue";
-// import Excel from "@mescius/spread-excelio";
-// import { saveAs } from 'file-saver';
+import * as XLSX from "xlsx"; // Import the XLSX library for reading Excel files
 
 export default {
     data() {
@@ -142,25 +152,27 @@ export default {
                 ruang_bengkel: "",
             },
             bengkelList: [],
+            parsedData: [],
             rowsPerPage: 5,
             sortBy: "ruang_bengkel",
             sortDirection: "asc",
             currentPage: 1,
-            searchQuery: "",
+          searchQuery: "",
+            showFileUpload: false,
             editIndex: null,
             dropdownIndex: null,
         };
     },
-  computed: {
-    pageInfo() {
-      const totalData = this.bengkelList.length;
-      const startIndex = (this.currentPage - 1) * this.rowsPerPage + 1;
-      const endIndex = Math.min(
-        startIndex + this.rowsPerPage - 1,
-        totalData
-      );
-      return `Menampilkan ${startIndex} sampai ${endIndex} dari ${totalData} data`;
-    },
+    computed: {
+        pageInfo() {
+            const totalData = this.bengkelList.length;
+            const startIndex = (this.currentPage - 1) * this.rowsPerPage + 1;
+            const endIndex = Math.min(
+                startIndex + this.rowsPerPage - 1,
+                totalData
+            );
+            return `Menampilkan ${startIndex} sampai ${endIndex} dari ${totalData} data`;
+        },
         filteredBengkelList() {
             const filteredList = this.bengkelList.filter((bengkel) =>
                 bengkel.ruang_bengkel
@@ -192,6 +204,70 @@ export default {
         },
     },
     methods: {
+        // Display the file upload modal
+    showFileUploadModal() {
+      this.showFileUpload = true;
+    },
+
+    // Close the file upload modal
+    closeFileUploadModal() {
+      this.showFileUpload = false;
+    },
+
+    // Handle file upload
+    handleFileUpload(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const content = e.target.result;
+          this.parseExcel(content);
+        };
+        reader.readAsArrayBuffer(file);
+      }
+    },
+
+    // Parse Excel data
+    parseExcel(content) {
+      const workbook = XLSX.read(content, { type: "array" });
+      const sheetName = workbook.SheetNames[0]; // Ambil sheet pertama
+      const sheet = workbook.Sheets[sheetName];
+
+      // Tentukan range mulai dari baris kedua dan kolom pertama (A2 sampai B2)
+      const range = { s: { r: 1, c: 0 }, e: { r: sheet['!ref'].split(':')[1].match(/\d+/)[0] - 1, c: 1 } };
+
+      // Mengambil data dari range yang ditentukan
+      const data = XLSX.utils.sheet_to_json(sheet, { header: 1, range: range });
+      this.parsedData = data; // Data mulai dari baris 2
+    },
+
+    // Submit parsed Excel data to the backend
+    async submitExcelData() {
+      if (this.parsedData.length > 0) {
+        try {
+          const token = localStorage.getItem("accessToken");
+
+          // Prepare FormData
+          const formData = new FormData();
+          formData.append("file", this.parsedData); // Add the parsed data as a file
+
+          const response = await axios.post("http://localhost:3000/bengkel/import", formData, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "multipart/form-data", // Set the correct Content-Type
+            },
+          });
+
+          Swal.fire("Success!", "Data berhasil diimpor.", "success");
+          this.fetchBengkelList();
+          this.closeFileUploadModal();
+        } catch (error) {
+          Swal.fire("Error!", "Gagal mengimpor data.", "error");
+        }
+      } else {
+        Swal.fire("Error!", "Tidak ada data untuk diimpor.", "error");
+      }
+    },
         toggleSort(column) {
             if (this.sortBy === column) {
                 this.sortDirection = this.sortDirection === "asc" ? "desc" : "asc";

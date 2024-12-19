@@ -30,7 +30,7 @@
             <div class="form-row">
                 <!-- alat -->
                 <div class="form-group">
-                    <label for="alat">Alat dan Ruang Bengkel</label>
+                  <label for="alat" class="label-required">Alat dan Ruang Bengkel</label>
                     <p>Pilih Nama Alat - Ruang Bengkel</p>
                     <select id="alat" class="form-control-alat" v-model="newPeminjaman.id_alat" :disabled="isEditMode">
                         <option disabled value="">Pilih Alat dan Ruang Bengkel</option>
@@ -42,7 +42,7 @@
                 <!-- end of alat -->
                 <!-- peminjam -->
                 <div class="form-group-nama">
-                    <label for="namaPeminjam">Nama Peminjam</label>
+                    <label for="namaPeminjam" class="label-required">Nama Peminjam</label>
                     <p>Pilih Nama Siswa - Jurusan</p>
                     <select id="namaPeminjam" class="form-control-peminjaman" v-model="newPeminjaman.nisPeminjam" :disabled="isEditMode">
                         <option disabled value="">Pilih Siswa</option>
@@ -59,7 +59,7 @@
             <div class="form-row">
                 <!-- tgl pinjam -->
                 <div class="form-group">
-                    <label for="tanggalPinjam">Tanggal Pinjam</label>
+                    <label for="tanggalPinjam" class="label-required">Tanggal Pinjam</label>
                     <p>Masukkan tanggal pinjam alat</p>
                     <div class="date-input-wrapper">
                         <input type="date" id="tanggalPinjam" v-model="newPeminjaman.tanggalPinjam" class="date-filter-modal" />
@@ -69,7 +69,7 @@
                 <!-- end of tgl pinjam -->
                 <!-- jumlah -->
                 <div class="form-group-jumlah">
-                    <label for="jumlahAlat">Jumlah Pinjaman</label>
+                    <label for="jumlahAlat" class="label-required">Jumlah Pinjaman</label>
                     <p>Masukkan jumlah alat yang dipinjam</p>
                     <input type="number" id="jumlahAlat" class="form-control-jumlah" v-model="newPeminjaman.jumlahAlat" />
                 </div>
@@ -412,7 +412,7 @@
                         <!-- end of tgl pengembalian -->
                         <!-- kondisi alat -->
                         <div class="form-group kondisi-alat">
-                            <label for="kondisiAlat">Kondisi Alat</label>
+                            <label for="kondisiAlat" class="labe">Kondisi Alat</label>
                             <p>Pilih Kondisi Alat</p>
                             <select v-model="newPengembalianBermasalah.kondisi" class="select-condi">
                                 <option disabled value="">Pilih Kondisi</option>
@@ -423,7 +423,7 @@
                         <!-- end of kondisi alat -->
                         <!-- jml alat rusak -->
                         <div class="form-group alat-rusak">
-                            <label for="jumlahAlatRusak">Jumlah Kerusakan</label>
+                            <label for="jumlahAlatRusak" class="label-required">Jumlah Kerusakan</label>
                             <p>Jumlah Kerusakan Alat</p>
                             <input type="number" id="jumlahAlatRusak" class="form-control" v-model="newPengembalianBermasalah.jumlahAlatBermasalah" />
                         </div>
@@ -1190,6 +1190,15 @@ export default {
 
 .date-input-wrapper:hover .calendar-icon {
     color: #636468;
+}
+
+.label-required::after {
+    content: "*";
+    color: red;
+    font-size: 1.2em; /* Ukuran bintang */
+    margin-left: 2px;
+    font-weight: bold;
+    vertical-align: middle; /* Agar sejajar dengan teks label */
 }
 
 .modal-content {
