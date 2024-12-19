@@ -187,7 +187,7 @@
               </span>
             </th>
             <th>Kondisi</th>
-            <th style="text-align: center;">Action</th>
+            <th style="text-align: center">Action</th>
           </tr>
         </thead>
         <tbody>
@@ -203,14 +203,12 @@
             <td>{{ formatDate(record.tanggal_pinjam) }}</td>
             <td>{{ formatDate(record.tgl_permasalahan) }}</td>
             <td>{{ record.kondisi }}</td>
-            <td style="text-align: center;">
+            <td style="text-align: center">
               <button
                 class="btn btn-sm"
                 @click="preparPostAlatBermasalah(record)"
               >
-                <span class="material-symbols-outlined">
-                  redo
-                </span>
+                <span class="material-symbols-outlined"> redo </span>
               </button>
             </td>
           </tr>
@@ -230,43 +228,50 @@
           <!-- Modal Body -->
           <div class="modal-body">
             <!-- Row atas -->
-            <!-- <div class="form-row"> -->
-              <!-- alat -->
-              <!-- <div class="form-group">
-                <label for="alat">Alat dan Ruang Bengkel</label>
-                <input
-                  type="text"
-                  id="alat"
-                  class="form-control-alat"
-                  v-model="selectedRecord.nama_alat"
-                  :value="`${selectedRecord.nama_alat} - ${selectedRecord.ruang_bengkel}`"
+            <!-- peminjam -->
+            <div class="form-group">
+              <label for="namaPeminjam">Nama Peminjam</label>
+              <p>Nama Peminjam</p>
+              <select
+                id="namaPeminjam"
+                class="form-control-peminjaman"
+                v-model="newPengembalianAlatBermasalah.nama_peminjam"
+                
+              >
+                <option disabled value="">Pilih Siswa</option>
+                <option
+                  v-for="record in displayedData"
+                  :key="record.id_alat_bermasalah"
+                  :value="record.nama_siswa"
                   disabled
-                />
-              </div> -->
-              <!-- peminjam -->
-              <!-- <div class="form-group-nama">
-                <label for="namaPeminjam">Nama Peminjam</label>
-                <input
-                  type="text"
-                  id="namaPeminjam"
-                  class="form-control-peminjaman"
-                  v-model="selectedRecord.nama_siswa"
-                  :value="`${selectedRecord.nama_siswa} - ${selectedRecord.jurusan}`"
+                >
+                  {{ record.nama_siswa }}
+                </option>
+              </select>
+            </div>
+            <!-- alat dipinjam -->
+            <div class="form-group">
+              <label for="alat">Alat Dipinjam</label>
+              <p>Alat - Ruang Bengkel</p>
+              <select
+                id="alat"
+                class="form-control-peminjaman"
+                v-model="newPengembalianAlatBermasalah.alat_dipinjam"
+                
+              >
+                <option disabled value="">Pilih Siswa</option>
+                <option
+                  v-for="record in displayedData"
+                  :key="record.id_alat_bermasalah"
+                  :value="record.nama_alat"
                   disabled
-                />
-              </div> -->
-              <!-- tgl pinjam -->
-              <!-- <div class="form-group">
-                <label for="tanggalPinjam">Tanggal Pinjam</label>
-                <input
-                  type="date"
-                  id="tanggalPinjam"
-                  class="date-filter-modal"
-                  v-model="selectedRecord.tanggal_pinjam"
-                  disabled
-                />
-              </div>
-            </div> -->
+                >
+                  {{ record.nama_alat }} - {{ record.ruang_bengkel }}
+                </option>
+              </select>
+            </div>
+            <!-- garis pemisah -->
+            <hr style="color: white" />
             <!-- form row -->
             <div class="form-row">
               <!-- tgl pinjam -->
@@ -293,7 +298,7 @@
                   style="margin-top: 0.5rem; height: 2.5rem; width: 6.3rem"
                   id="jumlahPengembalian"
                   class="form-control"
-                  v-model="newPengembalianAlatBermasalah.jumlah"
+                  v-model="newPengembalianAlatBermasalah.jumlah_dikembalikan"
                 />
               </div>
               <!-- jml alat rusak -->
@@ -358,9 +363,11 @@ export default {
       showModal: false,
       dropdownIndex: null,
       newPengembalianAlatBermasalah: {
+        alat_dipinjam:"",
+        nama_peminjam:"",
         id_peminjaman: "",
         tgl_kembali: "",
-        jumlah: "",
+        jumlah_dikembalikan: "",
       },
     };
   },
@@ -377,6 +384,8 @@ export default {
     preparPostAlatBermasalah(record) {
       // Hanya salin ruang_bengkel
       this.newPengembalianAlatBermasalah = {
+        alat_dipinjam:record.nama_alat,
+        nama_peminjam:record.nama_siswa,
         id_peminjaman: record.id_peminjaman,
       };
       this.showModal = true;
@@ -391,13 +400,13 @@ export default {
       if (
         this.newPengembalianAlatBermasalah.id_peminjaman &&
         this.newPengembalianAlatBermasalah.tgl_kembali &&
-        this.newPengembalianAlatBermasalah.jumlah
+        this.newPengembalianAlatBermasalah.jumlah_dikembalikan
       ) {
         try {
           const dataToSend = {
             id_peminjaman: this.newPengembalianAlatBermasalah.id_peminjaman,
             tgl_kembali: this.newPengembalianAlatBermasalah.tgl_kembali,
-            jumlah: this.newPengembalianAlatBermasalah.jumlah,
+            jumlah: this.newPengembalianAlatBermasalah.jumlah_dikembalikan,
           };
 
           const token = localStorage.getItem("accessToken");
@@ -819,21 +828,21 @@ th {
 }
 
 .date-filter-modal {
-    padding: 0.5rem 0.9rem;
-    width: 16rem;
-    border: 1px solid #d3d2d2 !important;
-    border-radius: 5px;
-    background-color: white;
-    color: #7b8291;
+  padding: 0.5rem 0.9rem;
+  width: 16rem;
+  border: 1px solid #d3d2d2 !important;
+  border-radius: 5px;
+  background-color: white;
+  color: #7b8291;
 }
 
 .calendar-icon {
-    position: absolute;
-    top: 50%;
-    right: 10px;
-    transform: translateY(-50%);
-    color: #7b8291;
-    pointer-events: none;
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  color: #7b8291;
+  pointer-events: none;
 }
 
 @media screen and (max-width: 450px) {
@@ -863,12 +872,12 @@ th {
   }
 
   .date-filter-modal {
-        padding: 0.5rem 0.9rem;
-        width: 90%;
-        border: 1px solid #d3d2d2 !important;
-        border-radius: 5px;
-        background-color: white;
-        color: #7b8291;
+    padding: 0.5rem 0.9rem;
+    width: 90%;
+    border: 1px solid #d3d2d2 !important;
+    border-radius: 5px;
+    background-color: white;
+    color: #7b8291;
   }
 
   .calendar-icon {
@@ -909,29 +918,29 @@ th {
   }
 
   .date-input-wrapper {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        width: 100%;
-    }
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+  }
 
-    .calendar-icon {
-        position: absolute;
-        right: 1rem;
-        top: 70%;
-        transform: translateY(-50%);
-        font-size: 1.2rem;
-        pointer-events: none;
-    }
+  .calendar-icon {
+    position: absolute;
+    right: 1rem;
+    top: 70%;
+    transform: translateY(-50%);
+    font-size: 1.2rem;
+    pointer-events: none;
+  }
 
-    .calendar-icon-i {
-        position: absolute;
-        right: 3rem;
-        top: 50%;
-        transform: translateY(-50%);
-        font-size: 1.2rem;
-        color: #7b8291;
-        pointer-events: none;
-    }
+  .calendar-icon-i {
+    position: absolute;
+    right: 3rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.2rem;
+    color: #7b8291;
+    pointer-events: none;
+  }
 }
 </style>
