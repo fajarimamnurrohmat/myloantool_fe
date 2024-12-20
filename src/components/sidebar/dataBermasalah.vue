@@ -228,48 +228,69 @@
           <!-- Modal Body -->
           <div class="modal-body">
             <!-- Row atas -->
-            <!-- peminjam -->
-            <div class="form-group">
-              <label for="namaPeminjam">Nama Peminjam</label>
-              <p>Nama Peminjam</p>
-              <select
-                id="namaPeminjam"
-                class="form-control-peminjaman"
-                v-model="newPengembalianAlatBermasalah.nama_peminjam"
-                
-              >
-                <option disabled value="">Pilih Siswa</option>
-                <option
-                  v-for="record in displayedData"
-                  :key="record.id_alat_bermasalah"
-                  :value="record.nama_siswa"
-                  disabled
+             <div class="form-row">
+              <!-- alat dipinjam -->
+              <div class="form-group">
+                <label for="alat">Alat Dipinjam</label>
+                <p>Alat - Ruang Bengkel</p>
+                <select
+                  id="alat"
+                  class="form-control-alat"
+                  v-model="newPengembalianAlatBermasalah.alat_dipinjam"
                 >
-                  {{ record.nama_siswa }}
-                </option>
-              </select>
-            </div>
-            <!-- alat dipinjam -->
-            <div class="form-group">
-              <label for="alat">Alat Dipinjam</label>
-              <p>Alat - Ruang Bengkel</p>
-              <select
-                id="alat"
-                class="form-control-peminjaman"
-                v-model="newPengembalianAlatBermasalah.alat_dipinjam"
-                
-              >
-                <option disabled value="">Pilih Siswa</option>
-                <option
-                  v-for="record in displayedData"
-                  :key="record.id_alat_bermasalah"
-                  :value="record.nama_alat"
-                  disabled
+                  <option disabled value="">Pilih Siswa</option>
+                  <option
+                    v-for="record in displayedData"
+                    :key="record.id_alat_bermasalah"
+                    :value="record.nama_alat"
+                    disabled
+                  >
+                    {{ record.nama_alat }} - {{ record.ruang_bengkel }}
+                  </option>
+                </select>
+              </div>
+              <!-- peminjam -->
+              <div class="form-group-nama">
+                <label for="namaPeminjam">Nama Peminjam</label>
+                <p>Nama Peminjam</p>
+                <select
+                  id="namaPeminjam"
+                  class="form-control-peminjaman"
+                  v-model="newPengembalianAlatBermasalah.nama_peminjam"
                 >
-                  {{ record.nama_alat }} - {{ record.ruang_bengkel }}
-                </option>
-              </select>
-            </div>
+                  <option disabled value="">Pilih Siswa</option>
+                  <option
+                    v-for="record in displayedData"
+                    :key="record.id_alat_bermasalah"
+                    :value="record.nama_siswa"
+                    disabled
+                  >
+                    {{ record.nama_siswa }}
+                  </option>
+                </select>
+              </div>
+             </div>
+             <div class="form-row">
+              <!-- tgl pinjam -->
+              <div class="form-group">
+                    <label for="tanggalPinjam">Tanggal Pinjam</label>
+                    <p>Masukkan tanggal pinjam alat</p>
+                    <div class="date-input-wrapper">
+                        <input type="date" id="tanggalPinjam"
+                        v-model="newPengembalianAlatBermasalah.tgl_peminjaman"
+                        class="date-filter-modal" disabled/>
+                        <i class="fas fa-calendar-alt calendar-icon-i"></i>
+                    </div>
+                </div>
+                <!-- end of tgl pinjam -->
+                <!-- jumlah -->
+                <div class="form-group-jumlah">
+                    <label for="jumlahAlat">Jumlah Pinjaman</label>
+                    <p>Masukkan jumlah alat yang dipinjam</p>
+                    <input type="number" id="jumlahAlat" class="form-control-jumlah" v-model="newPengembalianAlatBermasalah.jumlah" />
+                </div>
+                <!-- end of jumlah -->
+             </div>
             <!-- garis pemisah -->
             <hr style="color: white" />
             <!-- form row -->
@@ -290,7 +311,7 @@
               </div>
               <!-- tgl pinjam -->
               <!-- jml alat rusak -->
-              <div class="form-group" style="margin-left: 0.3rem">
+              <div class="form-group-jumlah-kembali">
                 <label for="jumlahPengembalian">Jumlah Pengembalian</label>
                 <p>Masukkan jumlah pengembalian alat</p>
                 <input
@@ -364,7 +385,9 @@ export default {
       dropdownIndex: null,
       newPengembalianAlatBermasalah: {
         alat_dipinjam:"",
-        nama_peminjam:"",
+        nama_peminjam: "",
+        tgl_peminjaman: "",
+        jumlah: "",
         id_peminjaman: "",
         tgl_kembali: "",
         jumlah_dikembalikan: "",
@@ -381,15 +404,32 @@ export default {
     });
   },
   methods: {
+    // Method untuk mempersiapkan data saat tombol pada record ditekan
     preparPostAlatBermasalah(record) {
-      // Hanya salin ruang_bengkel
+      //console.log(record);
       this.newPengembalianAlatBermasalah = {
-        alat_dipinjam:record.nama_alat,
-        nama_peminjam:record.nama_siswa,
+        alat_dipinjam: record.nama_alat,
+        nama_peminjam: record.nama_siswa,
+        tgl_peminjaman: this.convertToDateInputFormat(record.tanggal_pinjam),
+        jumlah: record.jumlah,
         id_peminjaman: record.id_peminjaman,
       };
       this.showModal = true;
       this.id_alat_bermasalah = record.id_alat_bermasalah;
+    },
+
+    // Method untuk mengonversi format tanggal ke format input date (YYYY-MM-DD)
+    convertToDateInputFormat(dateString) {
+      if (!dateString) return ""; // Jika tanggal kosong, kembalikan string kosong
+
+      const date = new Date(dateString); // Buat objek Date dari string
+      if (isNaN(date)) return ""; // Validasi: jika tanggal tidak valid, kembalikan string kosong
+
+      const year = date.getFullYear(); // Ambil tahun
+      const month = String(date.getMonth() + 1).padStart(2, "0"); // Ambil bulan, tambahkan leading zero jika perlu
+      const day = String(date.getDate()).padStart(2, "0"); // Ambil hari, tambahkan leading zero jika perlu
+
+      return `${year}-${month}-${day}`; // Gabungkan menjadi format YYYY-MM-DD
     },
     async addPengembalianAlatBermasalah(id_alat_bermasalah) {
       // console.log(
@@ -845,7 +885,32 @@ th {
   pointer-events: none;
 }
 
+.modal-content {
+    background: #274278 !important;
+    padding: 20px;
+    border-radius: 10px;
+    width: 40rem !important;
+    max-width: 100% !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 0.3s ease-in-out;
+    transition: fadeOut 0.3s ease-out;
+}
+
+.form-group-jumlah-kembali {
+    flex: 1;
+    margin-left: -4rem;
+}
+
+.form-group-jumlah-kembali label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
 @media screen and (max-width: 450px) {
+  .modal-content {
+        width: 90% !important;
+    }
   .header-dataBermasalah {
     font-weight: bold;
     color: #274278;
@@ -942,5 +1007,11 @@ th {
     color: #7b8291;
     pointer-events: none;
   }
+
+  .form-group-jumlah-kembali {
+    flex: 1;
+    margin-left: 0rem;
+    margin-top: 0.5rem;
+}
 }
 </style>

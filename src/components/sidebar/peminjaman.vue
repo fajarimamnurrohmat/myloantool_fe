@@ -240,7 +240,7 @@
     <!-- Start of Modal Pengembalian Section -->
     <div v-if="tampilModal" class="modal-overlay" @click.self="closeModal">
         <!-- Content Modal -->
-        <div class="modal-content" style="margin-top: 5rem">
+        <div class="modal-content">
             <!-- Header Modal -->
             <div class="modal-header" style="margin-top: -1rem">
                 <h4>Input Data Pengembalian</h4>
@@ -291,7 +291,7 @@
                     <!-- form row atas -->
 
                     <!-- form row tengah -->
-                    <div class="form-row">
+                    <div class="form-row tanggal-jumlah">
                         <!-- tgl pinjam -->
                         <div class="form-group">
                             <label for="tanggalPinjam">Tanggal Pinjam</label>
@@ -303,9 +303,9 @@
                         </div>
                         <!-- end of tgl pinjam -->
                         <!-- jumlah -->
-                        <div class="form-group-jumlah">
-                            <label for="jumlahAlat">Jumlah Pinjaman</label>
-                            <p>Masukkan jumlah alat yang dipinjam</p>
+                        <div class="form-group-jumlah-bermasalah">
+                            <label for="jumlahAlat">Jumlah Pinjam</label>
+                            <p>Tambah jumlah</p>
                             <input type="number" id="jumlahAlat" class="form-control-jumlah" v-model="newPeminjaman.jumlahAlat" disabled />
                         </div>
                         <!-- end of jumlah -->
@@ -375,7 +375,7 @@
                     <!-- end of form row atas -->
 
                     <!-- form row tengah -->
-                    <div class="form-row">
+                    <div class="form-row tanggal-jumlah">
                         <!-- tgl pinjam -->
                         <div class="form-group">
                             <label for="tanggalPinjam">Tanggal Pinjam</label>
@@ -387,9 +387,9 @@
                         </div>
                         <!-- end of tgl pinjam -->
                         <!-- jumlah -->
-                        <div class="form-group-jumlah">
-                            <label for="jumlahAlat">Jumlah Pinjaman</label>
-                            <p>Masukkan jumlah alat yang dipinjam</p>
+                        <div class="form-group-jumlah-bermasalah">
+                            <label for="jumlahAlat">Jumlah Pinjam</label>
+                            <p>Tambah jumlah</p>
                             <input type="number" id="jumlahAlat" class="form-control-jumlah" v-model="newPeminjaman.jumlahAlat" disabled/>
                         </div>
                         <!-- end of jumlah -->
@@ -414,7 +414,7 @@
                         <div class="form-row kondisi-dan-jumlah">
                             <!-- kondisi alat -->
                             <div class="form-group kondisi-alat">
-                                <label for="kondisiAlat" class="labe">Kondisi Alat</label>
+                                <label for="kondisiAlat">Kondisi Alat</label>
                                 <p>Pilih Kondisi Alat</p>
                                 <select v-model="newPengembalianBermasalah.kondisi" class="select-condi">
                                     <option disabled value="">Pilih Kondisi</option>
@@ -1099,7 +1099,7 @@ export default {
 .form-group.kondisi-alat {
     display: flex;
     flex-direction: column;
-    margin-right: 3.3rem;
+    margin-right: 0rem;
 }
 
 .form-group.kondisi-alat label {
@@ -1116,7 +1116,7 @@ export default {
 }
 
 .form-group.alat-rusak {
-    margin-left: -2.5rem;
+    margin-left: 0rem;
     margin-top: 0.13rem;
 }
 
@@ -1130,29 +1130,20 @@ export default {
     width: 10rem;
 }
 
-.form-group label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-}
-
-.form-group-nama {
-    flex: 1;
-    margin-left: -4rem;
-}
-
-.form-group-nama label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-}
-
+.form-group-nama,
 .form-group-jumlah {
     flex: 1;
     margin-left: -4rem;
 }
 
-.form-group-jumlah label {
+.form-group-jumlah-bermasalah {
+  margin-right: 11.3rem;
+}
+
+.form-group-jumlah label,
+.form-group label,
+.form-group-nama label,
+.form-group-jumlah-bermasalah label {
     display: block;
     margin-bottom: 5px;
     font-weight: bold;
@@ -1191,6 +1182,7 @@ export default {
 
 .modal-content {
     background: #274278 !important;
+    margin-top: 5rem;
     padding: 20px;
     border-radius: 10px;
     width: 40rem !important;
@@ -1262,18 +1254,7 @@ export default {
     height: 2.5rem;
 }
 
-.form-control-alat {
-    width: 100%;
-    padding: 8px;
-    font-size: 14px;
-    border: 1px solid #ccc;
-    background-color: white;
-    color: #000000;
-    border-radius: 4px;
-    width: 16rem;
-    height: 2.5rem;
-}
-
+.form-control-alat,
 .form-control-bengkel {
     width: 100%;
     padding: 8px;
@@ -1298,9 +1279,11 @@ export default {
     height: 2.7rem;
 }
 
-.form-row.kondisi-dan-jumlah {
+.form-row.kondisi-dan-jumlah,
+.form-row.tanggal-jumlah{
     flex-direction: row;
     justify-content: space-between;
+    margin-right: 1rem;
 }
 
 .filter-wrapper {
@@ -1795,11 +1778,6 @@ export default {
         width: 90%;
     }
 
-    .form-group-jumlah {
-        margin-top: 0.5rem;
-        margin-left: 0.2rem;
-    }
-
     .btn_add_peminjaman {
         width: 100%;
         padding: 10px;
@@ -1807,9 +1785,30 @@ export default {
     }
 
     /* Flexbox untuk elemen kondisi alat dan jumlah kerusakan */
-    .form-row.kondisi-dan-jumlah {
+    .form-row.kondisi-dan-jumlah,
+    .form-row.tanggal-jumlah {
         flex-direction: row;
         justify-content: space-between;
+    }
+
+    .form-group-jumlah {
+      font-size: 14px;
+      margin-left: 0rem;
+      flex: 1;
+      margin-top: 0.5rem;
+    }
+
+    .form-group-jumlah-bermasalah {
+      margin-top: 0.7rem;
+      margin-left: 3rem;
+    }
+
+    .form-group-jumlah-bermasalah p {
+      font-size: 11px;
+    }
+
+    .form-group-jumlah-bermasalah label {
+      font-size: 0.716rem;
     }
 
     /* Menyesuaikan ukuran input untuk responsif */
@@ -1829,6 +1828,7 @@ export default {
 
     .form-group.alat-rusak {
     margin-top: 0.5rem;
+    margin-right: 0rem;
     }
 
     .form-group.alat-rusak label {
