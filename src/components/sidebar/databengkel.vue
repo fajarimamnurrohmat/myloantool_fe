@@ -33,7 +33,7 @@
 
 <!-- Import Button and File Input -->
 <div class="import-search-wrapper" style="margin-top: 30px">
-  <div class="import-data">
+  <!-- <div class="import-data">
       <button class="btn-import" type="button" @click="showFileUploadModal" style="
         color: #4b6cb7;
         background-color: white;
@@ -43,10 +43,10 @@
       ">
         <i class="fa-solid fa-arrow-up-from-bracket" style="margin-right: 0.4rem; color: #4b6cb7"></i> Import
       </button>
-    </div>
+    </div> -->
 
     <!-- Modal for File Upload -->
-    <div v-if="showFileUpload" class="modal-overlay" @click.self="closeFileUploadModal">
+    <!-- <div v-if="showFileUpload" class="modal-overlay" @click.self="closeFileUploadModal">
       <div class="modal-content">
         <div class="modal-header">
           <h4>Upload File Excel</h4>
@@ -61,7 +61,7 @@
           <button @click="submitExcelData" class="btn-add-bengkel">Submit</button>
         </div>
       </div>
-    </div>
+    </div> -->
     <!-- End of File Upload Modal -->
 
     <!-- Search Bar -->
@@ -157,8 +157,8 @@ export default {
             sortBy: "ruang_bengkel",
             sortDirection: "asc",
             currentPage: 1,
-          searchQuery: "",
-            showFileUpload: false,
+            searchQuery: "",
+            // showFileUpload: false,
             editIndex: null,
             dropdownIndex: null,
         };
@@ -205,69 +205,69 @@ export default {
     },
     methods: {
         // Display the file upload modal
-    showFileUploadModal() {
-      this.showFileUpload = true;
-    },
+        // showFileUploadModal() {
+        //   this.showFileUpload = true;
+        // },
 
-    // Close the file upload modal
-    closeFileUploadModal() {
-      this.showFileUpload = false;
-    },
+        // Close the file upload modal
+        // closeFileUploadModal() {
+        //   this.showFileUpload = false;
+        // },
 
-    // Handle file upload
-    handleFileUpload(event) {
-      const file = event.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          const content = e.target.result;
-          this.parseExcel(content);
-        };
-        reader.readAsArrayBuffer(file);
-      }
-    },
+        // Handle file upload
+        // handleFileUpload(event) {
+        //   const file = event.target.files[0];
+        //   if (file) {
+        //     const reader = new FileReader();
+        //     reader.onload = (e) => {
+        //       const content = e.target.result;
+        //       this.parseExcel(content);
+        //     };
+        //     reader.readAsArrayBuffer(file);
+        //   }
+        // },
 
-    // Parse Excel data
-    parseExcel(content) {
-      const workbook = XLSX.read(content, { type: "array" });
-      const sheetName = workbook.SheetNames[0]; // Ambil sheet pertama
-      const sheet = workbook.Sheets[sheetName];
+        // Parse Excel data
+        // parseExcel(content) {
+        //   const workbook = XLSX.read(content, { type: "array" });
+        //   const sheetName = workbook.SheetNames[0]; // Ambil sheet pertama
+        //   const sheet = workbook.Sheets[sheetName];
 
-      // Tentukan range mulai dari baris kedua dan kolom pertama (A2 sampai B2)
-      const range = { s: { r: 1, c: 0 }, e: { r: sheet['!ref'].split(':')[1].match(/\d+/)[0] - 1, c: 1 } };
+          // Tentukan range mulai dari baris kedua dan kolom pertama (A2 sampai B2)
+        //   const range = { s: { r: 1, c: 0 }, e: { r: sheet['!ref'].split(':')[1].match(/\d+/)[0] - 1, c: 1 } };
 
-      // Mengambil data dari range yang ditentukan
-      const data = XLSX.utils.sheet_to_json(sheet, { header: 1, range: range });
-      this.parsedData = data; // Data mulai dari baris 2
-    },
+        //   // Mengambil data dari range yang ditentukan
+        //   const data = XLSX.utils.sheet_to_json(sheet, { header: 1, range: range });
+        //   this.parsedData = data; // Data mulai dari baris 2
+        // },
 
-    // Submit parsed Excel data to the backend
-    async submitExcelData() {
-      if (this.parsedData.length > 0) {
-        try {
-          const token = localStorage.getItem("accessToken");
+        // Submit parsed Excel data to the backend
+        // async submitExcelData() {
+        //   if (this.parsedData.length > 0) {
+        //     try {
+        //       const token = localStorage.getItem("accessToken");
 
-          // Prepare FormData
-          const formData = new FormData();
-          formData.append("file", this.parsedData); // Add the parsed data as a file
+        //       // Prepare FormData
+        //       const formData = new FormData();
+        //       formData.append("file", this.parsedData); // Add the parsed data as a file
 
-          const response = await axios.post("http://localhost:3000/bengkel/import", formData, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "multipart/form-data", // Set the correct Content-Type
-            },
-          });
+        //       const response = await axios.post("http://localhost:3000/bengkel/import", formData, {
+        //         headers: {
+        //           Authorization: `Bearer ${token}`,
+        //           "Content-Type": "multipart/form-data", // Set the correct Content-Type
+        //         },
+        //       });
 
-          Swal.fire("Success!", "Data berhasil diimpor.", "success");
-          this.fetchBengkelList();
-          this.closeFileUploadModal();
-        } catch (error) {
-          Swal.fire("Error!", "Gagal mengimpor data.", "error");
-        }
-      } else {
-        Swal.fire("Error!", "Tidak ada data untuk diimpor.", "error");
-      }
-    },
+        //       Swal.fire("Success!", "Data berhasil diimpor.", "success");
+        //       this.fetchBengkelList();
+        //       this.closeFileUploadModal();
+        //     } catch (error) {
+        //       Swal.fire("Error!", "Gagal mengimpor data.", "error");
+        //     }
+        //   } else {
+        //     Swal.fire("Error!", "Tidak ada data untuk diimpor.", "error");
+        //   }
+        // },
         toggleSort(column) {
             if (this.sortBy === column) {
                 this.sortDirection = this.sortDirection === "asc" ? "desc" : "asc";
