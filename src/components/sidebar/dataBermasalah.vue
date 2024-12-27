@@ -287,7 +287,7 @@
                 <div class="form-group-jumlah">
                     <label for="jumlahAlat">Jumlah Pinjaman</label>
                     <p>Masukkan jumlah alat yang dipinjam</p>
-                    <input type="number" id="jumlahAlat" class="form-control-jumlah" v-model="newPengembalianAlatBermasalah.jumlah" />
+                    <input type="number" id="jumlahAlat" class="form-control-jumlah" v-model="newPengembalianAlatBermasalah.jumlah" disabled/>
                 </div>
                 <!-- end of jumlah -->
              </div>
