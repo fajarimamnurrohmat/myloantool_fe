@@ -593,34 +593,6 @@ export default {
       this.selectedFile = event.target.files[0];
     },
 
-    // Parse Excel data
-    parseExcel(content) {
-      const workbook = XLSX.read(content, {
-        type: "array",
-      });
-      const sheetName = workbook.SheetNames[0]; // Ambil sheet pertama
-      const sheet = workbook.Sheets[sheetName];
-
-      // Tentukan range mulai dari baris kedua dan kolom pertama (A2 sampai B2)
-      const range = {
-        s: {
-          r: 1,
-          c: 0,
-        },
-        e: {
-          r: sheet["!ref"].split(":")[1].match(/\d+/)[0] - 1,
-          c: 1,
-        },
-      };
-
-      // Mengambil data dari range yang ditentukan
-      const data = XLSX.utils.sheet_to_json(sheet, {
-        header: 1,
-        range: range,
-      });
-      this.parsedData = data; // Data mulai dari baris 2
-    },
-
     // Submit parsed Excel data to the backend
     async submitExcelData() {
       if (!this.selectedFile) {
