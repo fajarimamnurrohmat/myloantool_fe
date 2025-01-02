@@ -228,7 +228,7 @@
           <!-- Modal Body -->
           <div class="modal-body">
             <!-- Row atas -->
-             <div class="form-row">
+            <div class="form-row">
               <!-- alat dipinjam -->
               <div class="form-group">
                 <label for="alat">Alat Dipinjam</label>
@@ -269,28 +269,38 @@
                   </option>
                 </select>
               </div>
-             </div>
-             <div class="form-row">
+            </div>
+            <div class="form-row">
               <!-- tgl pinjam -->
               <div class="form-group">
-                    <label for="tanggalPinjam">Tanggal Pinjam</label>
-                    <p>Masukkan tanggal pinjam alat</p>
-                    <div class="date-input-wrapper">
-                        <input type="date" id="tanggalPinjam"
-                        v-model="newPengembalianAlatBermasalah.tgl_peminjaman"
-                        class="date-filter-modal" disabled/>
-                        <i class="fas fa-calendar-alt calendar-icon-i"></i>
-                    </div>
+                <label for="tanggalPinjam">Tanggal Pinjam</label>
+                <p>Masukkan tanggal pinjam alat</p>
+                <div class="date-input-wrapper">
+                  <input
+                    type="date"
+                    id="tanggalPinjam"
+                    v-model="newPengembalianAlatBermasalah.tgl_peminjaman"
+                    class="date-filter-modal"
+                    disabled
+                  />
+                  <i class="fas fa-calendar-alt calendar-icon-i"></i>
                 </div>
-                <!-- end of tgl pinjam -->
-                <!-- jumlah -->
-                <div class="form-group-jumlah">
-                    <label for="jumlahAlat">Jumlah Pinjaman</label>
-                    <p>Masukkan jumlah alat yang dipinjam</p>
-                    <input type="number" id="jumlahAlat" class="form-control-jumlah" v-model="newPengembalianAlatBermasalah.jumlah" disabled/>
-                </div>
-                <!-- end of jumlah -->
-             </div>
+              </div>
+              <!-- end of tgl pinjam -->
+              <!-- jumlah -->
+              <div class="form-group-jumlah">
+                <label for="jumlahAlat">Jumlah Pinjaman</label>
+                <p>Masukkan jumlah alat yang dipinjam</p>
+                <input
+                  type="number"
+                  id="jumlahAlat"
+                  class="form-control-jumlah"
+                  v-model="newPengembalianAlatBermasalah.jumlah"
+                  disabled
+                />
+              </div>
+              <!-- end of jumlah -->
+            </div>
             <!-- garis pemisah -->
             <hr style="color: white" />
             <!-- form row -->
@@ -384,7 +394,7 @@ export default {
       showModal: false,
       dropdownIndex: null,
       newPengembalianAlatBermasalah: {
-        alat_dipinjam:"",
+        alat_dipinjam: "",
         nama_peminjam: "",
         tgl_peminjaman: "",
         jumlah: "",
@@ -526,42 +536,9 @@ export default {
       }
     },
     updateDisplayedData() {
-      let filteredData = this.alatBermasalah;
-
-      // Filter berdasarkan tanggal
-      if (this.startDate || this.endDate) {
-        filteredData = filteredData.filter((record) => {
-          const permasalahanDate = new Date(record.tanggalPermasalahan);
-          return (
-            (!this.startDate || permasalahanDate >= new Date(this.startDate)) &&
-            (!this.endDate || permasalahanDate <= new Date(this.endDate))
-          );
-        });
-      }
-
-      // Search Filter
-      if (this.searchQuery) {
-        const query = this.searchQuery.toLowerCase();
-        filteredData = filteredData.filter((record) =>
-          Object.values(record).some((value) =>
-            String(value).toLowerCase().includes(query)
-          )
-        );
-      }
-
-      // Sorting
-      filteredData.sort((a, b) => {
-        const fieldA = a[this.sortBy]?.toString().toLowerCase() || "";
-        const fieldB = b[this.sortBy]?.toString().toLowerCase() || "";
-        if (fieldA < fieldB) return this.sortDirection === "asc" ? -1 : 1;
-        if (fieldA > fieldB) return this.sortDirection === "asc" ? 1 : -1;
-        return 0;
-      });
-
-      // Pagination
-      const startIndex = 0;
-      const endIndex = this.rowsPerPage;
-      this.displayedData = filteredData.slice(startIndex, endIndex);
+      const startIndex = (this.currentPage - 1) * this.rowsPerPage;
+      const endIndex = startIndex + this.rowsPerPage;
+      this.displayedData = this.filteredAlat.slice(startIndex, endIndex);
     },
     toggleSort(column) {
       if (this.sortBy === column) {
@@ -575,7 +552,7 @@ export default {
       this.startDate = "";
       this.endDate = "";
       this.searchQuery = "";
-      this.updateDisplayedData();
+      //this.updateDisplayedData();
     },
     exportData(type) {
       const exportData = this.displayedData.map((record) => ({
@@ -640,63 +617,70 @@ export default {
         modalContent.classList.remove("closing");
       }, 300);
     },
-    filterByDate() {
-      this.currentPage = 1; // Reset to first page after filtering
-    },
     resetForm() {
       this.editIndex = null;
     },
   },
   computed: {
-    filterData() {
-      const startDate = new Date(this.startDate);
-      const endDate = new Date(this.endDate);
-
-      this.displayedData = this.alatBermasalah.filter((item) => {
-        const tglPermasalahan = new Date(item.tgl_permasalahan);
-        if (this.startDate && tglPermasalahan < startDate) {
-          return false;
-        }
-        if (this.endDate && tglPermasalahan > endDate) {
-          return false;
-        }
-        return true;
-      });
-    },
     pageInfo() {
-      const totalData = this.alatBermasalah.length;
+      const totalData = this.filteredAlat.length;
       const startIndex = (this.currentPage - 1) * this.rowsPerPage + 1;
       const endIndex = Math.min(startIndex + this.rowsPerPage - 1, totalData);
       return `Menampilkan ${startIndex} sampai ${endIndex} dari ${totalData} data`;
     },
-    displayedData() {
-      const start = (this.currentPage - 1) * this.rowsPerPage;
-      const end = start + this.rowsPerPage;
-      return this.alatBermasalah.slice(start, end);
+    filteredAlat() {
+      let filtered = this.alatBermasalah;
+
+      // Filter berdasarkan query pencarian
+      if (this.searchQuery) {
+        const query = this.searchQuery.toLowerCase();
+        filtered = filtered.filter((record) =>
+          record.nama_siswa.toLowerCase().includes(query)
+        );
+      }
+
+      // Filter berdasarkan tanggal
+      if (this.startDate) {
+        const start = new Date(this.startDate).getTime();
+        filtered = filtered.filter((record) => {
+          const recordDate = new Date(record.tgl_permasalahan).getTime();
+          return recordDate >= start;
+        });
+      }
+
+      if (this.endDate) {
+        const end = new Date(this.endDate).getTime();
+        filtered = filtered.filter((record) => {
+          const recordDate = new Date(record.tgl_permasalahan).getTime();
+          return recordDate <= end;
+        });
+      }
+
+      // Sortir data
+      filtered.sort((a, b) => {
+        const valA = a[this.sortBy]?.toString().toLowerCase() || "";
+        const valB = b[this.sortBy]?.toString().toLowerCase() || "";
+        if (this.sortDirection === "asc") {
+          return valA.localeCompare(valB);
+        } else {
+          return valB.localeCompare(valA);
+        }
+      });
+
+      return filtered;
     },
     totalPages() {
-      return Math.ceil(this.alatBermasalah.length / this.rowsPerPage);
+      return Math.ceil(this.filteredAlat.length / this.rowsPerPage);
     },
   },
   watch: {
-    startDate() {
-      this.filterData();
-    },
-    endDate() {
-      this.filterData();
-    },
-    rowsPerPage() {
-      this.updateDisplayedData();
-    },
-    startDate() {
-      this.updateDisplayedData();
-    },
-    endDate() {
-      this.updateDisplayedData();
-    },
-    searchQuery() {
-      this.updateDisplayedData();
-    },
+    startDate: "updateDisplayedData",
+    endDate: "updateDisplayedData",
+    searchQuery: "updateDisplayedData",
+    rowsPerPage: "updateDisplayedData",
+    currentPage: "updateDisplayedData",
+    sortBy: "updateDisplayedData",
+    sortDirection: "updateDisplayedData",
   },
 };
 </script>
@@ -886,31 +870,31 @@ th {
 }
 
 .modal-content {
-    background: #274278 !important;
-    padding: 20px;
-    border-radius: 10px;
-    width: 40rem !important;
-    max-width: 100% !important;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    animation: fadeIn 0.3s ease-in-out;
-    transition: fadeOut 0.3s ease-out;
+  background: #274278 !important;
+  padding: 20px;
+  border-radius: 10px;
+  width: 40rem !important;
+  max-width: 100% !important;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 0.3s ease-in-out;
+  transition: fadeOut 0.3s ease-out;
 }
 
 .form-group-jumlah-kembali {
-    flex: 1;
-    margin-left: -4rem;
+  flex: 1;
+  margin-left: -4rem;
 }
 
 .form-group-jumlah-kembali label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
 }
 
 @media screen and (max-width: 450px) {
   .modal-content {
-        width: 90% !important;
-    }
+    width: 90% !important;
+  }
   .header-dataBermasalah {
     font-weight: bold;
     color: #274278;
@@ -1012,6 +996,6 @@ th {
     flex: 1;
     margin-left: 0rem;
     margin-top: 0.5rem;
-}
+  }
 }
 </style>
