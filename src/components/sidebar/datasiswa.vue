@@ -74,7 +74,7 @@
                 <div class="modal-header-upload">
                     <div class="header-content">
                         <h5>Upload File Excel</h5>
-                        <p>Upload a CSV or Excel file to import student data</p>
+                        <p>Maksimal 100 baris data untuk diimpor.</p>
                     </div>
                     <span class="close-modal-upload" @click="closeFileUploadModal">&times;</span>
                 </div>
@@ -695,7 +695,7 @@ export default {
 
 .modal-header-upload p {
     margin-top: 8px;
-    color: #555;
+    color: #c91919;
     font-size: 14px;
 }
 

@@ -242,7 +242,7 @@
         <!-- Content Modal -->
         <div class="modal-content">
             <!-- Header Modal -->
-            <div class="modal-header" style="margin-top: -1rem">
+            <div class="modal-header">
                 <h4>Input Data Pengembalian</h4>
                 <span class="close-modal" @click="closeModal">&times;</span>
             </div>

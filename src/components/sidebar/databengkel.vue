@@ -537,6 +537,7 @@ export default {
     justify-content: space-between;
     align-items: center;
     color: white;
+    margin-bottom: -1rem;
 }
 
 .close-modal {

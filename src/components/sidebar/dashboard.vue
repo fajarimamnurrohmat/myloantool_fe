@@ -234,6 +234,10 @@ export default {
   justify-content: space-between;
 }
 
+.card-dashboard-2 h2 {
+  font-size: 2.2rem;
+}
+
 .card-dashboard-2:hover {
   transform: translateY(-5px);
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
