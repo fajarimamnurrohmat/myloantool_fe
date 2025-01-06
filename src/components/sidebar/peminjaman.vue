@@ -225,6 +225,9 @@
                             <button @click="openPengembalianModal(peminjaman)" class="dropdown-item" style="color: #274278">
                                 Pengembalian
                             </button>
+                            <button class="dropdown-item" @click="confirmDelete(index, peminjaman)" style="color: red">
+                                Hapus
+                            </button>
                         </div>
                     </div>
                     <!-- End of Action Dropdown -->
@@ -868,6 +871,54 @@ export default {
 
             // Menampilkan modal edit
             this.showModal = true;
+        },
+        // Fungsi untuk mengonfirmasi penghapusan
+        confirmDelete(index, peminjaman) {
+            console.log("Objek Peminjaman:", peminjaman); // Debugging untuk melihat properti dalam objek peminjaman
+            console.log("ID Peminjaman yang akan dihapus:", peminjaman.id_peminjaman); // Debugging ID peminjaman
+            Swal.fire({
+                title: "Anda yakin?",
+                text: "Data peminjaman ini akan dihapus!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Ya, hapus!",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    this.deletePeminjaman(index, peminjaman.id_peminjaman); // Panggil fungsi hapus data
+                    Swal.fire("Dihapus!", "Data peminjaman telah dihapus.", "success");
+                }
+            });
+        },
+        // Fungsi untuk menghapus peminjaman
+        async deletePeminjaman(index, peminjamanId) {
+            console.log("ID Peminjaman untuk dihapus:", peminjamanId); // Debugging ID peminjaman
+            try {
+                const token = localStorage.getItem("accessToken");
+                const response = await axios.delete(
+                    `http://localhost:3000/peminjaman/${peminjamanId}`, {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }
+                );
+                if (response.status === 200 && response.data.status === "success") {
+                    // Menghapus data dari list lokal jika berhasil
+                    this.peminjamanList.splice(index, 1); // Menghapus data dari list berdasarkan index
+                    this.dropdownIndex = null; // Reset dropdown setelah penghapusan
+                    Swal.fire("Dihapus!", "Data peminjaman telah dihapus.", "success");
+                } else {
+                    throw new Error("Gagal menghapus data peminjaman.");
+                }
+            } catch (error) {
+                Swal.fire({
+                    title: "Error!",
+                    text: `Tidak dapat menghapus data peminjaman: ${error.message}`,
+                    icon: "error",
+                    confirmButtonText: "OK",
+                });
+            }
         },
         openPengembalianModal(peminjaman) {
             // Debugging untuk memastikan objek peminjaman diterima
