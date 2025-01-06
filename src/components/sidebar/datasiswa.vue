@@ -232,7 +232,7 @@ export default {
     },
     computed: {
         pageInfo() {
-            const totalData = this.siswaList.length;
+            const totalData = this.filteredSiswaList.length;
             const startIndex = (this.currentPage - 1) * this.rowsPerPage + 1;
             const endIndex = Math.min(startIndex + this.rowsPerPage - 1, totalData);
             return `Menampilkan ${startIndex} sampai ${endIndex} dari ${totalData} data`;
