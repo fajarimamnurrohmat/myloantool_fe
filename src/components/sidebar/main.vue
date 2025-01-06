@@ -29,7 +29,7 @@
                     </li>
                     <li class="nav-item dropdown" :class="{ active: isActiveDropdown(['datapinjaman', 'pinjaman_bermasalah',]) }">
                         <a class="nav-link dropdown-toggle" href="#" id="dataPinjamanDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Data Pinjaman
+                            Data Pengembalian
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="dataPinjamanDropdown">
                             <li>

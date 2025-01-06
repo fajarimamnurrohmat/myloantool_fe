@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="header-tooltip">
-      <h3 class="header-dataBermasalah">Data Pinjaman Bermasalah</h3>
+      <h3 class="header-dataBermasalah">Halaman Pengembalian Bermasalah</h3>
       <div>
         <button
           type="button"

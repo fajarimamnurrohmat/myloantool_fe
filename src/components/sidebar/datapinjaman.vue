@@ -1,146 +1,156 @@
 <template>
-<div>
-  <!-- Header -->
-    <div class="header-tooltip">
-        <h3 class="header-DataPinjaman">Data Pinjaman Telah Dikembalikan</h3>
-        <div>
-            <button type="button" class="btn" data-toggle="tooltip" data-placement="top" title="Data pada halaman ini merupakan data barang yang memiliki kondisi baik.">
-                <span class="material-symbols-outlined">
-                    info
-                </span>
-            </button>
-        </div>
-    </div>
-  <!-- End of Header -->
-
-    <!-- filter wrapper -->
-    <div class="filter-wrapper">
-        <!-- Date Filter Section -->
-        <div class="date-inputs">
-            <div class="date-input-wrapper">
-                <label for="startDate" class="date-sort">Sort Date From:</label>
-                <input type="date" id="startDate" v-model="startDate" class="date-filter" />
-                <i class="fas fa-calendar-alt calendar-icon"></i>
-            </div>
-            <div class="date-input-wrapper">
-                <label for="endDate" class="date-sort">To:</label>
-                <input type="date" id="endDate" v-model="endDate" class="date-filter" />
-                <i class="fas fa-calendar-alt calendar-icon"></i>
-            </div>
-            <!-- filter button section -->
-            <div class="filter-buttons">
-                <button @click="resetFilters" class="btn-reset" style="height: 2.7rem; width: 3rem">
-                    <i class="fa fa-sync" aria-hidden="true"></i>
+    <div>
+        <!-- Header -->
+        <div class="header-tooltip">
+            <h3 class="header-DataPinjaman">Halaman Pengembalian</h3>
+            <div>
+                <button type="button" class="btn" data-toggle="tooltip" data-placement="top"
+                    title="Halaman ini memuat data pengembalian yang memiliki kondisi baik.">
+                    <span class="material-symbols-outlined">
+                        info
+                    </span>
                 </button>
-                <div class="dropdown d-inline-block">
-                    <button class="btn-export" type="button" @click="toggleDropdown" :aria-expanded="dropdownOpen" style="
+            </div>
+        </div>
+        <!-- End of Header -->
+
+        <!-- filter wrapper -->
+        <div class="filter-wrapper">
+            <!-- Date Filter Section -->
+            <div class="date-inputs">
+                <div class="date-input-wrapper">
+                    <label for="startDate" class="date-sort">Sort Date From:</label>
+                    <input type="date" id="startDate" v-model="startDate" class="date-filter" />
+                    <i class="fas fa-calendar-alt calendar-icon"></i>
+                </div>
+                <div class="date-input-wrapper">
+                    <label for="endDate" class="date-sort">To:</label>
+                    <input type="date" id="endDate" v-model="endDate" class="date-filter" />
+                    <i class="fas fa-calendar-alt calendar-icon"></i>
+                </div>
+                <!-- filter button section -->
+                <div class="filter-buttons">
+                    <button @click="resetFilters" class="btn-reset" style="height: 2.7rem; width: 3rem">
+                        <i class="fa fa-sync" aria-hidden="true"></i>
+                    </button>
+                    <div class="dropdown d-inline-block">
+                        <button class="btn-export" type="button" @click="toggleDropdown" :aria-expanded="dropdownOpen"
+                            style="
                 color: #4b6cb7;
                 background-color: white;
                 width: 6.5rem;
                 height: 2.72rem;
               ">
-                        <i class="fa-solid fa-arrow-up-from-bracket" style="
+                            <i class="fa-solid fa-arrow-up-from-bracket" style="
                           margin-left: 0.7rem;
                           margin-right: 0.4rem;
                           color: #4b6cb7;
                         ">
-                        </i>
-                        Export
-                    </button>
-                    <div v-if="dropdownOpen" class="dropdown-menu-export">
-                        <a class="dropdown-item-export" @click="exportData('pdf')" style="color: #4b6cb7">
-                            <i class="fa fa-file-pdf" aria-hidden="true" style="margin-left: 0.5rem; margin-right: 0.1rem"></i>
-                            .pdf
-                        </a>
-                        <a class="dropdown-item-export" @click="exportData('csv')" style="color: #4b6cb7">
-                            <i class="fa-solid fa-file-csv" aria-hidden="true" style="margin-left: 0.5rem; margin-right: 0.1rem"></i>
-                            .csv
-                        </a>
+                            </i>
+                            Export
+                        </button>
+                        <div v-if="dropdownOpen" class="dropdown-menu-export">
+                            <a class="dropdown-item-export" @click="exportData('pdf')" style="color: #4b6cb7">
+                                <i class="fa fa-file-pdf" aria-hidden="true"
+                                    style="margin-left: 0.5rem; margin-right: 0.1rem"></i>
+                                .pdf
+                            </a>
+                            <a class="dropdown-item-export" @click="exportData('csv')" style="color: #4b6cb7">
+                                <i class="fa-solid fa-file-csv" aria-hidden="true"
+                                    style="margin-left: 0.5rem; margin-right: 0.1rem"></i>
+                                .csv
+                            </a>
+                        </div>
                     </div>
                 </div>
+                <!-- search -->
+                <div class="search-bar-container">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" v-model="searchQuery" class="search-input"
+                        style="padding-right: 30px; width: 10rem" placeholder="Cari data..." />
+                </div>
+                <!-- search -->
             </div>
-            <!-- search -->
-            <div class="search-bar-container">
-                <i class="fas fa-search search-icon"></i>
-                <input type="text" v-model="searchQuery" class="search-input" style="padding-right: 30px; width: 10rem" placeholder="Cari data..." />
-            </div>
-            <!-- search -->
+            <!-- End of Date Filter Section -->
         </div>
-        <!-- End of Date Filter Section -->
-    </div>
-    <!-- End of filter wrapper -->
+        <!-- End of filter wrapper -->
 
-    <div class="table-wrapper">
-        <div class="info-page">
-            <div style="text-align: left">
-                Tampilkan:
-                <select v-model="rowsPerPage" class="select-rows" style="width: 3rem">
-                    <option value="5">5</option>
-                    <option value="10">10</option>
-                    <option value="20">20</option>
-                    <option value="100">100</option>
-                </select>
-                baris
+        <div class="table-wrapper">
+            <div class="info-page">
+                <div style="text-align: left">
+                    Tampilkan:
+                    <select v-model="rowsPerPage" class="select-rows" style="width: 3rem">
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                        <option value="20">20</option>
+                        <option value="100">100</option>
+                    </select>
+                    baris
+                </div>
+                <div>
+                    <p class="page-info">{{ pageInfo }}</p>
+                </div>
             </div>
-            <div>
-                <p class="page-info">{{ pageInfo }}</p>
-            </div>
-        </div>
-        <!-- Tabel Data -->
-        <table>
-            <thead>
-                <tr>
-                    <th>no</th>
-                    <th>Nama Peminjam <span class="material-symbols-outlined swap-sort" @click="toggleSort('nama_siswa')">
-                            swap_vert
-                        </span>
-                    </th>
-                    <th>Alat <span class="material-symbols-outlined swap-sort" @click="toggleSort('nama_alat')">
-                            swap_vert
-                        </span></th>
-                    <th>Bengkel <span class="material-symbols-outlined swap-sort" @click="toggleSort('ruang_bengkel')">
-                            swap_vert
-                        </span></th>
-                    <th>Jumlah kembali<span class="material-symbols-outlined swap-sort" @click="toggleSort('jumlah')">
-                            swap_vert
-                        </span></th>
-                    <th>Tanggal Pinjam<span class="material-symbols-outlined swap-sort" @click="toggleSort('tanggal_pinjam')">
-                            swap_vert
-                        </span></th>
-                    <th>Tanggal Kembali<span class="material-symbols-outlined swap-sort" @click="toggleSort('tgl_kembali')">
-                            swap_vert
-                        </span></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-if="displayedData.length === 0">
-                    <td colspan="6" style="text-align: center">Tidak ada data</td>
-                </tr>
-                <tr v-for="(record, index) in displayedData" :key="index">
-                    <td>{{ index + 1 + (currentPage - 1) * rowsPerPage }}</td>
-                    <td>{{ record.nama_siswa }}</td>
-                    <td>{{ record.nama_alat }}</td>
-                    <td>{{ record.ruang_bengkel }}</td>
-                    <td>{{ record.jumlah }}</td>
-                    <td>{{ formatDate(record.tanggal_pinjam) }}</td>
-                    <td>{{ formatDate(record.tgl_kembali) }}</td>
-                </tr>
-            </tbody>
-        </table>
+            <!-- Tabel Data -->
+            <table>
+                <thead>
+                    <tr>
+                        <th>no</th>
+                        <th>Nama Peminjam <span class="material-symbols-outlined swap-sort"
+                                @click="toggleSort('nama_siswa')">
+                                swap_vert
+                            </span>
+                        </th>
+                        <th>Alat <span class="material-symbols-outlined swap-sort" @click="toggleSort('nama_alat')">
+                                swap_vert
+                            </span></th>
+                        <th>Bengkel <span class="material-symbols-outlined swap-sort"
+                                @click="toggleSort('ruang_bengkel')">
+                                swap_vert
+                            </span></th>
+                        <th>Jumlah kembali<span class="material-symbols-outlined swap-sort"
+                                @click="toggleSort('jumlah')">
+                                swap_vert
+                            </span></th>
+                        <th>Tanggal Pinjam<span class="material-symbols-outlined swap-sort"
+                                @click="toggleSort('tanggal_pinjam')">
+                                swap_vert
+                            </span></th>
+                        <th>Tanggal Kembali<span class="material-symbols-outlined swap-sort"
+                                @click="toggleSort('tgl_kembali')">
+                                swap_vert
+                            </span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-if="displayedData.length === 0">
+                        <td colspan="6" style="text-align: center">Tidak ada data</td>
+                    </tr>
+                    <tr v-for="(record, index) in displayedData" :key="index">
+                        <td>{{ index + 1 + (currentPage - 1) * rowsPerPage }}</td>
+                        <td>{{ record.nama_siswa }}</td>
+                        <td>{{ record.nama_alat }}</td>
+                        <td>{{ record.ruang_bengkel }}</td>
+                        <td>{{ record.jumlah }}</td>
+                        <td>{{ formatDate(record.tanggal_pinjam) }}</td>
+                        <td>{{ formatDate(record.tgl_kembali) }}</td>
+                    </tr>
+                </tbody>
+            </table>
 
-        <div v-if="totalPages > 1" class="pagination-container">
-            <button @click="currentPage--" :disabled="currentPage === 1" class="pagination-button">
-                Previous
-            </button>
-            <span class="pagination-info">
-                Page {{ currentPage }} of {{ totalPages }}
-            </span>
-            <button @click="currentPage++" :disabled="currentPage === totalPages" class="pagination-button">
-                Next
-            </button>
+            <div v-if="totalPages > 1" class="pagination-container">
+                <button @click="currentPage--" :disabled="currentPage === 1" class="pagination-button">
+                    Previous
+                </button>
+                <span class="pagination-info">
+                    Page {{ currentPage }} of {{ totalPages }}
+                </span>
+                <button @click="currentPage++" :disabled="currentPage === totalPages" class="pagination-button">
+                    Next
+                </button>
+            </div>
         </div>
     </div>
-</div>
 </template>
 
 <script>
@@ -521,6 +531,7 @@ export default {
     transform: translateX(-50%);
     text-align: left;
 }
+
 /* end of dropdown style */
 
 .pagination-container {
